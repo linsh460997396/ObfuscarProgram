@@ -11,3 +11,6 @@ D:\VSWork\2022\Galaxy\AzureObfuscator\obj\Debug\GalaxyObfuscator.csproj.CoreComp
 D:\VSWork\2022\Galaxy\AzureObfuscator\obj\Debug\GalaxyOb.CF582F82.Up2Date
 D:\VSWork\2022\Galaxy\AzureObfuscator\obj\Debug\AzureObfuscator.exe
 D:\VSWork\2022\Galaxy\AzureObfuscator\obj\Debug\AzureObfuscator.pdb
+D:\VSWork\2022\Galaxy\AzureObfuscator\bin\Debug\Rules\SCEnd
+D:\VSWork\2022\Galaxy\AzureObfuscator\bin\Debug\Rules\SCHead
+D:\VSWork\2022\Galaxy\AzureObfuscator\bin\Debug\Rules\exclusion_rules.txt

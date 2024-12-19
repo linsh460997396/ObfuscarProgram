@@ -21,6 +21,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4BDF0387B2FB4FF9BC24A2A39953D2D5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_86414F64FB3BF040874012CAC0271A35"
         "OwnerKey" = "8:_C63A5A0259A04E44A9BC5FC8668A0C36"
         "MsmSig" = "8:_UNDEFINED"
@@ -34,6 +40,18 @@
         "Entry"
         {
         "MsmKey" = "8:_C63A5A0259A04E44A9BC5FC8668A0C36"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D1259CFEB4BE467FAFD9BA09AA097592"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FD6950D0038B4D7E91CE1F8D7FEB23B1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -80,6 +98,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
         "Release"
@@ -104,6 +130,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
     }
@@ -140,6 +174,26 @@
             "TargetName" = "8:StormLib.dll"
             "Tag" = "8:"
             "Folder" = "8:_CE130D51DA624550ACF2B1C3A28A665B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4BDF0387B2FB4FF9BC24A2A39953D2D5"
+            {
+            "SourcePath" = "8:..\\AzureObfuscator\\Rules\\SCEnd"
+            "TargetName" = "8:SCEnd"
+            "Tag" = "8:"
+            "Folder" = "8:_C081CEE6AF8443C4B53BC9DD1B69596B"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -216,6 +270,46 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D1259CFEB4BE467FAFD9BA09AA097592"
+            {
+            "SourcePath" = "8:..\\AzureObfuscator\\Rules\\exclusion_rules.txt"
+            "TargetName" = "8:exclusion_rules.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_C081CEE6AF8443C4B53BC9DD1B69596B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FD6950D0038B4D7E91CE1F8D7FEB23B1"
+            {
+            "SourcePath" = "8:..\\AzureObfuscator\\Rules\\SCHead"
+            "TargetName" = "8:SCHead"
+            "Tag" = "8:"
+            "Folder" = "8:_C081CEE6AF8443C4B53BC9DD1B69596B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -254,6 +348,17 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_C081CEE6AF8443C4B53BC9DD1B69596B"
+                    {
+                    "Name" = "8:Rules"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_2D2A3A78209C48AAA51B970D5FD40862"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
         }
@@ -271,9 +376,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:GalaxyObfuscatorSetup"
+        "ProductName" = "8:GalaxyObfuscator"
         "ProductCode" = "8:{6DE3D1D2-F330-4A38-9327-47993AE1EB46}"
-        "PackageCode" = "8:{C358F846-E829-4E0E-8BD0-81754F348B12}"
+        "PackageCode" = "8:{3AE8DF78-7073-4BCB-A7D5-4AB41001FDF7}"
         "UpgradeCode" = "8:{F223446D-B735-4108-838F-41B39BD5EDF4}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"

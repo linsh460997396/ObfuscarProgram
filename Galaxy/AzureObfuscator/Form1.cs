@@ -1,5 +1,6 @@
 ﻿using GalaxyObfuscator;
 using MetalMaxSystem;
+using StormLib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +14,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
+using System.Xml;
 
 namespace GalaxyObfuscator
 {
@@ -61,8 +64,49 @@ namespace GalaxyObfuscator
         public Form1()
         {
             InitializeComponent();
-            //label_Tips.ForeColor = Color.Red;
             label_Statistics.ForeColor = Color.Red;
+        }
+
+        bool GetCheckTestStateFromMainThread()
+        {
+            if (checkBox_Test.InvokeRequired)
+            {
+                return (bool)checkBox_Test.Invoke(new Func<bool>(GetCheckTestStateFromMainThread));
+            }
+            else
+            {
+                return checkBox_Test.Checked;
+            }
+        }
+
+        void SetCheckTestStateToMainThread(bool state)
+        {
+            // 调用 Invoke 方法将操作发送到主线程
+            Invoke((MethodInvoker)delegate ()
+            {
+                checkBox_Test.Checked = state;
+            });
+        }
+
+        bool GetCheckLC4StateFromMainThread()
+        {
+            if (checkBox_LC4.InvokeRequired)
+            {
+                return (bool)checkBox_LC4.Invoke(new Func<bool>(GetCheckLC4StateFromMainThread));
+            }
+            else
+            {
+                return checkBox_LC4.Checked;
+            }
+        }
+
+        void SetCheckLC4StateToMainThread(bool state)
+        {
+            // 调用 Invoke 方法将操作发送到主线程
+            Invoke((MethodInvoker)delegate ()
+            {
+                checkBox_LC4.Checked = state;
+            });
         }
 
         string GetCodeFromMainThread()
@@ -223,6 +267,27 @@ namespace GalaxyObfuscator
             return type;
         }
 
+        string GetRichTextBoxListFromMainThread()
+        {
+            if (richTextBox_List.InvokeRequired)
+            {
+                return (string)richTextBox_List.Invoke(new Func<string>(GetRichTextBoxListFromMainThread));
+            }
+            else
+            {
+                return richTextBox_List.Text;
+            }
+        }
+
+        void SetRichTextBoxListToMainThread(string code)
+        {
+            // 调用 Invoke 方法将操作发送到主线程
+            Invoke((MethodInvoker)delegate ()
+            {
+                richTextBox_List.Text = code;
+            });
+        }
+
         /// <summary>
         /// 按钮点击后处理主要内容，本函数交由后台线程运行
         /// </summary>
@@ -239,10 +304,13 @@ namespace GalaxyObfuscator
                         SetTipsToMainThread("功能未选择！");
                         break;
                     case 0:
-                        SelectedFunc_0(GetRulePathFromMainThread());
+                        SelectedFunc_0();
                         break;
                     case 1:
-                        SelectedFunc_1(GetRulePathFromMainThread());
+                        SelectedFunc_1();
+                        break;
+                    case 2:
+                        SelectedFunc_2();
                         break;
                     default:
                         SetTipsToMainThread("功能无效！");
@@ -274,7 +342,7 @@ namespace GalaxyObfuscator
         {
             for (int i = 0; i < 1; i++)
             {
-                if (MMCore.IsDFPath(textBox_workPath.Text))
+                if (MMCore.IsDFPath(textBox_workPath.Text) || GetSelectedIndexFromMainThread()==1 || GetSelectedIndexFromMainThread()==2)
                 {
                     //开始工作，大部分界面置灰（用户不可操作）
                     UserOpEnableChange(false);
@@ -296,7 +364,7 @@ namespace GalaxyObfuscator
                 }
                 else
                 {
-                    label_Statistics.Text = "工作目录错误！";
+                    label_Tips.Text = "工作目录错误！";
                     break;
                 }
             }
@@ -325,15 +393,21 @@ namespace GalaxyObfuscator
         }
 
         /// <summary>
-        /// 第1个功能索引的执行方法：批处理混淆.SC2Map地图文件
+        /// 对.SC2Map地图文件进行混肴
         /// </summary>
-        /// <param name="exclusionRulesPath"></param>
-        void SelectedFunc_0(string exclusionRulesPath)
+        void SelectedFunc_0()
         {
             try
             {
-                //批量混淆
-                ObDirectoryRecursively(GetWorkPathFromMainThread());
+                if (GetCheckTestStateFromMainThread() == false)
+                {
+                    ObDirectoryRecursively(GetWorkPathFromMainThread());
+                }
+                else 
+                {
+                    //实验版混淆
+                    SelectedFunc_Test();
+                }
             }
             catch (Exception ex)
             {
@@ -343,11 +417,37 @@ namespace GalaxyObfuscator
         }
 
         /// <summary>
-        /// 第2个功能索引的执行方法：混淆Galaxy代码
+        /// 对Galaxy代码进行混肴
         /// </summary>
-        /// <param name="exclusionRulesPath"></param>
-        void SelectedFunc_1(string exclusionRulesPath)
+        void SelectedFunc_1()
         {
+            if (GetCheckTestStateFromMainThread() == false)
+            {
+                Obfuscator obfuscator = new Obfuscator();
+                obfuscator.script = GetCodeFromMainThread();
+                SetCodeToMainThread(obfuscator.obfuscateScript());
+            }
+            else
+            {
+                //实验版混淆
+                SelectedFunc_Test();
+            }
+        }
+
+        /// <summary>
+        /// 将Objects布置信息转Galaxy
+        /// </summary>
+        void SelectedFunc_2()
+        {
+
+        }
+
+        /// <summary>
+        /// 实验版混淆
+        /// </summary>
+        void SelectedFunc_Test()
+        {
+            string exclusionRulesPath = GetRulePathFromMainThread();
             //排除规则文件使用系统默认的情况：1）文件路径为空；2）文件路径虽不为空但后缀非.txt；3）文件路径非法。
             if (
                 exclusionRulesPath == ""
@@ -356,11 +456,11 @@ namespace GalaxyObfuscator
             )
             {
                 //文本路径错误，重置为系统默认
-                exclusionRulesPath = AppDomain.CurrentDomain.BaseDirectory + @"exclusion_rules.txt";
+                exclusionRulesPath = AppDomain.CurrentDomain.BaseDirectory + @"Rules/exclusion_rules.txt";
                 SetRulePathToMainThread(exclusionRulesPath);
                 //SetTipsToMainThread("排除规则文件路径错误，重置为系统默认！");
             }
-            //去除代码里的注释
+            //去除代码里的注释和空行
             string mainCode = MMCore.RemoveEmptyLines(MMCore.RemoveComments(GetCodeFromMainThread()));
             // 定义正则表达式模式，匹配函数名
             string pattern = @"(?<=^|[^a-zA-Z_])[a-zA-Z_][\w]*(?=\s*\([^\)]*\)(\s+|\n|$))";
@@ -443,12 +543,15 @@ namespace GalaxyObfuscator
             //}
             //obfuscatedCode = Regex.Replace(obfuscatedCode, pattern, string.Empty, options);
 
-            string sCHeadPath = AppDomain.CurrentDomain.BaseDirectory + @"SCHead";
-            string sCEndPath = AppDomain.CurrentDomain.BaseDirectory + @"SCEnd";
-            string sCHead = File.ReadAllText(sCHeadPath);
-            string sCEnd = File.ReadAllText(sCEndPath);
-            obfuscatedCode = sCHead + obfuscatedCode + sCEnd;
-
+            //植入LC4等其他功能（注：LC4卡顿检测功能来自岛风）
+            if (GetCheckLC4StateFromMainThread() == true)
+            {
+                string sCHeadPath = AppDomain.CurrentDomain.BaseDirectory + @"Rules/SCHead";
+                string sCEndPath = AppDomain.CurrentDomain.BaseDirectory + @"Rules/SCEnd";
+                string sCHead = File.ReadAllText(sCHeadPath);
+                string sCEnd = File.ReadAllText(sCEndPath);
+                obfuscatedCode = sCHead + obfuscatedCode + sCEnd;
+            }
             SetCodeToMainThread(obfuscatedCode);
         }
 
@@ -518,10 +621,12 @@ namespace GalaxyObfuscator
         /// <param name="e"></param>
         void button_selectWorkPath_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-            fbd.ShowDialog();
-            string path = fbd.SelectedPath;
-            textBox_workPath.Text = path;
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog())
+            {
+                fbd.ShowDialog();
+                string path = fbd.SelectedPath;
+                textBox_workPath.Text = path;
+            }
         }
 
         void button_selectRulePath_Click(object sender, EventArgs e)
@@ -542,9 +647,130 @@ namespace GalaxyObfuscator
             }
         }
 
+        void LoadContentFromFile_Galaxy()
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "SC2Map Files (*.SC2Map)|*.SC2Map|Galaxy Files (*.galaxy)|*.galaxy|All Files (*.*)|*.*";
+                DialogResult result = ofd.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    string script;
+                    string path = ofd.FileName;
+                    string fileExtension = Path.GetExtension(path).ToLower(); // 获取文件扩展名并转换为小写
+                    switch (fileExtension)
+                    {
+                        case ".sc2map":
+                            // 处理.SC2Map文件
+                            using (MpqArchive mpqArchive = new MpqArchive(path))
+                            {
+                                //打开MPQ格式文件中的MapScript.galaxy
+                                using (StreamReader streamReader = new StreamReader(new BufferedStream(mpqArchive.OpenFile("MapScript.galaxy"))))
+                                {
+                                    //字节转字符串
+                                    script = streamReader.ReadToEnd();
+                                    //脚本内容显示到窗口
+                                    richTextBox_Code.Text = script;
+                                }
+                            }
+                            break;
+
+                        case ".galaxy":
+                            // 处理.galaxy文件
+                            byte[] binaryData;
+                            try
+                            {
+                                binaryData = File.ReadAllBytes(path);
+                                script = Encoding.UTF8.GetString(binaryData);
+                                //内容显示到窗口
+                                richTextBox_Code.Text = script;
+                            }
+                            catch (FileNotFoundException)
+                            {
+                                label_Tips.Text = "文件未找到";
+                            }
+                            catch (Exception ex)
+                            {
+                                label_Tips.Text = $"发生错误: {ex.Message}";
+                            }
+                            break;
+
+                        default:
+                            // 未知文件类型
+                            MessageBox.Show("必须是*.SC2Map或*.galaxy文件");
+                            break;
+                    }
+                }
+                else if (result == DialogResult.Cancel)
+                {
+                    //MessageBox.Show("用户取消了文件选择！");
+                }
+            }
+        }
+
+        void LoadContentFromFile_Objects()
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "SC2Map Files (*.SC2Map)|*.SC2Map|Object Files (Objects)|Objects|All Files (*.*)|*.*";
+                DialogResult result = ofd.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    string str;
+                    string path = ofd.FileName;
+                    string fileExtension = Path.GetExtension(path).ToLower(); // 获取文件扩展名并转换为小写
+                    switch (fileExtension)
+                    {
+                        case ".sc2map":
+                            // 处理.SC2Map文件
+                            using (MpqArchive mpqArchive = new MpqArchive(path))
+                            {
+                                //打开MPQ格式文件中的MapScript.galaxy
+                                using (StreamReader streamReader = new StreamReader(new BufferedStream(mpqArchive.OpenFile("Objects"))))
+                                {
+                                    //字节转字符串
+                                    str = streamReader.ReadToEnd();
+                                    //脚本内容显示到窗口
+                                    richTextBox_Code.Text = str;
+                                }
+                            }
+                            break;
+
+                        case "Objects":
+                            // 处理.galaxy文件
+                            byte[] binaryData;
+                            try
+                            {
+                                binaryData = File.ReadAllBytes(path);
+                                str = Encoding.UTF8.GetString(binaryData);
+                                //内容显示到窗口
+                                richTextBox_Code.Text = str;
+                            }
+                            catch (FileNotFoundException)
+                            {
+                                label_Tips.Text = "文件未找到";
+                            }
+                            catch (Exception ex)
+                            {
+                                label_Tips.Text = $"发生错误: {ex.Message}";
+                            }
+                            break;
+                        default:
+                            // 未知文件类型
+                            MessageBox.Show("必须是*.SC2Map或名为Objects的文件");
+                            break;
+                    }
+                }
+                else if (result == DialogResult.Cancel)
+                {
+                    //MessageBox.Show("用户取消了文件选择！");
+                }
+            }
+        }
+
         void richTextBox_Code_TextChanged(object sender, EventArgs e)
         {
-            //文本改变时不需要写任何动作
+            //文本改变时不需要写任何动作，但也可用来检查关键字或执行命令
         }
 
         void comboBox_SelectFunc_SelectedIndexChanged(object sender, EventArgs e)
@@ -555,12 +781,27 @@ namespace GalaxyObfuscator
                     SetTipsToMainThread("功能未选择！");
                     break;
                 case 0:
-                    SetTipsToMainThread("混淆.SC2Map地图文件（请选择处理目录）");
+                    SetTipsToMainThread("（设置处理目录）执行将批处理混肴文件夹内所有.SC2Map地图文件");
+                    panel1.Visible = true;
                     panel_Bottom.Visible = false;
+                    checkBox_LC4.Enabled = true;
+                    checkBox_Test.Enabled = true;
                     break;
                 case 1:
-                    SetTipsToMainThread("混淆Galaxy代码（请在左下角的文本框填入代码）");
+                    SetTipsToMainThread("（左下文本）填入Galaxy代码，执行将进行混肴");
+                    button_LoadContentFromFile.Text = "读取Map里的代码";
+                    panel1.Visible = false;
                     panel_Bottom.Visible = true;
+                    checkBox_LC4.Enabled = true;
+                    checkBox_Test.Enabled = true;
+                    break;
+                case 2:
+                    SetTipsToMainThread("（左下文本）填入Objects内容，执行将单位、装饰物布置信息转Galaxy动作");
+                    button_LoadContentFromFile.Text = "读取Map里的Objects";
+                    panel1.Visible = false;
+                    panel_Bottom.Visible = true;
+                    checkBox_LC4.Enabled = false;
+                    checkBox_Test.Enabled = false;
                     break;
                 default:
                     SetTipsToMainThread("功能无效！");
@@ -570,9 +811,25 @@ namespace GalaxyObfuscator
 
         void Form1_Load(object sender, EventArgs e)
         {
-            comboBox_SelectFunc.Items.Add("混淆.SC2Map地图文件");
-            comboBox_SelectFunc.Items.Add("混淆Galaxy代码");
+            comboBox_SelectFunc.Items.Add("对.SC2Map地图文件进行混肴");
+            comboBox_SelectFunc.Items.Add("对Galaxy代码进行混肴");
+            comboBox_SelectFunc.Items.Add("将Objects布置信息转Galaxy（演算体的碰撞将失效）");
             comboBox_SelectFunc.SelectedIndex = 0;
+        }
+
+        void button_LoadContentFromFile_Click(object sender, EventArgs e)
+        {
+            switch (GetSelectedIndexFromMainThread())
+            {
+                case 1:
+                    LoadContentFromFile_Galaxy();
+                    break;
+                case 2:
+                    LoadContentFromFile_Objects();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
