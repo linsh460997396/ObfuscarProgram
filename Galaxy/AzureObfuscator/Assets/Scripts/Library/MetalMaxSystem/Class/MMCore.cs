@@ -1,4 +1,4 @@
-﻿#define NETFRAMEWORK
+﻿//#define NETFRAMEWORK
 //#define MonoGame
 
 using System;
@@ -1040,7 +1040,7 @@ namespace MetalMaxSystem
         }
 
         /// <summary>
-        /// 去掉单行及多行注释
+        /// 去掉代码里的注释
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
@@ -1054,24 +1054,11 @@ namespace MetalMaxSystem
         }
 
         /// <summary>
-        /// 去掉空行
+        /// 去掉代码里的空行
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
         public static string RemoveEmptyLines(string code)
-        {
-            string pattern = @"^\s*\n$";
-            RegexOptions options = RegexOptions.Multiline;
-            string result = Regex.Replace(code, pattern, string.Empty, options);
-            return result;
-        }
-
-        /// <summary>
-        /// 去掉空字符
-        /// </summary>
-        /// <param name="code"></param>
-        /// <returns></returns>
-        public static string RemoveEmptyChar(string code)
         {
             string pattern = @"^\s*$";
             RegexOptions options = RegexOptions.Multiline;

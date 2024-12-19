@@ -3,19 +3,19 @@
   "WorkspaceRootPath": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\assets\\scripts\\library\\metalmaxsystem\\class\\obfuscator\\codeobfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:assets\\scripts\\library\\metalmaxsystem\\class\\obfuscator\\codeobfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|d:\\vswork\\2022\\galaxy\\azureobfuscator\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|d:\\vswork\\2022\\galaxy\\azureobfuscator\\assets\\scripts\\library\\metalmaxsystem\\class\\obfuscator\\codeobfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:assets\\scripts\\library\\metalmaxsystem\\class\\obfuscator\\codeobfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|d:\\vswork\\2022\\galaxy\\azureobfuscator\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|d:\\vswork\\2022\\galaxy\\azureobfuscator\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -26,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,13 +34,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "CodeObfuscator.cs",
               "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\Obfuscator\\CodeObfuscator.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\Obfuscator\\CodeObfuscator.cs",
               "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\Obfuscator\\CodeObfuscator.cs",
               "RelativeToolTip": "Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\Obfuscator\\CodeObfuscator.cs",
-              "ViewState": "AgIAAIAAAAAAAAAAAAAjwKwAAABXAAAAAAAAAA==",
+              "ViewState": "AgIAAJ4AAAAAAAAAAAAAAKkAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-19T13:23:26.875Z",
               "EditorCaption": ""
@@ -72,13 +72,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Form1.cs",
               "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Form1.cs",
               "RelativeDocumentMoniker": "Form1.cs",
               "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Form1.cs",
               "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAAEwAAAAAAAAAAAAIwGkAAAAtAAAAAAAAAA==",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAIwGkAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-19T09:20:12.378Z",
               "EditorCaption": ""
