@@ -1,0 +1,13 @@
+D:\VSWork\2022\Galaxy\AzureObfuscator\bin\Debug\AzureObfuscator.exe.config
+D:\VSWork\2022\Galaxy\AzureObfuscator\bin\Debug\AzureObfuscator.exe
+D:\VSWork\2022\Galaxy\AzureObfuscator\bin\Debug\AzureObfuscator.pdb
+D:\VSWork\2022\Galaxy\AzureObfuscator\bin\Debug\System.Numerics.Vectors.dll
+D:\VSWork\2022\Galaxy\AzureObfuscator\bin\Debug\System.Numerics.Vectors.xml
+D:\VSWork\2022\Galaxy\AzureObfuscator\obj\Debug\GalaxyObfuscator.csproj.AssemblyReference.cache
+D:\VSWork\2022\Galaxy\AzureObfuscator\obj\Debug\GalaxyObfuscator.Form1.resources
+D:\VSWork\2022\Galaxy\AzureObfuscator\obj\Debug\AzureObfuscator.Properties.Resources.resources
+D:\VSWork\2022\Galaxy\AzureObfuscator\obj\Debug\GalaxyObfuscator.csproj.GenerateResource.cache
+D:\VSWork\2022\Galaxy\AzureObfuscator\obj\Debug\GalaxyObfuscator.csproj.CoreCompileInputs.cache
+D:\VSWork\2022\Galaxy\AzureObfuscator\obj\Debug\GalaxyOb.CF582F82.Up2Date
+D:\VSWork\2022\Galaxy\AzureObfuscator\obj\Debug\AzureObfuscator.exe
+D:\VSWork\2022\Galaxy\AzureObfuscator\obj\Debug\AzureObfuscator.pdb

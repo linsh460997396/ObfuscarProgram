@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyObfuscator", "GalaxyObfuscator.csproj", "{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "GalaxyObfuscatorSetup", "..\GalaxyObfuscatorSetup\GalaxyObfuscatorSetup.vdproj", "{8C1EB4EC-95B6-47FA-9C1C-524AA46A6ABD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C1EB4EC-95B6-47FA-9C1C-524AA46A6ABD}.Debug|Any CPU.ActiveCfg = Debug
+		{8C1EB4EC-95B6-47FA-9C1C-524AA46A6ABD}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
