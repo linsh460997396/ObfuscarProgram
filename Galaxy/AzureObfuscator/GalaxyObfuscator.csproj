@@ -64,6 +64,7 @@
     <Compile Include="Assets\Scripts\Library\GalaxyObfuscator\TokenType.cs" />
     <Compile Include="Assets\Scripts\Library\GalaxyObfuscator\UnexpectedEndOfFileException.cs" />
     <Compile Include="Assets\Scripts\Library\MetalMaxSystem\Class\DotNetEvent\DllLoader.cs" />
+    <Compile Include="Assets\Scripts\Library\MetalMaxSystem\Class\DotNetEvent\FileWriter.cs" />
     <Compile Include="Assets\Scripts\Library\MetalMaxSystem\Class\DotNetEvent\KeyMouseHook\KeyboardHook.cs" />
     <Compile Include="Assets\Scripts\Library\MetalMaxSystem\Class\DotNetEvent\KeyMouseHook\MouseHook.cs" />
     <Compile Include="Assets\Scripts\Library\MetalMaxSystem\Class\DotNetEvent\KeyMouseHook\RecordService.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Assets\Scripts\Library\MetalMaxSystem\Class\Other\MainThreadDispatcher.cs" />
     <Compile Include="Assets\Scripts\Library\MetalMaxSystem\Class\Other\Resource.cs" />
     <Compile Include="Assets\Scripts\Library\MetalMaxSystem\Class\Other\TextureAnalyzer.cs" />
+    <Compile Include="Assets\Scripts\Library\MetalMaxSystem\Class\Other\TextureAnalyzerNet.cs" />
     <Compile Include="Assets\Scripts\Library\MetalMaxSystem\Class\Thread\MainUpdate.cs" />
     <Compile Include="Assets\Scripts\Library\MetalMaxSystem\Class\Thread\SubUpdate.cs" />
     <Compile Include="Assets\Scripts\Library\MetalMaxSystem\Class\Thread\TimerUpdate.cs" />
