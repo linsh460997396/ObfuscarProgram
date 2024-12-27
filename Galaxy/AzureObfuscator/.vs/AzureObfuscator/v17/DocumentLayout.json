@@ -1,12 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|d:\\vswork\\2022\\galaxy\\azureobfuscator\\assets\\scripts\\library\\metalmaxsystem\\class\\other\\textureanalyzernet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:assets\\scripts\\library\\metalmaxsystem\\class\\other\\textureanalyzernet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -14,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -23,19 +18,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "TextureAnalyzerNet.cs",
-              "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\Other\\TextureAnalyzerNet.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\Other\\TextureAnalyzerNet.cs",
-              "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\Other\\TextureAnalyzerNet.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\Other\\TextureAnalyzerNet.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-24T17:44:10.651Z",
-              "EditorCaption": ""
             }
           ]
         }
