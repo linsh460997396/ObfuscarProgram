@@ -12,8 +12,8 @@ namespace GalaxyObfuscator
         /// <summary>
         /// [构造函数]标识符生成器
         /// </summary>
-        /// <param name="alphabet">包含所有可能用于生成标识符的字符</param>
-        /// <param name="maxLength">生成标识符的最大长度</param>
+        /// <param name="alphabet">包含所有用于生成标识符的混淆字符</param>
+        /// <param name="maxLength">生成标识符的最大长度限制</param>
         public IdentifierGenerator(string alphabet, int maxLength)
         {
             this.alphabet = alphabet;//设置可用字符集
@@ -22,7 +22,7 @@ namespace GalaxyObfuscator
         }
 
         /// <summary>
-        /// 生成唯一标识符
+        /// 生成唯一标识符。随机选择标识符的长度（1到maxLength之间），之后随机选择字符集字符进行组合（第一位数组元素是非数字开头）。
         /// </summary>
         /// <returns></returns>
         public string Generate()
@@ -61,7 +61,7 @@ namespace GalaxyObfuscator
             return text;
         }
         /// <summary>
-        /// 已生成的标识符集合，用于确保唯一性
+        /// 已生成的标识符集合，用于确保唯一性（用于Generate时进行比对）
         /// </summary>
         private ISet<string> names = new HashSet<string>();
         /// <summary>

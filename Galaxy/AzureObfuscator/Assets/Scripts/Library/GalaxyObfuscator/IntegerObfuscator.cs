@@ -9,7 +9,7 @@ namespace GalaxyObfuscator
     internal class IntegerObfuscator
     {
         /// <summary>
-        /// 简单混肴
+        /// 简单混淆。函数将number转成八进制或十六进制表示。
         /// </summary>
         /// <param name="number"></param>
         /// <returns></returns>
@@ -17,7 +17,7 @@ namespace GalaxyObfuscator
         {
             //根据随机数生成器的结果，选择不同的方式来表示整数
             switch (this.random.Next(7))
-            {
+            {//随机出0~6，其中0~3均执行return "0" + Convert.ToString(number, 8);
                 case 0:
                 case 1:
                 case 2:
@@ -37,7 +37,7 @@ namespace GalaxyObfuscator
         }
 
         /// <summary>
-        /// 生成混淆后的加减法表达式。number的混淆结果以字符串的形式存储在StringBuilder对象str中
+        /// 生成混淆后的加减法表达式。函数将number的混淆结果以字符串的形式存储在StringBuilder对象参数中
         /// </summary>
         /// <param name="str"></param>
         /// <param name="number"></param>
@@ -102,7 +102,7 @@ namespace GalaxyObfuscator
         }
 
         /// <summary>
-        /// 混肴一个整数
+        /// 混肴一个整数为（^）形式。
         /// </summary>
         /// <param name="number">用于混肴的整数</param>
         /// <returns>返回混淆后的字符串</returns>

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using MetalMaxSystem;
 using StormLib;
 
 namespace GalaxyObfuscator
@@ -99,21 +101,26 @@ namespace GalaxyObfuscator
         }
 
         /// <summary>
-        /// 混淆脚本的方法
+        /// 混淆脚本
         /// </summary>
         /// <returns>返回对Obfuscator.script混肴后的结果</returns>
         public string obfuscateScript()
         {
             //使用字符集及长度限制创建标识符生成器
             this.identifierGenerator = new IdentifierGenerator("lI1", 16);
-            //构建混淆字典
-            this.identifierTable = new Dictionary<Sequence, string>(); 
+            //构建混淆字典（标识符表、字面量表）
+            this.identifierTable = new Dictionary<Sequence, string>();
             this.literalTable = new Dictionary<Sequence, string>();
             //扫描脚本（分析并提取出所有需要混淆的标识符和字面量），涉及解析脚本代码识别出变量名、函数名等并记录在相应的表中
             this.scan();
+            //MMCore.WriteLine(string.Join(",\r\n", identifierTable.Select(kvp => $"Key: {kvp.Key}, Value: {kvp.Value}")));
+            //MMCore.WriteLine("█identifierTable End█" + "\r\n" + "");
+            //MMCore.WriteLine(string.Join(",\r\n", literalTable.Select(kvp => $"Key: {kvp.Key}, Value: {kvp.Value}")));
+            //MMCore.WriteLine("█literalTable End█" + "\r\n" + "");
             //遍历标识符保留列表（这些标识符在混淆过程中不应被改变）
             //Obfuscator.ReservedIdentifiers包含了不应被混淆的标识符集合
-            foreach (string str in Obfuscator.ReservedIdentifiers)
+            ReservedIdentifiers = File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + @"Rules/exclusion_rules.txt");
+            foreach (string str in ReservedIdentifiers)
             {
                 //将保留标识符转换为Sequence类型（为了方便比较或存储）
                 Sequence key = new Sequence(str);
@@ -122,8 +129,10 @@ namespace GalaxyObfuscator
                 {
                     //移除保留标识符
                     this.identifierTable.Remove(key);
+                    MMCore.WriteLine("移除标识符："+ key);
                 }
             }
+            //MMCore.WriteLine("C:/Users/linsh/Desktop/test.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
             //构建混淆后的脚本
             return this.construct();
         }
@@ -256,12 +265,12 @@ namespace GalaxyObfuscator
         /// <exception cref="SyntaxErrorException"></exception>
         private void scan()
         {
-            //初始化扫描器准备扫描脚本
+            //创建扫描器并填入要扫描的原始脚本
             this.scanner = new Scanner(this.script);
-            //循环读取脚本中的每一个标记
+            //读标记（识别空白字符和注释、标识符、字面量、符号并读其中一种直到各自结尾符，为一次标记，一直循环到代码全部读完）
             while (this.scanner.MoveNext())
             {
-                //获取当前标记
+                //获取当前分析出来的标记
                 Token token = this.scanner.Current;
                 //如果当前标记为None表示没有更多标记可读，因此退出循环
                 if (token.Type == TokenType.None)
@@ -277,6 +286,7 @@ namespace GalaxyObfuscator
                 string a;
                 if ((a = token.ToString()) != null)
                 {
+                    //MMCore.WriteLine(token.ToString());
                     //根据标识符的值执行不同的解析逻辑
                     if (a == "include")
                     {
@@ -316,6 +326,7 @@ namespace GalaxyObfuscator
                 //如果标识符不是上述特殊关键字则解析为一个普通的声明
                 this.scanDeclaration();
             }
+            //MMCore.WriteLine("C:/Users/linsh/Desktop/test.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, true);//尾行留空
         }
 
         /// <summary>
@@ -325,7 +336,7 @@ namespace GalaxyObfuscator
         {
             //读取一个预期的标识符标记
             this.scanner.ReadExpectedToken(TokenType.Identifier);
-            //将读取的标识符添加到某个地方（可能是标识符表或类似的结构）
+            //将读取的标识符添加到标识符表
             this.addIdentifier();
             //初始化字符串数组用于存储处理后的标识符
             string[] array = new string[2];
@@ -708,7 +719,7 @@ namespace GalaxyObfuscator
         /// </summary>
         private const string ScriptFileName = "MapScript.galaxy";
         /// <summary>
-        /// 定义关键字数组，这些关键字在脚本解析中具有特殊含义
+        /// 定义关键字数组，这些关键字在脚本解析中具有特殊含义，不应被混淆
         /// </summary>
         private static readonly string[] Keywords = new string[]
 {
@@ -718,13 +729,26 @@ namespace GalaxyObfuscator
             "else",
             "return"
 };
+        private static string[] _reservedIdentifiers;
         /// <summary>
         /// 标识符保留数组，这些标识符在脚本中具有特殊用途，不应被混淆
         /// </summary>
-        private static readonly string[] ReservedIdentifiers = new string[]
-{
-            "InitMap"
-};
+        public static string[] ReservedIdentifiers
+        {
+            get
+            {
+                return _reservedIdentifiers;
+            }
+            set
+            {
+                _reservedIdentifiers = value;
+            }
+        }
+        //        private static readonly string[] ReservedIdentifiers = new string[]
+        //{
+        //            "InitMap"
+        //};
+
         /// <summary>
         /// 标识符生成器，用于生成唯一的标识符或进行某种形式的标识符混淆
         /// </summary>
