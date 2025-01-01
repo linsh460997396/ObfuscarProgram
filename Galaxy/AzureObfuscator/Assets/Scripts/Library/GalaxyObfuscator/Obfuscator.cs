@@ -113,10 +113,10 @@ namespace GalaxyObfuscator
             this.literalTable = new Dictionary<Sequence, string>();
             //扫描脚本（分析并提取出所有需要混淆的标识符和字面量），涉及解析脚本代码识别出变量名、函数名等并记录在相应的表中
             this.scan();
-            //MMCore.WriteLine(string.Join(",\r\n", identifierTable.Select(kvp => $"Key: {kvp.Key}, Value: {kvp.Value}")));
-            //MMCore.WriteLine("█identifierTable End█" + "\r\n" + "");
-            //MMCore.WriteLine(string.Join(",\r\n", literalTable.Select(kvp => $"Key: {kvp.Key}, Value: {kvp.Value}")));
-            //MMCore.WriteLine("█literalTable End█" + "\r\n" + "");
+            MMCore.WriteLine(string.Join(",\r\n", identifierTable.Select(kvp => $"Key: {kvp.Key}, Value: {kvp.Value}")));
+            MMCore.WriteLine("█identifierTable End█" + "\r\n" + "");
+            MMCore.WriteLine(string.Join(",\r\n", literalTable.Select(kvp => $"Key: {kvp.Key}, Value: {kvp.Value}")));
+            MMCore.WriteLine("█literalTable End█" + "\r\n" + "");
             //遍历标识符保留列表（这些标识符在混淆过程中不应被改变）
             //Obfuscator.ReservedIdentifiers包含了不应被混淆的标识符集合
             ReservedIdentifiers = File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + @"Rules/exclusion_rules.txt");
@@ -132,14 +132,14 @@ namespace GalaxyObfuscator
                     MMCore.WriteLine("移除标识符："+ key);
                 }
             }
-            //MMCore.WriteLine("C:/Users/linsh/Desktop/test.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
+            MMCore.WriteLine("C:/Users/linsh/Desktop/test.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
             //构建混淆后的脚本
             return this.construct();
         }
         /// <summary>
-        /// 判断给定的Token（令牌）对象是否应该被视为一个独立的标记
+        /// 判断给定的Token对象是否应该被视为一个独立的标记
         /// </summary>
-        /// <param name="token">要判断的Token（令牌）对象</param>
+        /// <param name="token">要判断的Token对象</param>
         /// <returns></returns>
         private static bool isSeparateToken(Token token)
         {
@@ -159,7 +159,7 @@ namespace GalaxyObfuscator
             //乘以10是为了预留足够的空间，避免频繁扩容
             StringBuilder stringBuilder = new StringBuilder(this.script.Length * 10);
             //处理脚本中的"include"指令
-            //如果当前token是标识符且为"include"，则读取下一个token（令牌）作为"include"的加载文件名
+            //如果当前token是标识符且为"include"，则读取下一个token作为"include"的加载文件名
             while (this.scanner.Read().Type == TokenType.Identifier && this.scanner.Current.Sequence == "include")
             {
                 //"include"后面紧跟着的是要"include"的加载文件名（作为字符串字面量）
@@ -280,13 +280,14 @@ namespace GalaxyObfuscator
                 //如果当前标记不是标识符，则抛出语法错误异常
                 if (token.Type != TokenType.Identifier)
                 {
+                    MMCore.WriteLine("当前标记不是标识符，抛出错误！" + $"Type: {token.Type.ToString()}, Value: {token.Sequence.ToString()}");
                     throw new SyntaxErrorException(this.scanner);
                 }
                 //将当前标识符转换为字符串
                 string a;
                 if ((a = token.ToString()) != null)
                 {
-                    //MMCore.WriteLine(token.ToString());
+                    MMCore.WriteLine("进入检查！" + $"Type: {token.Type.ToString()}, Value: {token.Sequence.ToString()}");
                     //根据标识符的值执行不同的解析逻辑
                     if (a == "include")
                     {
@@ -318,6 +319,7 @@ namespace GalaxyObfuscator
                         //期望下一个标记为分号，表示声明结束
                         if (this.scanner.Current.Sequence != ";")
                         {
+                            MMCore.WriteLine("期望下一个标记为分号表示声明结束，但不存在所以抛出错误！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
                             throw new SyntaxErrorException(this.scanner);
                         }
                         continue;
@@ -450,6 +452,7 @@ namespace GalaxyObfuscator
             if (this.scanner.Current.Type != TokenType.Identifier)
             {
                 //如果不是则抛出语法错误异常
+                MMCore.WriteLine("期望是变量但不是所以抛出错误！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
                 throw new SyntaxErrorException(this.scanner);
             }
             //如果标识符表中不包含当前标识符则将其添加进去
@@ -512,24 +515,27 @@ namespace GalaxyObfuscator
                     goto Block_3;
                 }
             }
-            //确保读取到}符号
+            //确保读取到}右大括号
             if (type != TokenType.Symbol)
             {
+                MMCore.WriteLine("期望是符号但不是所以抛出错误！" + $"Type: {type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
                 throw new SyntaxErrorException(this.scanner);
             }
             if (this.scanner.Current.Sequence != "}")
             {
+                MMCore.WriteLine("期望是右大括号但不是所以抛出错误！" + $"Type: {type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
                 throw new SyntaxErrorException(this.scanner);
             }
-            //确保读取到;符号
+            //确保读取到;分号
             this.scanner.ReadExpectedSymbol(";");
             return;
         Block_3:
+            MMCore.WriteLine("期望是分号但不是所以抛出错误！" + $"Type: {type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
             throw new SyntaxErrorException(this.scanner);
         }
 
         /// <summary>
-        /// 扫描和处理声明语句（可能是变量声明或函数声明）
+        /// 扫描和处理声明语句（可能的变量或函数声明）
         /// </summary>
         /// <exception cref="SyntaxErrorException"></exception>
         private void scanDeclaration()
@@ -568,6 +574,7 @@ namespace GalaxyObfuscator
             //此时应期望一个右括号来结束函数参数列表，如果不是右括号则抛出语法错误异常
             if (this.scanner.Current.Type != TokenType.Symbol && this.scanner.Current.Sequence != ")")
             {
+                MMCore.WriteLine("期望是右括号来结束函数参数列表但不是所以抛出错误！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
                 throw new SyntaxErrorException(this.scanner);
             }
             //读取并跳过右括号
@@ -585,6 +592,7 @@ namespace GalaxyObfuscator
                 return;
             }
             // 如果既不是分号也不是左大括号则抛出语法错误异常
+            MMCore.WriteLine("期望是右括号来结束函数参数列表但不是所以抛出错误！" + $"Type: {scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
             throw new SyntaxErrorException(this.scanner);
         }
 
@@ -709,8 +717,10 @@ namespace GalaxyObfuscator
             }
             return;
         Block_4:
+            MMCore.WriteLine("期望是变量函数标识符但不是所以抛出错误！" + $"Type: {scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
             throw new SyntaxErrorException(this.scanner);
         Block_7:
+            MMCore.WriteLine("期望序列字符串是分号但不是所以抛出错误！" + $"Type: {scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
             throw new SyntaxErrorException(this.scanner);
         }
 

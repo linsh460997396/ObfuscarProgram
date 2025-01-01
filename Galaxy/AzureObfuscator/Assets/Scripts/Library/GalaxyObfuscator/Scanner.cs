@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MetalMaxSystem;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -100,6 +101,7 @@ namespace GalaxyObfuscator
         {
             if (!this.MoveNext())
             {
+                MMCore.WriteLine("MoveNext失败！" + $"Type: {token.Type.ToString()}, Value: {token.Sequence.ToString()}");
                 throw new UnexpectedEndOfFileException();
             }
             return this.token;
@@ -114,6 +116,7 @@ namespace GalaxyObfuscator
             this.Read();
             if (this.token.Type != TokenType.Symbol || this.token.Sequence != symbol)
             {
+                MMCore.WriteLine("标记类型不是符号或当前标记的序列（字符串）不等于参数" + symbol + "时抛出异常！" + $"Type: {token.Type.ToString()}, Value: {token.Sequence.ToString()}");
                 throw new SyntaxErrorException("Expected " + symbol);
             }
         }
@@ -127,6 +130,7 @@ namespace GalaxyObfuscator
             this.Read();
             if (this.token.Type != type)
             {
+                MMCore.WriteLine("读当前标记并期望特定的标记类型为参数" + token + "，否则抛出异常！" + $"Type: {token.Type.ToString()}, Value: {token.Sequence.ToString()}");
                 throw new SyntaxErrorException("Unexpected " + this.token);
             }
         }
@@ -144,6 +148,7 @@ namespace GalaxyObfuscator
                     return;
                 }
             }
+            MMCore.WriteLine("跳过直到遇到指定的终止符，如果到当前标记的序列（字符串）末尾还没有遇到终止符" + terminate + "，则抛出异常！" + $"Type: {this.Current.Type.ToString()}, Value: {this.Current.Sequence.ToString()}");
             throw new SyntaxErrorException("Missing " + terminate);
         }
         /// <summary>
@@ -169,6 +174,7 @@ namespace GalaxyObfuscator
                     }
                 }
             }
+            MMCore.WriteLine("跳过嵌套的代码块直到遇到指定的结束符，如果到当前标记的序列（字符串）末尾还没遇到有效的结束符" + e + "，则抛出异常！" + $"Type: {this.Current.Type.ToString()}, Value: {this.Current.Sequence.ToString()}");
             throw new SyntaxErrorException("Missing " + e);
         }
         /// <summary>
@@ -323,6 +329,7 @@ namespace GalaxyObfuscator
                     }
                 }
                 //全部读完还没遇到*/结尾，则报错
+                MMCore.WriteLine("全部读完还没遇到*/结尾则抛出异常！" + $"Type: {this.Current.Type.ToString()}, Value: {this.Current.Sequence.ToString()}");
                 throw new SyntaxErrorException("End of file in comment");
             }
             while (!this.End)
@@ -431,10 +438,12 @@ namespace GalaxyObfuscator
                 }
                 else if (c2 == '\n')
                 {//否则当前字符是换行符，弹出错误提示“常量中存在新行”
+                    MMCore.WriteLine("当前字符期望是反斜杠且为末尾字符但是换行符，抛出错误“常量中存在新行”" + $"Type: {this.Current.Type.ToString()}, Value: {this.Current.Sequence.ToString()}");
                     throw new SyntaxErrorException("New line in constant");
                 }
             }
             //没有正常返回时执行错误提示
+            MMCore.WriteLine("读文本字面量没有正常返回，抛出错误！" + $"Type: {this.Current.Type.ToString()}, Value: {this.Current.Sequence.ToString()}");
             throw new UnexpectedEndOfFileException();
         }
         /// <summary>
