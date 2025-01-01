@@ -280,7 +280,7 @@ namespace GalaxyObfuscator
                 //如果当前标记不是标识符，则抛出语法错误异常
                 if (token.Type != TokenType.Identifier)
                 {
-                    MMCore.WriteLine("当前标记不是标识符，抛出错误！" + $"Type: {token.Type.ToString()}, Value: {token.Sequence.ToString()}");
+                    MMCore.WriteLine("当前标记不是标识符，抛出！" + $"Type: {token.Type.ToString()}, Value: {token.Sequence.ToString()}");
                     throw new SyntaxErrorException(this.scanner);
                 }
                 //将当前标识符转换为字符串
@@ -312,14 +312,14 @@ namespace GalaxyObfuscator
                     }
                     else
                     {
-                        //读取并期望下一个标记为标识符（表示新类型名）
+                        //读取并期望下一个标记为标识符（新类型名）
                         this.scanner.ReadExpectedToken(TokenType.Identifier);
                         //解析变量声明（此处假设typedef后紧跟变量声明）
                         this.scanVariableDeclaration(false);
                         //期望下一个标记为分号，表示声明结束
                         if (this.scanner.Current.Sequence != ";")
                         {
-                            MMCore.WriteLine("期望下一个标记为分号表示声明结束，但不存在所以抛出错误！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
+                            MMCore.WriteLine("期望下一个标记为分号表示声明结束，但不存在所以抛出！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
                             throw new SyntaxErrorException(this.scanner);
                         }
                         continue;
@@ -452,7 +452,7 @@ namespace GalaxyObfuscator
             if (this.scanner.Current.Type != TokenType.Identifier)
             {
                 //如果不是则抛出语法错误异常
-                MMCore.WriteLine("期望是变量但不是所以抛出错误！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
+                MMCore.WriteLine("期望是变量但不是所以抛出！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
                 throw new SyntaxErrorException(this.scanner);
             }
             //如果标识符表中不包含当前标识符则将其添加进去
@@ -518,19 +518,19 @@ namespace GalaxyObfuscator
             //确保读取到}右大括号
             if (type != TokenType.Symbol)
             {
-                MMCore.WriteLine("期望是符号但不是所以抛出错误！" + $"Type: {type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
+                MMCore.WriteLine("期望是符号但不是所以抛出！" + $"Type: {type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
                 throw new SyntaxErrorException(this.scanner);
             }
             if (this.scanner.Current.Sequence != "}")
             {
-                MMCore.WriteLine("期望是右大括号但不是所以抛出错误！" + $"Type: {type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
+                MMCore.WriteLine("期望是右大括号但不是所以抛出！" + $"Type: {type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
                 throw new SyntaxErrorException(this.scanner);
             }
             //确保读取到;分号
             this.scanner.ReadExpectedSymbol(";");
             return;
         Block_3:
-            MMCore.WriteLine("期望是分号但不是所以抛出错误！" + $"Type: {type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
+            MMCore.WriteLine("期望是分号但不是所以抛出！" + $"Type: {type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
             throw new SyntaxErrorException(this.scanner);
         }
 
@@ -574,7 +574,7 @@ namespace GalaxyObfuscator
             //此时应期望一个右括号来结束函数参数列表，如果不是右括号则抛出语法错误异常
             if (this.scanner.Current.Type != TokenType.Symbol && this.scanner.Current.Sequence != ")")
             {
-                MMCore.WriteLine("期望是右括号来结束函数参数列表但不是所以抛出错误！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
+                MMCore.WriteLine("期望是右括号来结束函数参数列表但不是所以抛出！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
                 throw new SyntaxErrorException(this.scanner);
             }
             //读取并跳过右括号
@@ -592,7 +592,7 @@ namespace GalaxyObfuscator
                 return;
             }
             // 如果既不是分号也不是左大括号则抛出语法错误异常
-            MMCore.WriteLine("期望是右括号来结束函数参数列表但不是所以抛出错误！" + $"Type: {scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
+            MMCore.WriteLine("期望是右括号来结束函数参数列表但不是所以抛出！" + $"Type: {scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
             throw new SyntaxErrorException(this.scanner);
         }
 
@@ -717,10 +717,10 @@ namespace GalaxyObfuscator
             }
             return;
         Block_4:
-            MMCore.WriteLine("期望是变量函数标识符但不是所以抛出错误！" + $"Type: {scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
+            MMCore.WriteLine("期望是变量函数标识符但不是所以抛出！" + $"Type: {scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
             throw new SyntaxErrorException(this.scanner);
         Block_7:
-            MMCore.WriteLine("期望序列字符串是分号但不是所以抛出错误！" + $"Type: {scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
+            MMCore.WriteLine("期望序列字符串是分号但不是所以抛出！" + $"Type: {scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
             throw new SyntaxErrorException(this.scanner);
         }
 
@@ -729,7 +729,7 @@ namespace GalaxyObfuscator
         /// </summary>
         private const string ScriptFileName = "MapScript.galaxy";
         /// <summary>
-        /// 定义关键字数组，这些关键字在脚本解析中具有特殊含义，不应被混淆
+        /// 定义关键字数组，这些关键字在脚本解析中具有特殊含义（如include、void、int），除了不应被混淆还决定后面可预期的扫描方法。
         /// </summary>
         private static readonly string[] Keywords = new string[]
 {
@@ -737,11 +737,21 @@ namespace GalaxyObfuscator
             "while",
             "if",
             "else",
+            "elseif",
+            "switch",
+            "foreach",
             "return"
+
+            //"for",
+            //"while",
+            //"if",
+            //"else",
+            //"return"
 };
         private static string[] _reservedIdentifiers;
         /// <summary>
-        /// 标识符保留数组，这些标识符在脚本中具有特殊用途，不应被混淆
+        /// 标识符保留数组，这些标识符在脚本中具有特殊用途，不应被混淆。
+        /// 从扫描到声明的结构体、变量、函数名表（参与混淆）中排除保留标识符，官方函数因在代码文件中没声明所以不在该表。
         /// </summary>
         public static string[] ReservedIdentifiers
         {

@@ -438,12 +438,12 @@ namespace GalaxyObfuscator
                 }
                 else if (c2 == '\n')
                 {//否则当前字符是换行符，弹出错误提示“常量中存在新行”
-                    MMCore.WriteLine("当前字符期望是反斜杠且为末尾字符但是换行符，抛出错误“常量中存在新行”" + $"Type: {this.Current.Type.ToString()}, Value: {this.Current.Sequence.ToString()}");
+                    MMCore.WriteLine("当前字符期望是反斜杠且为末尾字符但是换行符，抛出“常量中存在新行”" + $"Type: {this.Current.Type.ToString()}, Value: {this.Current.Sequence.ToString()}");
                     throw new SyntaxErrorException("New line in constant");
                 }
             }
             //没有正常返回时执行错误提示
-            MMCore.WriteLine("读文本字面量没有正常返回，抛出错误！" + $"Type: {this.Current.Type.ToString()}, Value: {this.Current.Sequence.ToString()}");
+            MMCore.WriteLine("读文本字面量没有正常返回，抛出！" + $"Type: {this.Current.Type.ToString()}, Value: {this.Current.Sequence.ToString()}");
             throw new UnexpectedEndOfFileException();
         }
         /// <summary>
@@ -453,7 +453,7 @@ namespace GalaxyObfuscator
         {
             this.token.Sequence.Start = this.position;
             this.token.Type = TokenType.Symbol;
-            //读取当前字符并前进指针
+            //读取当前字符并将扫描指针前进1字符
             char c = this.read();
             if (!this.End)
             {//如果第二字符非末尾
@@ -485,7 +485,7 @@ namespace GalaxyObfuscator
                             //当前字符是<或=的情况
                             if ("+-*/%&^|=!<>".Contains(c))
                             {//检查第一个字符是否在"+-*/%&^|=!<>"中
-                                //指针前进
+                                //前进
                                 this.forward();
                                 return;
                             }
@@ -494,7 +494,7 @@ namespace GalaxyObfuscator
                             //当前字符是>的情况
                             if (c == '-')
                             {
-                                //指针前进
+                                //前进
                                 this.forward();
                             }
                             break;
@@ -510,7 +510,7 @@ namespace GalaxyObfuscator
                     //如果当前字符与第一个字符相同且下一字符是=且非末尾字符时
                     if (this.get() == c && this.forward() && this.get() == '=')
                     {
-                        //指针前进
+                        //前进
                         this.forward();
                         return;
                     }
