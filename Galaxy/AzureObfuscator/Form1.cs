@@ -320,7 +320,7 @@ namespace GalaxyObfuscator
                 //Debug.WriteLine(stopwatch.Elapsed.ToString());
                 SetStatisticsToMainThread(" 时耗：" + stopwatch.Elapsed.ToString());
                 //↓如果勾选了打印报告
-                MMCore.WriteLine("C:/Users/linsh/Desktop/test.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
+                //MMCore.WriteLine("C:/Users/linsh/Desktop/test.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
                 //MessageBox.Show("Completed!");//弹窗提示
             }
             //放弃了线程注销做法，程序将始终运行至此，可以知道是用户中断还是正常运行结束
