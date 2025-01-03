@@ -142,7 +142,7 @@ namespace GalaxyObfuscator
                 this.script = sCHead + "\r\n" + this.script + "\r\n" + sCEnd;
                 if (form1.GetSelectedIndexFromMainThread() == 1)
                 {
-                    MMCore.WriteLine("添加LC4混淆头尾");
+                    MMCore.WriteLine("添加LC4头尾");
                     form1.SetCodeToMainThread(this.script);
                 }
             }
@@ -344,10 +344,10 @@ namespace GalaxyObfuscator
                     //gf_ObfAuto_syscalltemplate(){};funcref<gf_ObfAuto_syscalltemplate>[...问题发生时指针位置在{}后的分号
                     //如果退出代码块时，代码块里什么都没有，应归属于正常现象（由于未捕获上个标记头暂不分析代码块，直接按遇}或;当正常继续）
                     //实际上有非空内容应处理而非随意跳过（待处理）
-                    if (token.Type == TokenType.Symbol && (token.ToString() == "}" || token.ToString() == ";"))
-                    {
-                        continue;
-                    }
+                    //if (token.Type == TokenType.Symbol && (token.ToString() == "}" || token.ToString() == ";"))
+                    //{
+                    //    continue;
+                    //}
                     MMCore.WriteLine("当前标记不是标识符，抛出！" + $"Type: {token.Type.ToString()}, Value: {token.ToString()}");
                     throw new SyntaxErrorException(this.scanner);
                 }
