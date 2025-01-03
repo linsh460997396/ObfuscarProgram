@@ -1733,7 +1733,7 @@ namespace MetalMaxSystem
         /// <param name="bufferAppend">false覆盖缓冲区（即写入前清理StringBuilder）,true向缓冲区追加文本</param>
         public static void WriteLine(string value, bool bufferAppend = true)
         {
-            //Tell(value);//临时调试
+            Tell(value);//临时调试
             if (fileWriter == null) { fileWriter = new FileWriter(); }
             fileWriter.WriteLine(value, !bufferAppend);
         }

@@ -13,7 +13,8 @@ namespace GalaxyObfuscator
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Obfuscator.form1 = new Form1();
+            Application.Run(Obfuscator.form1);
         }
     }
 }

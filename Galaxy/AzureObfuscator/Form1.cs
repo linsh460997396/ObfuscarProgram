@@ -1,21 +1,15 @@
-﻿using GalaxyObfuscator;
-using MetalMaxSystem;
+﻿using MetalMaxSystem;
 using StormLib;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
-using System.Xml;
+using System.Xml.Linq;
 
 namespace GalaxyObfuscator
 {
@@ -88,7 +82,7 @@ namespace GalaxyObfuscator
             });
         }
 
-        bool GetCheckLC4StateFromMainThread()
+        public bool GetCheckLC4StateFromMainThread()
         {
             if (checkBox_LC4.InvokeRequired)
             {
@@ -121,7 +115,7 @@ namespace GalaxyObfuscator
             }
         }
 
-        void SetCodeToMainThread(string code)
+        public void SetCodeToMainThread(string code)
         {
             // 调用 Invoke 方法将操作发送到主线程
             Invoke((MethodInvoker)delegate ()
@@ -130,7 +124,7 @@ namespace GalaxyObfuscator
             });
         }
 
-        int GetSelectedIndexFromMainThread()
+        public int GetSelectedIndexFromMainThread()
         {
             if (comboBox_SelectFunc.InvokeRequired)
             {
@@ -293,7 +287,7 @@ namespace GalaxyObfuscator
         /// </summary>
         void ButtonRun()
         {
-            string directoryPath = textBox_workPath.Text;
+            Obfuscator.mutiCount = 0;//运行前重置计数
             for (int i = 0; i < 1; i++)
             {
                 Stopwatch stopwatch = new Stopwatch();
@@ -319,8 +313,6 @@ namespace GalaxyObfuscator
                 stopwatch.Stop();
                 //Debug.WriteLine(stopwatch.Elapsed.ToString());
                 SetStatisticsToMainThread(" 时耗：" + stopwatch.Elapsed.ToString());
-                //↓如果勾选了打印报告
-                //MMCore.WriteLine("C:/Users/linsh/Desktop/test.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
                 //MessageBox.Show("Completed!");//弹窗提示
             }
             //放弃了线程注销做法，程序将始终运行至此，可以知道是用户中断还是正常运行结束
@@ -344,7 +336,7 @@ namespace GalaxyObfuscator
         {
             for (int i = 0; i < 1; i++)
             {
-                if (MMCore.IsDFPath(textBox_workPath.Text) || GetSelectedIndexFromMainThread()==1 || GetSelectedIndexFromMainThread()==2)
+                if (MMCore.IsDFPath(textBox_workPath.Text) || GetSelectedIndexFromMainThread() == 1 || GetSelectedIndexFromMainThread() == 2)
                 {
                     //开始工作，大部分界面置灰（用户不可操作）
                     UserOpEnableChange(false);
@@ -402,10 +394,10 @@ namespace GalaxyObfuscator
             try
             {
                 if (GetCheckTestStateFromMainThread() == false)
-                {
+                {//非实验版混淆
                     ObDirectoryRecursively(GetWorkPathFromMainThread());
                 }
-                else 
+                else
                 {
                     //实验版混淆
                     SelectedFunc_Test();
@@ -428,6 +420,8 @@ namespace GalaxyObfuscator
                 Obfuscator obfuscator = new Obfuscator();
                 obfuscator.script = GetCodeFromMainThread();
                 SetCodeToMainThread(obfuscator.obfuscateScript());
+                //↓如果勾选了打印报告
+                MMCore.WriteLine(GetWorkPathFromMainThread() + @"/代码混淆报告.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
             }
             else
             {
@@ -441,7 +435,156 @@ namespace GalaxyObfuscator
         /// </summary>
         void SelectedFunc_2()
         {
+            StringBuilder stringBuilder = new StringBuilder();
+            try
+            {
+                //使用XDocument.Parse来解析XML字符串
+                XDocument doc = XDocument.Parse(GetCodeFromMainThread());
 
+                stringBuilder.AppendLine("█注：地编布置装饰物时碰撞写死二进制文件，转Galaxy布置可用透明单位移动碰撞来补█");
+                stringBuilder.AppendLine("█↓ObjectUnit.UnitCreate.Start↓█单位.创建");
+                // 遍历所有的ObjectUnit元素
+                foreach (var obj in doc.Descendants("ObjectUnit"))
+                {
+                    // 提取必要的属性值
+                    // int id = int.Parse(obj.Attribute("Id").Value);
+                    string position = obj.Attribute("Position").Value;
+                    string type = obj.Attribute("UnitType").Value;
+                    string rotation = obj.Attribute("Rotation")?.Value;
+                    double ro = 0.0;
+                    if (rotation != null)
+                    {
+                        double.TryParse(rotation, out ro);
+                        //使用 Math.Round 进行四舍五入，然后转换为 int 类型来保留整数部分
+                        rotation = ((int)Math.Round(RadianToDegree(ro)) - 90).ToString();
+                    }
+                    else
+                    {
+                        rotation = "270";
+                    }
+
+                    // 分割Position属性以获取X和Y坐标
+                    string[] positionParts = position.Split(',');
+                    string x = positionParts[0];
+                    string y = positionParts[1];
+
+                    // 替换Type属性中的"CCData_Blocker"为"CCData_UnitBlocker"
+                    // string unitType = type.Replace("CCData_FKWall", "CCData_FK4Wall");
+
+                    // 检查unitType是否包含"CCData_UnitBlocker"
+                    // if (unitType.Contains("CCData_FK4Wall"))
+                    // {
+                    //     // 如果包含，则输出新格式的字符串
+                    //     stringBuilder.AppendLine($"UnitCreate(1, \"{unitType}\", 0, gv_playerID, Point({x}, {y}), rotation);");
+                    // }
+
+                    //输出新格式的字符串
+                    stringBuilder.AppendLine(
+                        $"UnitCreate(1, \"{type}\", 0, gv_playerID, Point({x}, {y}), {rotation});"
+                    );
+                }
+                stringBuilder.AppendLine("█↑ObjectUnit.UnitCreate.End↑█" + "\r\n");
+
+                stringBuilder.AppendLine("█↓ObjectDoodad.CreateActorAtPoint.Start↓█装饰物.创建演算体");
+                //遍历所有的ObjectDoodad元素
+                foreach (var obj in doc.Descendants("ObjectDoodad"))
+                {
+                    // 提取必要的属性值
+                    string position = obj.Attribute("Position").Value;
+                    string type = obj.Attribute("Type").Value;
+                    string rotation = obj.Attribute("Rotation")?.Value;
+                    double ro = 0.0;
+
+                    // 分割Position属性以获取X和Y坐标
+                    string[] positionParts = position.Split(',');
+                    string x = positionParts[0];
+                    string y = positionParts[1];
+
+                    // 输出新格式的字符串
+                    stringBuilder.AppendLine(
+                        $"libNtve_gf_CreateActorAtPoint (\"{type}\", Point({x}, {y}));"
+                    );
+                    stringBuilder.AppendLine(
+                        $"libBC0D3AAD_gf_HD_RegA_Simple(libNtve_gf_ActorLastCreated(), \"gv_DoodedObjGroup\");\\\\加入演算体组（需MM_功能库）"
+                    );
+                    if (rotation != null)
+                    {
+                        double.TryParse(rotation, out ro);
+                        //使用Math.Round进行四舍五入，然后转换为int类型来保留整数部分
+                        rotation = ((int)Math.Round(RadianToDegree(ro)) - 90).ToString();
+                        stringBuilder.AppendLine(
+                            $"libNtve_gf_MakeModelFaceAngle(libNtve_gf_ActorLastCreated(), {rotation});"
+                        );
+                    }
+                }
+                stringBuilder.AppendLine("█↑ObjectDoodad.CreateActorAtPoint.End↑█" + "\r\n");
+
+                stringBuilder.AppendLine("█↓ObjectDoodad.CreateModelAtPoint.Start↓█装饰物.创建模型");
+                // 遍历所有的ObjectDoodad元素
+                foreach (var obj in doc.Descendants("ObjectDoodad"))
+                {
+                    // 提取必要的属性值
+                    string position = obj.Attribute("Position").Value;
+                    string type = obj.Attribute("Type").Value;
+                    string rotation = obj.Attribute("Rotation")?.Value;
+                    double ro = 0.0;
+
+                    // 分割Position属性以获取X和Y坐标
+                    string[] positionParts = position.Split(',');
+                    string x = positionParts[0];
+                    string y = positionParts[1];
+
+                    // 输出新格式的字符串
+                    Console.WriteLine(
+                        $"libNtve_gf_CreateModelAtPoint(\"{type}\", Point({x}, {y}));"
+                    );
+                    Console.WriteLine(
+                        $"libBC0D3AAD_gf_HD_RegA_Simple(libNtve_gf_ActorLastCreated(), \"gv_DoodedObjGroup\");"
+                    );
+                    if (rotation != null)
+                    {
+                        double.TryParse(rotation, out ro);
+                        //使用 Math.Round 进行四舍五入，然后转换为 int 类型来保留整数部分
+                        rotation = ((int)Math.Round(RadianToDegree(ro)) - 90).ToString();
+                        Console.WriteLine(
+                            $"libNtve_gf_MakeModelFaceAngle(libNtve_gf_ActorLastCreated(), {rotation});"
+                        );
+                    }
+                }
+                stringBuilder.AppendLine("█↑ObjectDoodad.CreateModelAtPoint.End↑█" + "\r\n");
+
+                stringBuilder.AppendLine("█↓ObjectPoint.PathAddNoFlyZone.Start↓█点.路径创建禁飞区");
+                // 遍历所有的ObjectDoodad元素
+                foreach (var obj in doc.Descendants("ObjectPoint"))
+                {
+                    // 提取必要的属性值
+                    // int id = int.Parse(doodad.Attribute("Id").Value);
+                    string position = obj.Attribute("Position").Value;
+                    string type = obj.Attribute("Type").Value;
+
+                    // 分割Position属性以获取X和Y坐标
+                    string[] positionParts = position.Split(',');
+                    string x = positionParts[0];
+                    string y = positionParts[1];
+
+                    // 输出新格式的字符串
+                    if (type == "NoFlyZone")
+                    {
+                        stringBuilder.AppendLine($"PathAddNoFlyZone(Point({x}, {y}), 2.0, 2.0);\\\\后俩参数是范围大小");
+                    }
+                }
+                stringBuilder.AppendLine("█↑ObjectPoint.PathAddNoFlyZone.End↑█" + "\r\n");
+            }
+            catch (IOException ex)
+            {
+                //处理文件读取过程中的异常
+                Debug.WriteLine("Error: " + ex.Message);
+            }
+        }
+
+        public static double RadianToDegree(double radian)
+        {
+            return radian * (180.0 / Math.PI);
         }
 
         /// <summary>
@@ -552,7 +695,7 @@ namespace GalaxyObfuscator
                 string sCEndPath = AppDomain.CurrentDomain.BaseDirectory + @"Rules/SCEnd";
                 string sCHead = File.ReadAllText(sCHeadPath);
                 string sCEnd = File.ReadAllText(sCEndPath);
-                obfuscatedCode = sCHead + obfuscatedCode + sCEnd;
+                obfuscatedCode = sCHead + "\r\n" + obfuscatedCode + "\r\n" + sCEnd;
             }
             SetCodeToMainThread(obfuscatedCode);
         }
@@ -625,9 +768,15 @@ namespace GalaxyObfuscator
         {
             using (FolderBrowserDialog fbd = new FolderBrowserDialog())
             {
-                fbd.ShowDialog();
-                string path = fbd.SelectedPath;
-                textBox_workPath.Text = path;
+                DialogResult result = fbd.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    textBox_workPath.Text = fbd.SelectedPath;
+                }
+                else if (result == DialogResult.Cancel)
+                {
+                    //MessageBox.Show("用户取消则什么也不做，防止目录刷回空");
+                }
             }
         }
 
@@ -783,7 +932,7 @@ namespace GalaxyObfuscator
                     SetTipsToMainThread("功能未选择！");
                     break;
                 case 0:
-                    SetTipsToMainThread("（设置处理目录）执行将批处理混肴文件夹内所有.SC2Map地图文件");
+                    SetTipsToMainThread("（选择处理目录）执行将批处理混肴文件夹内所有.SC2Map地图文件");
                     panel1.Visible = true;
                     panel_Bottom.Visible = false;
                     checkBox_LC4.Enabled = true;
@@ -798,7 +947,7 @@ namespace GalaxyObfuscator
                     checkBox_Test.Enabled = true;
                     break;
                 case 2:
-                    SetTipsToMainThread("（左下文本）填入Objects内容，执行将单位、装饰物布置信息转Galaxy动作");
+                    SetTipsToMainThread("（左下文本）填入Objects内容，执行将单位装饰等地形布置信息转Galaxy");
                     button_LoadContentFromFile.Text = "读取Map里的Objects";
                     panel1.Visible = false;
                     panel_Bottom.Visible = true;
@@ -814,8 +963,8 @@ namespace GalaxyObfuscator
         void Form1_Load(object sender, EventArgs e)
         {
             comboBox_SelectFunc.Items.Add("对.SC2Map地图文件进行混肴");
-            comboBox_SelectFunc.Items.Add("对Galaxy代码进行混肴");
-            comboBox_SelectFunc.Items.Add("将Objects布置信息转Galaxy（演算体的碰撞将失效）");
+            comboBox_SelectFunc.Items.Add("对自定义Galaxy代码进行混肴");
+            comboBox_SelectFunc.Items.Add("[正在开发]将Objects等地形布置信息转Galaxy");
             comboBox_SelectFunc.SelectedIndex = 0;
         }
 

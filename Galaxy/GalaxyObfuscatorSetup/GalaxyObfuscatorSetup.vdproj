@@ -378,7 +378,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:GalaxyObfuscator"
         "ProductCode" = "8:{6DE3D1D2-F330-4A38-9327-47993AE1EB46}"
-        "PackageCode" = "8:{3AE8DF78-7073-4BCB-A7D5-4AB41001FDF7}"
+        "PackageCode" = "8:{0F76B72A-BB49-44AC-8414-D7666158A46C}"
         "UpgradeCode" = "8:{F223446D-B735-4108-838F-41B39BD5EDF4}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -498,6 +498,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_57C29D0AB6514770A6A9472A358CE4C2"
+            {
+            "Name" = "8:星海混淆器"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_C63A5A0259A04E44A9BC5FC8668A0C36"
+            "Folder" = "8:_0AA10562515847EC87583FFF3D04250D"
+            "WorkingFolder" = "8:_CE130D51DA624550ACF2B1C3A28A665B"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {

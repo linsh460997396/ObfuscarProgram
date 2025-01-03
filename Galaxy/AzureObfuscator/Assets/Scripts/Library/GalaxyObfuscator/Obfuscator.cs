@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml;
 using MetalMaxSystem;
 using StormLib;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace GalaxyObfuscator
 {
@@ -16,16 +13,28 @@ namespace GalaxyObfuscator
     /// </summary>
     internal class Obfuscator
     {
+        public static int mutiCount = 0;
+        public static Form1 form1;
+
         /// <summary>
-        /// 启动混淆过程
+        /// 启动混淆过程。如果文件名不包含"Obfuscated"则创建混淆器实例并对目标文件进行混淆。
         /// </summary>
         /// <param name="filename"></param>
-        public static void Obfuscate(string filename)
+        /// <param name="torf">是否跳过含关键字文件</param>
+        /// <param name="key">关键字，默认值"Obfuscated"</param>
+        public static void Obfuscate(string filename, bool torf = true, string key = "Obfuscated")
         {
-            //创建混肴器实例
-            Obfuscator obfuscator = new Obfuscator();
-            //对目标文件进行混肴
-            obfuscator.ObfuscateFile(filename);
+            if (!torf || !filename.Contains(key))
+            {//没有启用跳过含关键字文件或文件名不包含关键字时启动
+                mutiCount++;//记录执行次数，若为1则为单文件混淆，否则为多文件混淆
+                //创建混肴器实例
+                Obfuscator obfuscator = new Obfuscator();
+                //对目标文件进行混肴
+                obfuscator.ObfuscateFile(filename);
+                //↓如果勾选了打印报告（目前批量时只对第一个文件进行混肴时有调试报告，多文件暂不支持）
+                //打印每个名称的混淆报告（会清空StringBuilder的缓存区，批量混淆时下个报告应能独立）
+                MMCore.WriteLine(filename + @"_混淆报告.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
+            }
         }
         /// <summary>
         /// 对目标文件进行混肴
@@ -53,6 +62,17 @@ namespace GalaxyObfuscator
                 }
                 //混淆脚本内容
                 this.script = this.obfuscateScript();
+
+                //include部分转移至construct()处理
+                ////正则表达式模式：匹配 include 后跟着的双引号内的字符串
+                //string pattern = @"include\s*""([""]*)""";
+                ////创建正则表达式对象
+                //Regex regex = new Regex(pattern);
+                ////查找匹配项
+                ////MatchCollection matches = regex.Matches(script);
+                ////将代码中经过pattern正则匹配到的替换为StringObfuscator.Obfuscate(m.Value) //m.Value 获取捕获组（即双引号内的字符串）
+                //string obfuscatedCode = Regex.Replace(script, pattern,(Match m) => this.stringObfuscator.Obfuscate(m.Value));
+
                 //创建临时文件
                 string tempFileName = Path.GetTempFileName();
                 //将混淆后的脚本写入临时文件
@@ -113,6 +133,20 @@ namespace GalaxyObfuscator
         /// <returns>返回对Obfuscator.script混肴后的结果</returns>
         public string obfuscateScript()
         {
+            if (form1.GetCheckLC4StateFromMainThread() == true)
+            {//LC4先添加到脚本头尾
+                string sCHeadPath = AppDomain.CurrentDomain.BaseDirectory + @"Rules/SCHead";
+                string sCEndPath = AppDomain.CurrentDomain.BaseDirectory + @"Rules/SCEnd";
+                string sCHead = File.ReadAllText(sCHeadPath);
+                string sCEnd = File.ReadAllText(sCEndPath);
+                this.script = sCHead + "\r\n" + this.script + "\r\n" + sCEnd;
+                if (form1.GetSelectedIndexFromMainThread() == 1)
+                {
+                    MMCore.WriteLine("添加LC4混淆头尾");
+                    form1.SetCodeToMainThread(this.script);
+                }
+            }
+
             //使用字符集及长度限制创建标识符生成器
             this.identifierGenerator = new IdentifierGenerator("lI1", 16);
             //构建混淆字典（标识符表、字面量表）
@@ -163,7 +197,7 @@ namespace GalaxyObfuscator
         /// <returns></returns>
         private string construct()
         {
-            string tempStr;int tempInt;
+            string tempStr; int tempInt;
             //初始化扫描器，用于扫描原始脚本
             this.scanner = new Scanner(this.script);
             //初始化StringBuilder，用于构建混淆后的脚本
@@ -175,7 +209,11 @@ namespace GalaxyObfuscator
             {
                 //"include"后面紧跟着的是要"include"的加载文件名（作为字符串字面量）
                 //这里没有处理可能的错误情况，比如"include"后面不是字符串字面量
-                stringBuilder.AppendLine("include " + this.scanner.Read().Sequence);
+                tempStr = scanner.Read().ParseStringLiteral();
+                MMCore.WriteLine("字符串字面量：" + tempStr);
+                tempStr = this.stringObfuscator.Obfuscate(tempStr);
+                MMCore.WriteLine("混淆后：" + tempStr);
+                stringBuilder.AppendLine("include " + tempStr);
             }
             //初始化一个空的token，用于标记上一个处理的token
             Token token = new Token
@@ -303,6 +341,13 @@ namespace GalaxyObfuscator
                 //如果当前标记不是标识符，则抛出语法错误异常
                 if (token.Type != TokenType.Identifier)
                 {
+                    //gf_ObfAuto_syscalltemplate(){};funcref<gf_ObfAuto_syscalltemplate>[...问题发生时指针位置在{}后的分号
+                    //如果退出代码块时，代码块里什么都没有，应归属于正常现象（由于未捕获上个标记头暂不分析代码块，直接按遇}或;当正常继续）
+                    //实际上有非空内容应处理而非随意跳过（待处理）
+                    if (token.Type == TokenType.Symbol && (token.ToString() == "}" || token.ToString() == ";"))
+                    {
+                        continue;
+                    }
                     MMCore.WriteLine("当前标记不是标识符，抛出！" + $"Type: {token.Type.ToString()}, Value: {token.ToString()}");
                     throw new SyntaxErrorException(this.scanner);
                 }
@@ -486,10 +531,15 @@ namespace GalaxyObfuscator
                 //读取并跳过闭合的'>'
                 this.scanner.ReadExpectedToken();
             }
+            //gf_ObfAuto_syscalltemplate(){};funcref<gf_ObfAuto_syscalltemplate>[...问题发生时指针位置在>后的[，尖括号不能比[]先处理否则指针跨度太大导致没有处理到关键内容
+            //除非符号或空格，否则不应跳过（[]后面一般不会直接连着<>所以跳跃动作虽然连着但不会发生，如果发生就要处理[]和<>代码块里的内容）
+
             //检查当前标记是否为标识符（变量名）
             if (this.scanner.Current.Type != TokenType.Identifier)
             {
-                //如果不是则抛出语法错误异常
+                //如果不是则抛出语法错误异常，函数内if...;}DataTableSetBool(...问题发生时指针位置在(，标记是DataTableSetBool但它不是标识符（Native函数未在代码文件声明）
+                //DataTableSetBool(false,lll[(l1I1^0x2a397^(~-0X1e1f9d8c))][((1<<(-0x2B+IIl))^((~-1785843762)^l1Il))][((-0X99^llII)+lllI+(~0X57F5F7D0))],lp_bool0);
+                //实际上有非空内容应处理而非随意跳过（待处理）
                 MMCore.WriteLine("期望是变量但不是所以抛出！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.ToString()}");
                 throw new SyntaxErrorException(this.scanner);
             }

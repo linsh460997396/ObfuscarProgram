@@ -11,8 +11,8 @@ namespace GalaxyObfuscator
     /// </summary>
     internal class SyntaxErrorException : Exception
     {
-        static FileWriter tempFileWriter = new FileWriter();
-        public string errPath = "C:/Users/linsh/Desktop/SyntaxErrorException.txt";
+        //static FileWriter tempFileWriter = new FileWriter();
+        //public string errPath = "C:/Users/linsh/Desktop/SyntaxErrorException.txt";
 
         /// <summary>
         /// [构造函数]语法错误表达（自定义异常类）
