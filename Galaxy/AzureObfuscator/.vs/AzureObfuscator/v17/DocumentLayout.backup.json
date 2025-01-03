@@ -3,8 +3,24 @@
   "WorkspaceRootPath": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|d:\\vswork\\2022\\galaxy\\azureobfuscator\\assets\\scripts\\library\\galaxyobfuscator\\obfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\assets\\scripts\\library\\galaxyobfuscator\\obfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:assets\\scripts\\library\\galaxyobfuscator\\obfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\assets\\scripts\\library\\galaxyobfuscator\\integerobfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:assets\\scripts\\library\\galaxyobfuscator\\integerobfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|d:\\vswork\\2022\\galaxy\\azureobfuscator\\assets\\scripts\\library\\metalmaxsystem\\class\\mmcore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:assets\\scripts\\library\\metalmaxsystem\\class\\mmcore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|d:\\vswork\\2022\\galaxy\\azureobfuscator\\assets\\scripts\\library\\galaxyobfuscator\\stringobfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:assets\\scripts\\library\\galaxyobfuscator\\stringobfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\assets\\scripts\\library\\galaxyobfuscator\\syntaxerrorexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:assets\\scripts\\library\\galaxyobfuscator\\syntaxerrorexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\assets\\scripts\\library\\galaxyobfuscator\\scanner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -18,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,15 +46,67 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MMCore.cs",
+              "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\MMCore.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\MMCore.cs",
+              "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\MMCore.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\MMCore.cs",
+              "ViewState": "AgIAADEFAAAAAAAAAAAAAFgFAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-03T10:37:26.318Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "SyntaxErrorException.cs",
+              "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\SyntaxErrorException.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Library\\GalaxyObfuscator\\SyntaxErrorException.cs",
+              "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\SyntaxErrorException.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Library\\GalaxyObfuscator\\SyntaxErrorException.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABIAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-02T20:45:43.818Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "StringObfuscator.cs",
+              "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\StringObfuscator.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Library\\GalaxyObfuscator\\StringObfuscator.cs",
+              "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\StringObfuscator.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Library\\GalaxyObfuscator\\StringObfuscator.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAAAFAAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-02T20:19:56.748Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "IntegerObfuscator.cs",
+              "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\IntegerObfuscator.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Library\\GalaxyObfuscator\\IntegerObfuscator.cs",
+              "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\IntegerObfuscator.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Library\\GalaxyObfuscator\\IntegerObfuscator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAMYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-02T20:13:40.31Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "Scanner.cs",
               "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\Scanner.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Library\\GalaxyObfuscator\\Scanner.cs",
               "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\Scanner.cs",
               "RelativeToolTip": "Assets\\Scripts\\Library\\GalaxyObfuscator\\Scanner.cs",
-              "ViewState": "AgIAANwBAAAAAAAAAADgv/MBAAAiAAAAAAAAAA==",
+              "ViewState": "AgIAALgAAAAAAAAAAADgv64AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-01T15:27:00.003Z",
+              "WhenOpened": "2025-01-02T12:21:19.597Z",
               "EditorCaption": ""
             },
             {
@@ -49,9 +117,9 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\Library\\GalaxyObfuscator\\Obfuscator.cs",
               "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\Obfuscator.cs",
               "RelativeToolTip": "Assets\\Scripts\\Library\\GalaxyObfuscator\\Obfuscator.cs",
-              "ViewState": "AgIAANMCAAAAAAAAAADgv9sCAABFAAAAAAAAAA==",
+              "ViewState": "AgIAACgAAAAAAAAAAAAhwGkAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-31T10:04:26.387Z",
+              "WhenOpened": "2025-01-02T11:58:36.803Z",
               "EditorCaption": ""
             }
           ]

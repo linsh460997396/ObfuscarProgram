@@ -10,7 +10,7 @@
         /// </summary>
         None,
         /// <summary>
-        /// 表示标识符（如变量名、函数名等）
+        /// 表示标识符（如关键字、结构体名、变量名、函数名等）
         /// </summary>
         Identifier,
         /// <summary>

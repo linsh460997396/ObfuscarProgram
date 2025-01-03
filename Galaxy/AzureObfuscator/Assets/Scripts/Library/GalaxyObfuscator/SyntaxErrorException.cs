@@ -1,6 +1,8 @@
 ﻿using MetalMaxSystem;
 using System;
+using System.IO;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace GalaxyObfuscator
 {
@@ -9,6 +11,9 @@ namespace GalaxyObfuscator
     /// </summary>
     internal class SyntaxErrorException : Exception
     {
+        static FileWriter tempFileWriter = new FileWriter();
+        public string errPath = "C:/Users/linsh/Desktop/SyntaxErrorException.txt";
+
         /// <summary>
         /// [构造函数]语法错误表达（自定义异常类）
         /// </summary>
@@ -23,9 +28,12 @@ namespace GalaxyObfuscator
         /// 同时在函数内部获取scanner.Current.Sequence并将其赋值给sequence
         /// </summary>
         /// <param name="scanner"></param>
-        public SyntaxErrorException(Scanner scanner) : base("Unexpected " + scanner.Current.Sequence.ToString())
+        public SyntaxErrorException(Scanner scanner) : base("Unexpected " + scanner.Current.ToString())
         {
-            Sequence sequence = scanner.Current.Sequence;
+            //↓强力调试模式
+            //tempFileWriter.Buffer.Append(MMCore.fileWriter.Buffer);
+            //tempFileWriter.WriteLine("█意外终止 "+ "SyntaxErrorException Unexpected " + scanner.Current.ToString());
+            //tempFileWriter.Close(errPath, true, Encoding.UTF8);//出现错误立即写入（性能差），防止在无限循环退出时不打印报告
         }
         /// <summary>
         /// [构造函数]语法错误表达（自定义异常类），调用基类（Exception）的构造函数base(message)进行处理。

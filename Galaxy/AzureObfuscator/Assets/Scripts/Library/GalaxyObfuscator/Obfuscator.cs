@@ -7,6 +7,7 @@ using System.Text;
 using System.Xml;
 using MetalMaxSystem;
 using StormLib;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GalaxyObfuscator
 {
@@ -54,49 +55,55 @@ namespace GalaxyObfuscator
                 this.script = this.obfuscateScript();
                 //创建临时文件
                 string tempFileName = Path.GetTempFileName();
-                string tempFileName2 = Path.GetTempFileName();
                 //将混淆后的脚本写入临时文件
                 File.WriteAllText(tempFileName, this.script);
-                //创建XML文件包含混淆后的脚本（用于替换Triggers文件）
-                using (FileStream fileStream = new FileStream(tempFileName2, FileMode.OpenOrCreate))
-                {
-                    //创建XML写入器，用于向文件写入XML数据
-                    XmlWriter xmlWriter = XmlWriter.Create(fileStream);
-                    //写入XML声明
-                    xmlWriter.WriteStartDocument();
-                    //写入根元素<TriggerData>
-                    xmlWriter.WriteStartElement("TriggerData");
-                    //写入<Root>元素
-                    xmlWriter.WriteStartElement("Root");
-                    //写入一个<Item>元素，并为其添加Type和Id属性
-                    xmlWriter.WriteStartElement("Item");
-                    xmlWriter.WriteAttributeString("Type", "CustomScript");
-                    xmlWriter.WriteAttributeString("Id", "CFE7E55E");
-                    xmlWriter.WriteEndElement();
-                    //结束<Root>元素
-                    xmlWriter.WriteEndElement();
-                    //写入<Element>元素并为其添加Type和Id属性
-                    xmlWriter.WriteStartElement("Element");
-                    xmlWriter.WriteAttributeString("Type", "CustomScript");
-                    xmlWriter.WriteAttributeString("Id", "CFE7E55E");
-                    //写入<ScriptCode>元素
-                    xmlWriter.WriteStartElement("ScriptCode");
-                    //将混淆后的脚本内容作为其子元素的内容
-                    xmlWriter.WriteString(this.script);
-                    xmlWriter.WriteEndElement();
-                    //结束<Element>元素
-                    xmlWriter.WriteEndElement();
-                    //结束根元素<TriggerData>
-                    xmlWriter.WriteEndElement();
-                    //关闭XML写入器，完成XML文件的写入
-                    xmlWriter.Close();
-                }
-                //将两个临时文件添加到MPQ存档中，替换原有的文件或添加新文件
+                //将临时文件添加到MPQ存档中，替换原有的文件或添加新文件
                 mpqArchive.AddFile(tempFileName, "MapScript.galaxy", true);
-                mpqArchive.AddFile(tempFileName2, "Triggers", true);
                 //删除临时文件（清理资源）
-                File.Delete(tempFileName2);
                 File.Delete(tempFileName);
+
+                ////创建Triggers临时文件，准备修改
+                //string tempTriggersFileName = Path.GetTempFileName();
+                ////创建XML文件包含混淆后的脚本（用于替换Triggers文件）
+                //using (FileStream fileStream = new FileStream(tempTriggersFileName, FileMode.OpenOrCreate))
+                //{
+                //    //创建XML写入器，用于向文件写入XML数据
+                //    XmlWriter xmlWriter = XmlWriter.Create(fileStream);
+                //    //写入XML声明
+                //    xmlWriter.WriteStartDocument();
+                //    //写入根元素<TriggerData>
+                //    xmlWriter.WriteStartElement("TriggerData");
+                //    //写入<Root>元素
+                //    xmlWriter.WriteStartElement("Root");
+                //    //写入一个<Item>元素，并为其添加Type和Id属性
+                //    xmlWriter.WriteStartElement("Item");
+                //    xmlWriter.WriteAttributeString("Type", "CustomScript");
+                //    xmlWriter.WriteAttributeString("Id", "CFE7E55E");
+                //    xmlWriter.WriteEndElement();
+                //    //结束<Root>元素
+                //    xmlWriter.WriteEndElement();
+                //    //写入<Element>元素并为其添加Type和Id属性
+                //    xmlWriter.WriteStartElement("Element");
+                //    xmlWriter.WriteAttributeString("Type", "CustomScript");
+                //    xmlWriter.WriteAttributeString("Id", "CFE7E55E");
+                //    //写入<ScriptCode>元素
+                //    xmlWriter.WriteStartElement("ScriptCode");
+                //    //将混淆后的脚本内容作为其子元素的内容
+                //    xmlWriter.WriteString(this.script);
+                //    xmlWriter.WriteEndElement();
+                //    //结束<Element>元素
+                //    xmlWriter.WriteEndElement();
+                //    //结束根元素<TriggerData>
+                //    xmlWriter.WriteEndElement();
+                //    //关闭XML写入器，完成XML文件的写入
+                //    xmlWriter.Close();
+                //}
+                //Triggers必须删掉而不是替换，否则可能导致地图无法打开及发布失败（因为发布时会重新根据Triggers生成脚本覆盖，混淆就白做了）
+                //mpqArchive.AddFile(tempTriggersFileName, "Triggers", true);
+                //删除临时文件（清理资源）
+                //File.Delete(tempTriggersFileName);
+                //↓改为删除Triggers文件
+                mpqArchive.RemoveFile("Triggers");
             }
         }
 
@@ -112,9 +119,13 @@ namespace GalaxyObfuscator
             this.identifierTable = new Dictionary<Sequence, string>();
             this.literalTable = new Dictionary<Sequence, string>();
             //扫描脚本（分析并提取出所有需要混淆的标识符和字面量），涉及解析脚本代码识别出变量名、函数名等并记录在相应的表中
+            MMCore.WriteLine("█↓扫描开始↓█");
             this.scan();
+            MMCore.WriteLine("█Scan End█" + "\r\n" + "");
+            MMCore.WriteLine("█↓标识符表↓█");
             MMCore.WriteLine(string.Join(",\r\n", identifierTable.Select(kvp => $"Key: {kvp.Key}, Value: {kvp.Value}")));
             MMCore.WriteLine("█identifierTable End█" + "\r\n" + "");
+            MMCore.WriteLine("█↓字面量表↓█");
             MMCore.WriteLine(string.Join(",\r\n", literalTable.Select(kvp => $"Key: {kvp.Key}, Value: {kvp.Value}")));
             MMCore.WriteLine("█literalTable End█" + "\r\n" + "");
             //遍历标识符保留列表（这些标识符在混淆过程中不应被改变）
@@ -129,10 +140,9 @@ namespace GalaxyObfuscator
                 {
                     //移除保留标识符
                     this.identifierTable.Remove(key);
-                    MMCore.WriteLine("移除标识符："+ key);
+                    MMCore.WriteLine("移除标识符：" + key);
                 }
             }
-            MMCore.WriteLine("C:/Users/linsh/Desktop/test.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
             //构建混淆后的脚本
             return this.construct();
         }
@@ -153,6 +163,7 @@ namespace GalaxyObfuscator
         /// <returns></returns>
         private string construct()
         {
+            string tempStr;int tempInt;
             //初始化扫描器，用于扫描原始脚本
             this.scanner = new Scanner(this.script);
             //初始化StringBuilder，用于构建混淆后的脚本
@@ -193,6 +204,7 @@ namespace GalaxyObfuscator
                         case TokenType.Identifier:
                             if (this.identifierTable.ContainsKey(token2.Sequence))
                             {
+                                //附加混肴后的标识符
                                 stringBuilder.Append(this.identifierTable[token2.Sequence]);
                             }
                             else
@@ -202,15 +214,19 @@ namespace GalaxyObfuscator
                             }
                             break;
                         case TokenType.StringLiteral:
-                            //如果literalTable中包含了当前字符串字面量的映射则使用映射后的字面量
                             if (this.literalTable.ContainsKey(token2.Sequence))
-                            {
+                            {//如果literalTable中包含了当前字符串字面量的映射
+                                //使用映射后的字面量
                                 stringBuilder.Append(this.literalTable[token2.Sequence]);
                             }
                             else
                             {
                                 //否则，对字符串字面量进行混淆处理并附加混淆后的结果
-                                stringBuilder.Append(this.stringObfuscator.Obfuscate(token2.ParseStringLiteral()));
+                                tempStr = token2.ParseStringLiteral();
+                                MMCore.WriteLine("字符串字面量：" + tempStr);
+                                tempStr = this.stringObfuscator.Obfuscate(tempStr);
+                                MMCore.WriteLine("混淆后：" + tempStr);
+                                stringBuilder.Append(tempStr);
                             }
                             break;
                         case TokenType.CharLiteral:
@@ -221,7 +237,11 @@ namespace GalaxyObfuscator
                         case TokenType.IntegerLiteral:
                         case TokenType.HexLiteral:
                             //对于整数字面量和十六进制字面量进行混淆处理并附加混淆后的结果
-                            stringBuilder.Append(this.integerObfuscator.Obfuscate(token2.ParseIntegerLiteral()));
+                            tempInt = token2.ParseIntegerLiteral();
+                            MMCore.WriteLine("整数字面量：" + tempInt.ToString());
+                            tempStr = this.integerObfuscator.Obfuscate(tempInt);
+                            MMCore.WriteLine("混淆后：" + tempStr);
+                            stringBuilder.Append(tempStr);
                             break;
                         default:
                             //对于其他类型的token也跳转到IL_19D标签处理
@@ -256,7 +276,9 @@ namespace GalaxyObfuscator
         {
             //从扫描器获取当前标识符的文本，利用标识符生成器为当前标识符创造一个新名称
             //将原始标识符及其新名称作为键值对添加到标识符表中
-            this.identifierTable.Add(this.scanner.Current.Sequence, this.identifierGenerator.Generate());
+            string temp = this.identifierGenerator.Generate();
+            this.identifierTable.Add(this.scanner.Current.Sequence, temp);
+            MMCore.WriteLine("存储标识符表" + $"Key: {this.scanner.Current.Sequence}, Value: {temp}");
         }
 
         /// <summary>
@@ -272,6 +294,7 @@ namespace GalaxyObfuscator
             {
                 //获取当前分析出来的标记
                 Token token = this.scanner.Current;
+                MMCore.WriteLine("新的遍历标记！" + $"Type: {token.Type.ToString()}, Value: {token.ToString()}");
                 //如果当前标记为None表示没有更多标记可读，因此退出循环
                 if (token.Type == TokenType.None)
                 {
@@ -280,14 +303,14 @@ namespace GalaxyObfuscator
                 //如果当前标记不是标识符，则抛出语法错误异常
                 if (token.Type != TokenType.Identifier)
                 {
-                    MMCore.WriteLine("当前标记不是标识符，抛出！" + $"Type: {token.Type.ToString()}, Value: {token.Sequence.ToString()}");
+                    MMCore.WriteLine("当前标记不是标识符，抛出！" + $"Type: {token.Type.ToString()}, Value: {token.ToString()}");
                     throw new SyntaxErrorException(this.scanner);
                 }
                 //将当前标识符转换为字符串
                 string a;
                 if ((a = token.ToString()) != null)
                 {
-                    MMCore.WriteLine("进入检查！" + $"Type: {token.Type.ToString()}, Value: {token.Sequence.ToString()}");
+                    MMCore.WriteLine("进入检查！" + $"Type: {token.Type.ToString()}, Value: {token.ToString()}");
                     //根据标识符的值执行不同的解析逻辑
                     if (a == "include")
                     {
@@ -319,7 +342,7 @@ namespace GalaxyObfuscator
                         //期望下一个标记为分号，表示声明结束
                         if (this.scanner.Current.Sequence != ";")
                         {
-                            MMCore.WriteLine("期望下一个标记为分号表示声明结束，但不存在所以抛出！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
+                            MMCore.WriteLine("期望下一个标记为分号表示声明结束，但不存在所以抛出！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.ToString()}");
                             throw new SyntaxErrorException(this.scanner);
                         }
                         continue;
@@ -328,7 +351,6 @@ namespace GalaxyObfuscator
                 //如果标识符不是上述特殊关键字则解析为一个普通的声明
                 this.scanDeclaration();
             }
-            //MMCore.WriteLine("C:/Users/linsh/Desktop/test.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, true);//尾行留空
         }
 
         /// <summary>
@@ -336,6 +358,7 @@ namespace GalaxyObfuscator
         /// </summary>
         private void scanTriggerDefinition()
         {
+            string temp;
             //读取一个预期的标识符标记
             this.scanner.ReadExpectedToken(TokenType.Identifier);
             //将读取的标识符添加到标识符表
@@ -368,12 +391,15 @@ namespace GalaxyObfuscator
                 }
                 else
                 {
-                    //如果存在则直接使用已有的标识符
+                    //如果存在则直接使用已有的标识符（应该是这种情况）
                     text2 = this.identifierTable[new Sequence(text)];
                 }
+
                 //将处理后的标识符（新生成的或是已有的）添加到字面量表中
-                //注意：这里将标识符用双引号括起来，并进行了混淆处理
-                this.literalTable.Add(new Sequence("\"" + text + "\""), this.stringObfuscator.Obfuscate(text2));
+                //注意：这里将标识符用双引号括起来，并进行了混淆处理，字符串中有同名函数的应采用标识符混淆表同一Key对应的混淆值
+                temp = this.stringObfuscator.Obfuscate(text2);
+                this.literalTable.Add(new Sequence("\"" + text + "\""), temp);
+                MMCore.WriteLine("存储至字面量表 " + $"Key: {text}, Value: {temp}");
             }
             //跳过至下一个分号，表示触发器定义的结束
             this.scanner.SkipBlock(";");
@@ -448,11 +474,23 @@ namespace GalaxyObfuscator
                 //读取并跳过闭合的']'
                 this.scanner.ReadExpectedToken();
             }
+            //处理特殊类型声明（例如arrayref<>或funcref<>）
+            while (this.scanner.Current.Type == TokenType.Symbol && this.scanner.Current.Sequence == "<")
+            {
+                //跳过直到找到闭合的'>'
+                do
+                {
+                    this.scanner.ReadExpectedToken();
+                }
+                while (this.scanner.Current.Type != TokenType.Symbol || this.scanner.Current.Sequence != ">");
+                //读取并跳过闭合的'>'
+                this.scanner.ReadExpectedToken();
+            }
             //检查当前标记是否为标识符（变量名）
             if (this.scanner.Current.Type != TokenType.Identifier)
             {
                 //如果不是则抛出语法错误异常
-                MMCore.WriteLine("期望是变量但不是所以抛出！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
+                MMCore.WriteLine("期望是变量但不是所以抛出！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.ToString()}");
                 throw new SyntaxErrorException(this.scanner);
             }
             //如果标识符表中不包含当前标识符则将其添加进去
@@ -518,19 +556,19 @@ namespace GalaxyObfuscator
             //确保读取到}右大括号
             if (type != TokenType.Symbol)
             {
-                MMCore.WriteLine("期望是符号但不是所以抛出！" + $"Type: {type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
+                MMCore.WriteLine("期望是符号但不是所以抛出！" + $"Type: {type.ToString()}, Value: {this.scanner.Current.ToString()}");
                 throw new SyntaxErrorException(this.scanner);
             }
             if (this.scanner.Current.Sequence != "}")
             {
-                MMCore.WriteLine("期望是右大括号但不是所以抛出！" + $"Type: {type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
+                MMCore.WriteLine("期望是右大括号但不是所以抛出！" + $"Type: {type.ToString()}, Value: {this.scanner.Current.ToString()}");
                 throw new SyntaxErrorException(this.scanner);
             }
             //确保读取到;分号
             this.scanner.ReadExpectedSymbol(";");
             return;
         Block_3:
-            MMCore.WriteLine("期望是分号但不是所以抛出！" + $"Type: {type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
+            MMCore.WriteLine("期望是分号但不是所以抛出！" + $"Type: {type.ToString()}, Value: {this.scanner.Current.ToString()}");
             throw new SyntaxErrorException(this.scanner);
         }
 
@@ -604,7 +642,7 @@ namespace GalaxyObfuscator
             //获取当前扫描器所指的标记（token）
             Token token = this.scanner.Current;
             //如果当前标记是"for"关键字，设置num为2
-            //因为for循环通常包含初始化语句、条件判断语句和迭代语句，此处只想跳过初始化语句所以需要额外处理两个分号
+            //因为for循环通常包含初始化语句、条件判断语句和迭代语句，此处只想跳过初始化语句所以需要额外处理跳过两个分号（防止后面期望函数无法正确）
             int num = (token.ToString() == "for") ? 2 : 0;
             //使用无限循环来持续读取标记直至满足退出条件
             for (; ; )
@@ -646,6 +684,10 @@ namespace GalaxyObfuscator
         /// <exception cref="SyntaxErrorException"></exception>
         private void scanBlock()
         {
+            string result; bool torf = false;
+            int end = -1;
+            int start = scanner.position;//当前扫描指针在代码块头部{位置
+            //MMCore.WriteLine("StartIndex：" + start);
             //使用无限循环来持续读取标记直至满足退出条件
             for (; ; )
             {
@@ -657,29 +699,109 @@ namespace GalaxyObfuscator
                     //如果符号是右大括号}表示代码块结束，应退出循环
                     if (this.scanner.Current.Sequence == "}")
                     {
+                        //退出代码块（已经退出了就无需记录位置，改为在嵌套外层记录）
+                        //MMCore.WriteLine("退出代码块！");
                         break;
                     }
                     //如果符号是左大括号{表示嵌套的代码块开始，递归调用scanBlock方法处理
                     if (this.scanner.Current.Sequence == "{")
                     {
+                        //MMCore.WriteLine("准备递归进入代码块内部扫描！" + $"Type: {scanner.Current.Type.ToString()}, Value: {scanner.Current.ToString()}");
+                        start = scanner.position - 1;//进嵌套块前开始位置要刷新，因ReadExpectedToken使当前标记和指针错位（指针又走了一步，所以要-1才是{符所在）
                         this.scanBlock();
+                        end = scanner.position - 1;//记录刚退出嵌套块时的扫描指针位置（当前标记和指针错位依然是错位状态）
+                        //MMCore.WriteLine("递归结束！EndIndex：" + end + $" Type: {scanner.Current.Type.ToString()}, Value: {scanner.Current.ToString()}");
                     }
                     else
                     {
                         //如果符号是分号表示一条语句结束，继续检查下一条语句
                         if (this.scanner.Current.Sequence == ";")
                         {
+                            end = scanner.position;
+                            //MMCore.WriteLine("指针停在分号的后面1位：" + end);
                             continue;
                         }
                         //如果符号不是上述三种情况之一则跳过以分号为结尾的代码块
-                        //这可能是为了处理如单行注释或特定语法结构的跳过
-                        this.scanner.SkipBlock(";");
+                        //↓处理如单行注释或特定语法结构的跳过
+                        //this.scanner.SkipBlock(";");//一直跳直到指针停在分号的后面1位但如果是空块会报错（无限循环）
+
+                        //↓修复如下
+                        //MMCore.WriteLine("指针位置：" + scanner.position + " 准备一直跳，直到指针停在指定符号之一的后面1位");
+                        this.scanner.SkipBlockPro(";", "{", "}");//一直跳直到指针停在指定符号之一的后面1位
+                        end = scanner.position - 1;//指针停在指定符号之一的后面1位
                     }
                 }
-                //如果当前标记不是标识符则跳转到Block_4标签，抛出语法错误异常
+                //如果当前标记不是标识符则跳转到Block_4标签抛出语法错误异常，或在此处处理异常
                 if (this.scanner.Current.Type != TokenType.Identifier)
                 {
-                    goto Block_4;
+                    //MMCore.WriteLine("标记类型非标识符！当前指针位置：" + scanner.position);
+                    //如果退出代码块时，代码块里什么都没有，应归属于正常现象
+                    if (end == -1)
+                    {//本层是递归方法最内部或无嵌套检查代码块情况，说明有未识别语法或语法错误，处理或记录它
+                        if (scanner.position - 1 - start == 1)
+                        {//如果{}前后相靠
+                            result = scanner.Current.Sequence.String.Substring(start, 2);
+                            if (result == "{}")
+                            {//检查是否为{}
+                                //通过
+                                torf = true;
+                                MMCore.WriteLine("代码块为{}相靠！");
+                            }
+                        }
+                        else
+                        {//{}非前后相靠，说明夹着其他字符
+                            //记录夹着的字符
+                            result = scanner.Current.Sequence.String.Substring(start + 1, scanner.position - start - 2);
+                            //检查字符串是否为null或者全是空格
+                            if (string.IsNullOrEmpty(result) || result.All(char.IsWhiteSpace))
+                            {
+                                //通过
+                                torf = true;
+                                MMCore.WriteLine("代码块为空或全是空格！");
+                            }
+                        }
+                    }
+                    else
+                    {//本层有嵌套检查代码块情况，检查是否是嵌套块的异常（有未识别语法或语法错误），处理或记录它
+                        if (end == scanner.position - 1)
+                        {//是递归块跑到这里来
+                            if (scanner.position - 1 - start == 1)
+                            {//如果递归块{}前后相靠
+                                result = scanner.Current.Sequence.String.Substring(start, 2);
+                                if (result == "{}")
+                                {//检查递归块是否为{}
+                                 //通过
+                                    torf = true;
+                                    MMCore.WriteLine("嵌套代码块为{}相靠！");
+                                }
+                            }
+                            else
+                            {//递归块{}非前后相靠，说明夹着其他字符
+                             //记录夹着的字符
+                                result = scanner.Current.Sequence.String.Substring(start + 1, scanner.position - start - 2);
+                                //检查字符串是否为null或者全是空格
+                                if (string.IsNullOrEmpty(result) || result.All(char.IsWhiteSpace))
+                                {
+                                    //通过
+                                    torf = true;
+                                    MMCore.WriteLine("嵌套代码块为空或全是空格！");
+                                }
+                            }
+                        }
+                    }
+                    //MMCore.WriteLine("↓扫描结果↓");
+                    //MMCore.WriteLine(scanner.Current.Sequence.String.Substring(start, scanner.position - start));
+                    //MMCore.WriteLine("↑扫描结果↑");
+                    // 检查字符串是否为空或者全是空格
+                    if (torf == false)
+                    {
+                        result = scanner.Current.Sequence.String.Substring(start, scanner.position - start);
+                        MMCore.WriteLine("严重意外：代码块非null或空格，亦非有效标识符！请反馈！");
+                        MMCore.WriteLine("↓异常扫描结果↓");
+                        MMCore.WriteLine(result);
+                        MMCore.WriteLine("↑异常扫描结果↑");
+                        goto Block_4;
+                    }
                 }
                 //获取关键字列表用于后续判断当前标识符是否为关键字
                 IEnumerable<string> keywords = Obfuscator.Keywords;
@@ -717,7 +839,7 @@ namespace GalaxyObfuscator
             }
             return;
         Block_4:
-            MMCore.WriteLine("期望是变量函数标识符但不是所以抛出！" + $"Type: {scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
+            MMCore.WriteLine("期望是标识符（如关键字、结构体名、变量名、函数名等）但不是所以抛出！" + $"Type: {scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
             throw new SyntaxErrorException(this.scanner);
         Block_7:
             MMCore.WriteLine("期望序列字符串是分号但不是所以抛出！" + $"Type: {scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
@@ -729,7 +851,8 @@ namespace GalaxyObfuscator
         /// </summary>
         private const string ScriptFileName = "MapScript.galaxy";
         /// <summary>
-        /// 定义关键字数组，这些关键字在脚本解析中具有特殊含义（如include、void、int），除了不应被混淆还决定后面可预期的扫描方法。
+        /// 定义关键字数组（扫描时直接跳过，扫描指针将停留在它们后面）。这些关键字在脚本解析中具有特殊含义（如include、void、int、for），除不应被混淆（逐字混淆方式凡没有声明的本就不会被混淆）还决定后面可预期的扫描方法。
+        /// For循环初始化语句中因有分号特殊（为防止预期处理函数无法正确识别）所以检测关键字后立即让扫描指针2次跳过分号
         /// </summary>
         private static readonly string[] Keywords = new string[]
 {
@@ -737,16 +860,12 @@ namespace GalaxyObfuscator
             "while",
             "if",
             "else",
-            "elseif",
-            "switch",
+            "elseif", //C#中为else if
+            //"switch", //Galaxy里没有switch，会被转成if..elseif..
             "foreach",
+            "arrayref",//不添加导致扫描中断
+            "funcref",//不添加导致扫描中断
             "return"
-
-            //"for",
-            //"while",
-            //"if",
-            //"else",
-            //"return"
 };
         private static string[] _reservedIdentifiers;
         /// <summary>
@@ -790,15 +909,15 @@ namespace GalaxyObfuscator
         /// </summary>
         public string script;
         /// <summary>
-        /// 随机数生成器对象，可能用于混淆过程中的随机化操作
+        /// 随机数生成器，可能用于混淆过程中的随机化操作
         /// </summary>
         private Random random = new Random();
         /// <summary>
-        /// 字符串混淆器对象，用于对字符串字面量进行混淆处理
+        /// 字符串混淆器，用于对字符串字面量进行混淆处理
         /// </summary>
         private StringObfuscator stringObfuscator = new StringObfuscator();
         /// <summary>
-        /// 整数混淆器对象，用于对整数字面量进行混淆处理
+        /// 整数混淆器，用于对整数字面量进行混淆处理
         /// </summary>
         private IntegerObfuscator integerObfuscator = new IntegerObfuscator();
     }

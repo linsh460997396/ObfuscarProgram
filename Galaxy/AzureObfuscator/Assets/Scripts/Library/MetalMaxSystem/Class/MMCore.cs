@@ -45,6 +45,7 @@ using Vector3F = Microsoft.Xna.Framework.Vector3;
 #else
 using Vector2F = System.Numerics.Vector2;
 using Vector3F = System.Numerics.Vector3;
+using System.Globalization;
 #endif
 #endif
 
@@ -1330,6 +1331,54 @@ namespace MetalMaxSystem
         }
 
         /// <summary>
+        /// 是否为汉字
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static bool IsChineseCharacter(char c)
+        {
+            //检查是否是汉字（基本区块）
+            return c >= '\u4e00' && c <= '\u9fff';
+            //如果需要支持更多区块可在这里添加额外的条件
+        }
+        /// <summary>
+        /// 是否为中文标点符号
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static bool IsChinesePunctuation(char c)
+        {
+            //非英文标点符号且字符位于CJK符号和标点符号的范围内（大致）
+            return ((!IsEnglishPunctuation(c)) && c >= '\u3000' && c <= '\u303f');
+            //注意：这个范围可能不是完全准确的，需要根据实际情况调整
+        }
+        /// <summary>
+        /// 是否为英文字母
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static bool IsEnglishCharacter(char c)
+        {
+            return (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z') ;
+        }
+        /// <summary>
+        /// 是否为英文标点符号
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static bool IsEnglishPunctuation(char c)
+        {
+            UnicodeCategory category = char.GetUnicodeCategory(c);
+            return category == UnicodeCategory.OpenPunctuation ||
+                   category == UnicodeCategory.ClosePunctuation ||
+                   category == UnicodeCategory.ConnectorPunctuation ||
+                   category == UnicodeCategory.DashPunctuation ||
+                   category == UnicodeCategory.InitialQuotePunctuation ||
+                   category == UnicodeCategory.FinalQuotePunctuation ||
+                   category == UnicodeCategory.OtherPunctuation;
+        }
+
+        /// <summary>
         /// 将字节大小转字符串Byte、KB、MB、GB、TB、PB、EB、ZB、YB、NB形式
         /// </summary>
         /// <param name="Size">字节大小</param>
@@ -1684,6 +1733,7 @@ namespace MetalMaxSystem
         /// <param name="bufferAppend">false覆盖缓冲区（即写入前清理StringBuilder）,true向缓冲区追加文本</param>
         public static void WriteLine(string value, bool bufferAppend = true)
         {
+            //Tell(value);//临时调试
             if (fileWriter == null) { fileWriter = new FileWriter(); }
             fileWriter.WriteLine(value, !bufferAppend);
         }
@@ -1693,16 +1743,67 @@ namespace MetalMaxSystem
         /// <param name="path">要写入的文件路径</param>
         /// <param name="value">要写入的字符内容</param>
         /// <param name="bufferAppend">false覆盖缓冲区（即写入前清理StringBuilder）,true向缓冲区追加文本</param>
-        /// <param name="end">立即写入文件并清理StringBuilder缓冲区</param>
+        /// <param name="end">立即写入文件并，如果flush=false则清理StringBuilder缓冲区</param>
         /// <param name="fileAppend">false覆盖文件，true向文件末尾追加文本</param>
-        public static void WriteLine(string path, string value, bool bufferAppend = true, bool end = false, bool fileAppend = false)
+        /// <param name="flush">是否使用Flush方法（不清空StringBuilder），默认false（使用Close方法，会清空StringBuilder）</param>
+        public static void WriteLine(string path, string value, bool bufferAppend = true, bool end = false, bool fileAppend = false, bool flush = false)
         {
             if (fileWriter == null) { fileWriter = new FileWriter(); }
             fileWriter.WriteLine(value, !bufferAppend);
             if (end)
             {
-                fileWriter.Close(path, fileAppend, Encoding.UTF8);
+                if (flush) { fileWriter.Flush(path, fileAppend, Encoding.UTF8); } else { fileWriter.Close(path, fileAppend, Encoding.UTF8); }
             }
+        }
+        /// <summary>
+        /// 使用FileWriter写文本每行（默认UTF-8）到文件（若不存在则自动新建）。FileWriter将调用Flush()方法，结束后保留MMCore.fileWriter的StringBuilder类型的Buffer缓冲区。
+        /// </summary>
+        /// <param name="path">要写入的文件路径</param>
+        /// <param name="value">要写入的字符内容</param>
+        /// <param name="bufferAppend">false覆盖缓冲区（即写入前清理StringBuilder）,true向缓冲区追加文本</param>
+        /// <param name="fileAppend">false覆盖文件，true向文件末尾追加文本</param>
+        public static void WriteLineFlush(string path, string value, bool bufferAppend = true, bool fileAppend = false)
+        {
+            if (fileWriter == null) { fileWriter = new FileWriter(); }
+            fileWriter.WriteLine(value, !bufferAppend);
+            fileWriter.Flush(path, fileAppend, Encoding.UTF8);
+        }
+        /// <summary>
+        /// 使用FileWriter写文本每行（默认UTF-8）到文件（若不存在则自动新建）。FileWriter将调用Close()方法，结束后清理MMCore.fileWriter的StringBuilder类型的Buffer缓冲区。
+        /// </summary>
+        /// <param name="path">要写入的文件路径</param>
+        /// <param name="value">要写入的字符内容</param>
+        /// <param name="bufferAppend">false覆盖缓冲区（即写入前清理StringBuilder）,true向缓冲区追加文本</param>
+        /// <param name="fileAppend">false覆盖文件，true向文件末尾追加文本</param>
+        public static void WriteLineClose(string path, string value, bool bufferAppend = true, bool fileAppend = false)
+        {
+            if (fileWriter == null) { fileWriter = new FileWriter(); }
+            fileWriter.WriteLine(value, !bufferAppend);
+            fileWriter.Close(path, fileAppend, Encoding.UTF8);
+        }
+        /// <summary>
+        /// 使用FileWriter副本（复制MMCore.fileWriter的StringBuilder类型的Buffer缓冲区）后写文本每行（默认UTF-8）到文件（若不存在则自动新建）。
+        /// </summary>
+        /// <param name="path">要写入的文件路径</param>
+        /// <param name="value">要写入的字符内容</param>
+        /// <param name="bufferAppend">false覆盖缓冲区（即写入前清理StringBuilder）,true向缓冲区追加文本</param>
+        /// <param name="end">立即写入文件，如果flush=false则清理StringBuilder缓冲区</param>
+        /// <param name="fileAppend">false覆盖文件，true向文件末尾追加文本</param>
+        /// <param name="flush">是否使用Flush方法（不清空StringBuilder），默认false（使用Close方法，会清空StringBuilder）</param>
+        /// <returns></returns>
+        public static FileWriter WriteLineCopy(string path, string value, bool bufferAppend = true, bool end = false, bool fileAppend = false, bool flush = false)
+        {
+            FileWriter tempFileWriter = new FileWriter();
+            if (fileWriter != null)
+            {
+                tempFileWriter.Buffer.Append(MMCore.fileWriter.Buffer);
+            }
+            tempFileWriter.WriteLine(value, !bufferAppend);
+            if (end)
+            {
+                if (flush) { tempFileWriter.Flush(path, true, Encoding.UTF8); } else { tempFileWriter.Close(path, true, Encoding.UTF8); }
+            }
+            return tempFileWriter;
         }
         /// <summary>
         /// 使用FileWriter写文本每行。写入内容暂存在MMCore.fileWriter的StringBuilder类型的Buffer缓冲区（直到参数end=true时写入文件，文件若不存在则自动新建）
@@ -1711,15 +1812,16 @@ namespace MetalMaxSystem
         /// <param name="value">要写入的字符内容</param>
         /// <param name="bufferAppend">false覆盖缓冲区（即写入前清理StringBuilder）,true向缓冲区追加文本</param>
         /// <param name="encoding">编码</param>
-        /// <param name="end">立即写入文件并清理StringBuilder缓冲区</param>
+        /// <param name="end">立即写入文件并，如果flush=false则清理StringBuilder缓冲区</param>
         /// <param name="fileAppend">false覆盖文件，true向文件末尾追加文本</param>
-        public static void WriteLine(string path, string value, bool bufferAppend, Encoding encoding, bool end = false, bool fileAppend = false)
+        /// <param name="flush">是否使用Flush方法（不清空StringBuilder），默认false（使用Close方法，会清空StringBuilder）</param>
+        public static void WriteLine(string path, string value, bool bufferAppend, Encoding encoding, bool end = false, bool fileAppend = false, bool flush = false)
         {
             if (fileWriter == null) { fileWriter = new FileWriter(); }
             fileWriter.WriteLine(value, !bufferAppend);
             if (end)
             {
-                fileWriter.Close(path, fileAppend, encoding);
+                if (flush) { fileWriter.Flush(path, fileAppend, encoding); } else { fileWriter.Close(path, fileAppend, encoding); }
             }
         }
 
@@ -1730,6 +1832,7 @@ namespace MetalMaxSystem
         /// <param name="bufferAppend">false覆盖缓冲区（即写入前清理StringBuilder）,true向缓冲区追加文本</param>
         public static void Write(string value, bool bufferAppend = true)
         {
+            //Tell(value);//临时调试
             if (fileWriter == null) { fileWriter = new FileWriter(); }
             fileWriter.Write(value, !bufferAppend);
         }
@@ -1739,16 +1842,68 @@ namespace MetalMaxSystem
         /// <param name="path">要写入的文件路径</param>
         /// <param name="value">要写入的字符内容</param>
         /// <param name="bufferAppend">false覆盖缓冲区（即写入前清理StringBuilder）,true向缓冲区追加文本</param>
-        /// <param name="end">立即写入文件并清理StringBuilder缓冲区</param>
+        /// <param name="end">立即写入文件并，如果flush=false则清理StringBuilder缓冲区</param>
         /// <param name="fileAppend">false覆盖文件，true向文件末尾追加文本</param>
-        public static void Write(string path, string value, bool bufferAppend = true, bool end = false, bool fileAppend = false)
+        /// <param name="flush">是否使用Flush方法（不清空StringBuilder），默认false（使用Close方法，会清空StringBuilder）</param>
+        public static void Write(string path, string value, bool bufferAppend = true, bool end = false, bool fileAppend = false, bool flush = false)
         {
             if (fileWriter == null) { fileWriter = new FileWriter(); }
             fileWriter.Write(value, !bufferAppend);
             if (end)
             {
-                fileWriter.Close(path, fileAppend, Encoding.UTF8);
+                if (flush) { fileWriter.Flush(path, fileAppend, Encoding.UTF8); } else { fileWriter.Close(path, fileAppend, Encoding.UTF8); }
             }
+        }
+        /// <summary>
+        /// 使用FileWriter写文本（默认UTF-8）到文件（若不存在则自动新建）。FileWriter将调用Flush()方法，结束后保留MMCore.fileWriter的StringBuilder类型的Buffer缓冲区。
+        /// </summary>
+        /// <param name="path">要写入的文件路径</param>
+        /// <param name="value">要写入的字符内容</param>
+        /// <param name="bufferAppend">false覆盖缓冲区（即写入前清理StringBuilder）,true向缓冲区追加文本</param>
+        /// <param name="fileAppend">false覆盖文件，true向文件末尾追加文本</param>
+        public static void WriteFlush(string path, string value, bool bufferAppend = true, bool fileAppend = false)
+        {
+            if (fileWriter == null) { fileWriter = new FileWriter(); }
+            fileWriter.Write(value, !bufferAppend);
+            fileWriter.Flush(path, fileAppend, Encoding.UTF8);
+        }
+        /// <summary>
+        /// 使用FileWriter写文本（默认UTF-8）到文件（若不存在则自动新建）。FileWriter将调用Close()方法，结束后清理MMCore.fileWriter的StringBuilder类型的Buffer缓冲区。
+        /// </summary>
+        /// <param name="path">要写入的文件路径</param>
+        /// <param name="value">要写入的字符内容</param>
+        /// <param name="bufferAppend">false覆盖缓冲区（即写入前清理StringBuilder）,true向缓冲区追加文本</param>
+        /// <param name="fileAppend">false覆盖文件，true向文件末尾追加文本</param>
+        public static void WriteClose(string path, string value, bool bufferAppend = true, bool fileAppend = false)
+        {
+            if (fileWriter == null) { fileWriter = new FileWriter(); }
+            fileWriter.Write(value, !bufferAppend);
+            fileWriter.Close(path, fileAppend, Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// 使用FileWriter副本（复制MMCore.fileWriter的StringBuilder类型的Buffer缓冲区）后写文本（默认UTF-8）到文件（若不存在则自动新建）。
+        /// </summary>
+        /// <param name="path">要写入的文件路径</param>
+        /// <param name="value">要写入的字符内容</param>
+        /// <param name="bufferAppend">false覆盖缓冲区（即写入前清理StringBuilder）,true向缓冲区追加文本</param>
+        /// <param name="end">立即写入文件，如果flush=false则清理StringBuilder缓冲区</param>
+        /// <param name="fileAppend">false覆盖文件，true向文件末尾追加文本</param>
+        /// <param name="flush">是否使用Flush方法（不清空StringBuilder），默认false（使用Close方法，会清空StringBuilder）</param>
+        /// <returns></returns>
+        public static FileWriter WriteCopy(string path, string value, bool bufferAppend = true, bool end = false, bool fileAppend = false, bool flush = false)
+        {
+            FileWriter tempFileWriter = new FileWriter();
+            if (fileWriter != null)
+            {
+                tempFileWriter.Buffer.Append(MMCore.fileWriter.Buffer);
+            }
+            tempFileWriter.Write(value, !bufferAppend);
+            if (end)
+            {
+                if (flush) { tempFileWriter.Flush(path, true, Encoding.UTF8); } else { tempFileWriter.Close(path, true, Encoding.UTF8); }
+            }
+            return tempFileWriter;
         }
         /// <summary>
         /// 使用FileWriter写文本。写入内容暂存在MMCore.fileWriter的StringBuilder类型的Buffer缓冲区（直到参数end=true时写入文件，文件若不存在则自动新建）
@@ -1757,15 +1912,16 @@ namespace MetalMaxSystem
         /// <param name="value">要写入的字符内容</param>
         /// <param name="bufferAppend">false覆盖缓冲区（即写入前清理StringBuilder）,true向缓冲区追加文本</param>
         /// <param name="encoding">编码</param>
-        /// <param name="end">立即写入文件并清理StringBuilder缓冲区</param>
+        /// <param name="end">立即写入文件并，如果flush=false则清理StringBuilder缓冲区</param>
         /// <param name="fileAppend">false覆盖文件，true向文件末尾追加文本</param>
-        public static void Write(string path, string value, bool bufferAppend, Encoding encoding, bool end = false, bool fileAppend = false)
+        /// <param name="flush">是否使用Flush方法（不清空StringBuilder），默认false（使用Close方法，会清空StringBuilder）</param>
+        public static void Write(string path, string value, bool bufferAppend, Encoding encoding, bool end = false, bool fileAppend = false, bool flush = false)
         {
             if (fileWriter == null) { fileWriter = new FileWriter(); }
             fileWriter.Write(value, !bufferAppend);
             if (end)
             {
-                fileWriter.Close(path, fileAppend, encoding);
+                if (flush) { fileWriter.Flush(path, fileAppend, encoding); } else { fileWriter.Close(path, fileAppend, encoding); }
             }
         }
 
@@ -2193,7 +2349,7 @@ namespace MetalMaxSystem
 
         }
 #endif
-#region 弹幕爬取
+        #region 弹幕爬取
 
         //功能出处：https://blog.csdn.net/qq_15505341/article/details/79212070/
 

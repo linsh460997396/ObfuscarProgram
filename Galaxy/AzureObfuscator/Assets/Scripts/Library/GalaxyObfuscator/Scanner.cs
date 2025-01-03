@@ -84,7 +84,7 @@ namespace GalaxyObfuscator
             return true;
         }
         /// <summary>
-        /// 读当前标记并返回
+        /// 读当前标记并返回（扫描指针将前进）
         /// </summary>
         /// <returns></returns>
         public Token Read()
@@ -133,6 +133,10 @@ namespace GalaxyObfuscator
                 MMCore.WriteLine("读当前标记并期望特定的标记类型为参数" + token + "，否则抛出异常！" + $"Type: {token.Type.ToString()}, Value: {token.Sequence.ToString()}");
                 throw new SyntaxErrorException("Unexpected " + this.token);
             }
+            else
+            {
+                MMCore.WriteLine("得到预期标记类型！" + $"Type: {type.ToString()}, Value: {token.ToString()}");
+            }
         }
         /// <summary>
         /// 跳过直到遇到指定的终止符，如果到当前标记的序列（字符串）末尾还没有遇到终止符则抛出异常
@@ -150,6 +154,43 @@ namespace GalaxyObfuscator
             }
             MMCore.WriteLine("跳过直到遇到指定的终止符，如果到当前标记的序列（字符串）末尾还没有遇到终止符" + terminate + "，则抛出异常！" + $"Type: {this.Current.Type.ToString()}, Value: {this.Current.Sequence.ToString()}");
             throw new SyntaxErrorException("Missing " + terminate);
+        }
+        /// <summary>
+        /// 跳过直到遇到指定的任意终止符，如果到当前标记的序列（字符串）末尾还没有遇到终止符则抛出异常
+        /// </summary>
+        /// <param name="terminate1">终止符1</param>
+        /// <param name="terminate2">终止符2</param>
+        /// <exception cref="SyntaxErrorException"></exception>
+        public void SkipBlockPro(string terminate1, string terminate2)
+        {
+            while (!this.End)
+            {
+                if (this.Read().Type == TokenType.Symbol && (this.token.Sequence == terminate1 || this.token.Sequence == terminate2))
+                {
+                    return;
+                }
+            }
+            MMCore.WriteLine("跳过直到遇到指定的任意终止符，如到当前标记序列末尾还没遇到终止符：" + terminate1 + "，或：" + terminate2 + "，则抛出异常！" + $"Type: {this.Current.Type.ToString()}, Value: {this.Current.Sequence.ToString()}");
+            throw new SyntaxErrorException("Missing " + terminate1 + "或" + terminate2);
+        }
+        /// <summary>
+        /// 跳过直到遇到指定的任意终止符，如果到当前标记的序列（字符串）末尾还没有遇到终止符则抛出异常
+        /// </summary>
+        /// <param name="terminate1"></param>
+        /// <param name="terminate2"></param>
+        /// <param name="terminate3"></param>
+        /// <exception cref="SyntaxErrorException"></exception>
+        public void SkipBlockPro(string terminate1, string terminate2, string terminate3)
+        {
+            while (!this.End)
+            {
+                if (this.Read().Type == TokenType.Symbol && (this.token.Sequence == terminate1 || this.token.Sequence == terminate2 || this.token.Sequence == terminate3))
+                {
+                    return;
+                }
+            }
+            MMCore.WriteLine("跳过直到遇到指定的任意终止符，如到当前标记序列末尾还没遇到终止符：" + terminate1 + "，或：" + terminate2 + "，或：" + terminate3 + "，则抛出异常！" + $"Type: {this.Current.Type.ToString()}, Value: {this.Current.Sequence.ToString()}");
+            throw new SyntaxErrorException("Missing " + terminate1 + "或" + terminate2 + "或" + terminate3);
         }
         /// <summary>
         /// 跳过嵌套的代码块直到遇到指定的结束符，如果到当前标记的序列（字符串）末尾还没遇到有效的结束符则抛出异常
@@ -180,7 +221,7 @@ namespace GalaxyObfuscator
         /// <summary>
         /// 当前扫描位置（1=第一个元素，0=未开始扫描）。当前标记的序列（字符串）的尾部指针索引（this.token.Sequence.End）
         /// </summary>
-        private int position
+        public int position
         {
             get
             {
@@ -329,7 +370,7 @@ namespace GalaxyObfuscator
                     }
                 }
                 //全部读完还没遇到*/结尾，则报错
-                MMCore.WriteLine("全部读完还没遇到*/结尾则抛出异常！" + $"Type: {this.Current.Type.ToString()}, Value: {this.Current.Sequence.ToString()}");
+                MMCore.WriteLine("全部读完还没遇到*/结尾则抛出异常！" + $"Type: {this.Current.Type.ToString()}, Value: {this.Current.ToString()}");
                 throw new SyntaxErrorException("End of file in comment");
             }
             while (!this.End)

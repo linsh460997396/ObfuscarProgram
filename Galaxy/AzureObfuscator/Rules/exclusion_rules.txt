@@ -1,4 +1,15 @@
 ﻿InitMap
+funcref
+arrayref
+return
+if
+else
+elseif
+for
+while
+switch
+foreach
+break
 Loop
 LoopCurrent
 GalaxyNativeInvalid
