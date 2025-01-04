@@ -46,6 +46,7 @@ using Vector3F = Microsoft.Xna.Framework.Vector3;
 using Vector2F = System.Numerics.Vector2;
 using Vector3F = System.Numerics.Vector3;
 using System.Globalization;
+using System.Linq;
 #endif
 #endif
 
@@ -601,6 +602,26 @@ namespace MetalMaxSystem
         #endregion
 
         #region Functions 数学公式
+
+        /// <summary>
+        /// 度转弧度
+        /// </summary>
+        /// <param name="radian"></param>
+        /// <returns></returns>
+        public static double RadianToDegree(double radian)
+        {
+            return radian * (180.0 / Mathf.PI);
+        }
+
+        /// <summary>
+        /// 度转弧度
+        /// </summary>
+        /// <param name="radian"></param>
+        /// <returns></returns>
+        public static float RadianToDegree(float radian)
+        {
+            return (float)(radian * (180.0 / Mathf.PI));
+        }
 
         /// <summary>
         /// 随机角度
@@ -1359,7 +1380,7 @@ namespace MetalMaxSystem
         /// <returns></returns>
         public static bool IsEnglishCharacter(char c)
         {
-            return (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z') ;
+            return (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z');
         }
         /// <summary>
         /// 是否为英文标点符号
@@ -1376,6 +1397,210 @@ namespace MetalMaxSystem
                    category == UnicodeCategory.InitialQuotePunctuation ||
                    category == UnicodeCategory.FinalQuotePunctuation ||
                    category == UnicodeCategory.OtherPunctuation;
+
+            // char.GetUnicodeCategory方法获取字符的Unicode类别（UnicodeCategory），然后根据这个类别判断字符是否为标点符号
+            // Unicode 标准将字符分为多个类别，其中与标点符号相关的类别包括：
+            // OpenPunctuation：开标点符号，例如 (、[、{
+            // ClosePunctuation：闭标点符号，例如 )、]、}
+            // ConnectorPunctuation：连接标点符号，例如 _
+            // DashPunctuation：破折号标点符号，例如 -、—
+            // InitialQuotePunctuation：初始引号标点符号，例如 “、‘
+            // FinalQuotePunctuation：结束引号标点符号，例如 ”、’
+            // OtherPunctuation：其他标点符号，包括一些特殊的标点符号，例如 !、@、#、$、%、``、&、* 等
+            // 如果字符的 Unicode 类别属于上述任何一个类别，方法返回 true，否则返回 false
+        }
+        /// <summary>
+        /// 是否十六进制字符
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static bool IsHexchar(byte c)
+        {
+            return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
+        }
+        /// <summary>
+        /// 是否八进制字符
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static bool IsOctchar(byte c)
+        {
+            return (c >= '0' && c <= '7');
+        }
+        /// <summary>
+        /// 是否十进制字符
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static bool IsDecchar(byte c)
+        {
+            return (c >= '0' && c <= '9');
+        }
+
+        /// <summary>
+        /// 对字符串中的特殊字符（如中文）进行转义处理，并将其转换为字节数组。该函数支持多种转义序列，包括十六进制、八进制和常见的转义字符（如 \n, \t, \r 等）。
+        /// 通过这种方式，可以确保字符串在某些特定上下文中（如网络传输或文件存储）能够正确解析。
+        /// </summary>
+        /// <param name="Text">任意字符串</param>
+        /// <returns></returns>
+        public static byte[] Escape(string Text)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(Text);
+            List<byte> result = new List<byte>();
+
+            for (int i = 0; i < bytes.Length;)
+            {
+                if (bytes[i] != '\\')
+                {
+                    result.Add(bytes[i]);
+                    i++;
+                }
+                else
+                {
+                    i++;
+                    if (i < bytes.Length)
+                    {
+                        string s = "";
+                        if (bytes[i] == 'x')
+                        {
+                            s = "";
+                            i++;
+                            int k = 0;
+                            while (k < 2 && i + k < bytes.Length && IsHexchar(bytes[i + k])) k++;
+                            for (int j = 0; j < k; j++) s += (char)bytes[i + j];
+                            byte hexvalue = Convert.ToByte(s, 16);
+                            result.Add(hexvalue);
+                            i += k;
+                        }
+                        else if (bytes[i] == '0')
+                        {
+                            s = "";
+                            i++;
+                            int k = 0;
+                            while (k < 3 && i + k < bytes.Length && IsOctchar(bytes[i + k])) k++;
+                            //这里注意如果k等于3 并且转换后的值超过255 则应将k-1重新计算一次
+                            for (int j = 0; j < k; j++) s += (char)bytes[i + j];
+
+                            byte hexvalue;
+                            try
+                            {
+                                hexvalue = Convert.ToByte(s, 8);
+                            }
+                            catch
+                            {
+                                s = "";
+                                k--;
+                                for (int j = 0; j < k; j++) s += (char)bytes[i + j];
+                                if (s == "") hexvalue = 0;
+                                else hexvalue = Convert.ToByte(s, 8);
+                            }
+                            result.Add(hexvalue);
+                            i += k;
+                        }
+                        else if (char.IsDigit((char)bytes[i]))
+                        {
+                            s = "";
+                            int k = 0;
+                            while (k < 3 && i + k < bytes.Length && IsHexchar(bytes[i + k])) k++;
+                            //这里注意如果k等于3 并且转换后的值超过255 则应将k-1重新计算一次
+                            for (int j = 0; j < k; j++) s += (char)bytes[i + j];
+                            byte hexvalue;
+                            try
+                            {
+                                hexvalue = Convert.ToByte(s, 8);
+                            }
+                            catch
+                            {
+                                s = "";
+                                k--;
+                                for (int j = 0; j < k; j++) s += (char)bytes[i + j];
+                                hexvalue = Convert.ToByte(s, 8);
+                            }
+                            result.Add(hexvalue);
+                            i += k;
+                        }
+                        else
+                        {
+
+                            switch ((char)bytes[i])
+                            {
+                                case 'n':
+                                    result.Add((byte)'\n');
+                                    break;
+                                case 't':
+                                    result.Add((byte)'\t');
+                                    break;
+                                case 'r':
+                                    result.Add((byte)'\r');
+                                    break;
+                                case '\\':
+                                    result.Add((byte)'\\');
+                                    break;
+                                case '\'':
+                                    result.Add((byte)'\'');
+                                    break;
+                                case '\"':
+                                    result.Add((byte)'\"');
+                                    break;
+                                case 'b':
+                                    result.Add((byte)'\b');
+                                    break;
+                                case 'f':
+                                    result.Add((byte)'\f');
+                                    break;
+                                case 'v':
+                                    result.Add((byte)'\v');
+                                    break;
+                                default:
+                                    // 如果是未知的转义符，保留原样
+                                    result.Add((byte)'\\');
+                                    result.Add(bytes[i]);
+                                    break;
+                            }
+
+                            i++;
+                        }
+                    }
+                }
+            }
+
+            //if (bFirst) return Escape(Encoding.UTF8.GetString(result.ToArray()), false);
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// 混淆处理（将字符串变转义序列）。字符串中每个字符将被转换为八进制或十六进制（X2）表示
+        /// </summary>
+        /// <param name="str">任意字符串</param>
+        /// <returns></returns>
+        public static string Obfuscate(string str)
+        {
+            byte[] bytes = Escape(str);
+            Random random = new Random();
+            string result = string.Concat(bytes.Select(b =>
+            {
+                // 随机选择八进制或十六进制表示
+                return random.Next(2) == 0
+                    ? $"\\x{b:X2}" // 十六进制表示
+                    : $"\\{Convert.ToString(b, 8).PadLeft(3, '0')}"; // 八进制表示，补足三位
+            }));
+            return result;
+        }
+
+        /// <summary>
+        /// 将英文字符串转换为中文（GalaxyEditor）
+        /// </summary>
+        /// <param name="hexString">十六位字符组成的字符串如"E58AA8E59BBEE6B58BE8AF95"</param>
+        /// <returns></returns>
+        public static string HexStringToChineseCharacter(string hexString)
+        {
+            byte[] bytes = new byte[hexString.Length / 2];//创建一个字节数组（C#每个字符Char占2字节16位）
+            for (int i = 0; i < hexString.Length; i += 2)
+            {
+                bytes[i / 2] = Convert.ToByte(hexString.Substring(i, 2), 16);
+            }
+            string result = System.Text.Encoding.UTF8.GetString(bytes);
+            return result;
         }
 
         /// <summary>
@@ -2313,11 +2538,7 @@ namespace MetalMaxSystem
         {
             if (!IsOwnWinRAR())
             {
-#if !NETFRAMEWORK
-                MessageBox.Show("本机并未安装WinRAR,请安装该压缩软件!", "温馨提示");
-#else
                 MMCore.Tell("本机并未安装WinRAR,请安装该压缩软件!", "温馨提示");
-#endif
                 return false;
             }
 
