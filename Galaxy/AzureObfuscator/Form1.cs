@@ -574,6 +574,8 @@ namespace GalaxyObfuscator
                     }
                 }
                 stringBuilder.AppendLine("█↑ObjectPoint.PathAddNoFlyZone.End↑█" + "\r\n");
+
+                SetCodeToMainThread(stringBuilder.ToString());
             }
             catch (IOException ex)
             {
