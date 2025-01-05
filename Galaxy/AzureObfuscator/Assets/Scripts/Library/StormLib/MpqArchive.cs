@@ -29,11 +29,11 @@ namespace StormLib
         /// <summary>
         /// [构造函数]MPQ档案管理器
         /// </summary>
-        /// <param name="filename"></param>
+        /// <param name="fileName"></param>
         /// <exception cref="IOException"></exception>
-        public MpqArchive(string filename)
+        public MpqArchive(string fileName)
 		{
-            if (!SFileOpenArchive(filename, 0U, 0U, out this.mpq))
+            if (!SFileOpenArchive(fileName, 0U, 0U, out this.mpq))
 			{
 				throw new IOException(new Win32Exception(Marshal.GetLastWin32Error()).Message);
 			}
@@ -71,24 +71,24 @@ namespace StormLib
 		}
 
 		// Token: 0x06000009 RID: 9 RVA: 0x00002126 File Offset: 0x00000326
-		public MpqStream OpenFile(string filename)
+		public MpqStream OpenFile(string fileName)
 		{
-			return new MpqStream(this.mpq, filename);
+			return new MpqStream(this.mpq, fileName);
 		}
 
 		// Token: 0x0600000A RID: 10 RVA: 0x00002134 File Offset: 0x00000334
-		public void RemoveFile(string filename)
+		public void RemoveFile(string fileName)
 		{
-			if (!MpqArchive.SFileRemoveFile(this.mpq, filename, 0U))
+			if (!MpqArchive.SFileRemoveFile(this.mpq, fileName, 0U))
 			{
 				throw new IOException(new Win32Exception(Marshal.GetLastWin32Error()).Message);
 			}
 		}
 
 		// Token: 0x0600000B RID: 11 RVA: 0x00002168 File Offset: 0x00000368
-		public void AddFile(string filename, string archivedName, bool replaceExisting)
+		public void AddFile(string fileName, string archivedName, bool replaceExisting)
 		{
-			if (!MpqArchive.SFileAddFileEx(this.mpq, filename, archivedName, replaceExisting ? 2147483648U : 0U, 0U, 0U))
+			if (!MpqArchive.SFileAddFileEx(this.mpq, fileName, archivedName, replaceExisting ? 2147483648U : 0U, 0U, 0U))
 			{
 				throw new IOException(new Win32Exception(Marshal.GetLastWin32Error()).Message);
 			}

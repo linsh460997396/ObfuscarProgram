@@ -3,19 +3,7 @@
   "WorkspaceRootPath": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\assets\\scripts\\library\\galaxyobfuscator\\stringobfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:assets\\scripts\\library\\galaxyobfuscator\\stringobfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\assets\\scripts\\library\\metalmaxsystem\\class\\mmcore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:assets\\scripts\\library\\metalmaxsystem\\class\\mmcore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|d:\\vswork\\2022\\galaxy\\azureobfuscator\\assets\\scripts\\library\\galaxyobfuscator\\obfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:assets\\scripts\\library\\galaxyobfuscator\\obfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\assets\\scripts\\library\\galaxyobfuscator\\scanner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|d:\\vswork\\2022\\galaxy\\azureobfuscator\\assets\\scripts\\library\\galaxyobfuscator\\scanner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:assets\\scripts\\library\\galaxyobfuscator\\scanner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -23,20 +11,16 @@
       "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\assets\\scripts\\library\\galaxyobfuscator\\obfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:assets\\scripts\\library\\galaxyobfuscator\\obfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\assets\\scripts\\library\\galaxyobfuscator\\syntaxerrorexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:assets\\scripts\\library\\galaxyobfuscator\\syntaxerrorexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\assets\\scripts\\library\\galaxyobfuscator\\integerobfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:assets\\scripts\\library\\galaxyobfuscator\\integerobfuscator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{3C9DB9D6-C6D1-4E1A-858E-E8C75ED181F0}|GalaxyObfuscator.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -58,101 +42,40 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-03T19:14:00.042Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Form1.cs [\u8BBE\u8BA1]",
-              "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Form1.cs",
-              "RelativeDocumentMoniker": "Form1.cs",
-              "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Form1.cs [\u8BBE\u8BA1]",
-              "RelativeToolTip": "Form1.cs [\u8BBE\u8BA1]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-03T19:06:25.114Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Form1.cs",
-              "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Form1.cs",
-              "RelativeDocumentMoniker": "Form1.cs",
-              "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Form1.cs",
-              "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAAKIBAAAAAAAAAADgv0wCAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-03T15:44:05.787Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "MMCore.cs",
-              "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\MMCore.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\MMCore.cs",
-              "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\MMCore.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Library\\MetalMaxSystem\\Class\\MMCore.cs",
-              "ViewState": "AgIAANNJAAAAAAAAAADwv/tJAAAOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-03T10:37:26.318Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "SyntaxErrorException.cs",
-              "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\SyntaxErrorException.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Library\\GalaxyObfuscator\\SyntaxErrorException.cs",
-              "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\SyntaxErrorException.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Library\\GalaxyObfuscator\\SyntaxErrorException.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAB4AAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-02T20:45:43.818Z"
+              "WhenOpened": "2025-01-05T13:18:51.869Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "StringObfuscator.cs",
-              "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\StringObfuscator.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Library\\GalaxyObfuscator\\StringObfuscator.cs",
-              "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\StringObfuscator.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Library\\GalaxyObfuscator\\StringObfuscator.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAAAB8AAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-02T20:19:56.748Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "IntegerObfuscator.cs",
-              "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\IntegerObfuscator.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\Library\\GalaxyObfuscator\\IntegerObfuscator.cs",
-              "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\IntegerObfuscator.cs",
-              "RelativeToolTip": "Assets\\Scripts\\Library\\GalaxyObfuscator\\IntegerObfuscator.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAMYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-02T20:13:40.31Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "Scanner.cs",
               "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\Scanner.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Library\\GalaxyObfuscator\\Scanner.cs",
               "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\Scanner.cs",
               "RelativeToolTip": "Assets\\Scripts\\Library\\GalaxyObfuscator\\Scanner.cs",
-              "ViewState": "AgIAAGkAAAAAAAAAAAAAAK4AAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAACYAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-02T12:21:19.597Z",
+              "WhenOpened": "2025-01-05T11:58:59.9Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Form1.cs",
+              "RelativeDocumentMoniker": "Form1.cs",
+              "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Form1.cs",
+              "RelativeToolTip": "Form1.cs",
+              "ViewState": "AgIAAEIBAAAAAAAAAADgv08BAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-05T11:54:05.264Z"
             },
             {
               "$type": "Document",
@@ -162,10 +85,21 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\Library\\GalaxyObfuscator\\Obfuscator.cs",
               "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\Obfuscator.cs",
               "RelativeToolTip": "Assets\\Scripts\\Library\\GalaxyObfuscator\\Obfuscator.cs",
-              "ViewState": "AgIAAPABAAAAAAAAAAAAAC4CAAAeAAAAAAAAAA==",
+              "ViewState": "AgIAAEgBAAAAAAAAAADgv1QBAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-02T11:58:36.803Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-05T11:21:34.871Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "SyntaxErrorException.cs",
+              "DocumentMoniker": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\SyntaxErrorException.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Library\\GalaxyObfuscator\\SyntaxErrorException.cs",
+              "ToolTip": "D:\\VSWork\\2022\\Galaxy\\AzureObfuscator\\Assets\\Scripts\\Library\\GalaxyObfuscator\\SyntaxErrorException.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Library\\GalaxyObfuscator\\SyntaxErrorException.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAADgvxkAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-05T10:55:10.191Z"
             }
           ]
         }

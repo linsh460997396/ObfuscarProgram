@@ -365,7 +365,7 @@ namespace GalaxyObfuscator
         }
 
         /// <summary>
-        /// 递归方式混肴文件夹内所有地图文件
+        /// 递归方式混淆文件夹内所有地图文件
         /// </summary>
         /// <param name="dirInfo"></param>
         void ObDirectoryRecursively(DirectoryInfo dirInfo)
@@ -387,7 +387,7 @@ namespace GalaxyObfuscator
         }
 
         /// <summary>
-        /// 对.SC2Map地图文件进行混肴
+        /// 对.SC2Map地图文件进行混淆
         /// </summary>
         void SelectedFunc_0()
         {
@@ -411,17 +411,18 @@ namespace GalaxyObfuscator
         }
 
         /// <summary>
-        /// 对Galaxy代码进行混肴
+        /// 对Galaxy代码进行混淆
         /// </summary>
         void SelectedFunc_1()
         {
             if (GetCheckTestStateFromMainThread() == false)
             {
-                Obfuscator obfuscator = new Obfuscator();
+                string workDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                Obfuscator obfuscator = new Obfuscator(workDirectory + @"/SyntaxErrorException.txt");
                 obfuscator.script = GetCodeFromMainThread();
                 SetCodeToMainThread(obfuscator.obfuscateScript());
                 //↓如果勾选了打印报告
-                MMCore.WriteLine(GetWorkPathFromMainThread() + @"/代码混淆报告.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
+                MMCore.WriteLine(workDirectory + @"/代码混淆报告.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
             }
             else
             {
@@ -934,14 +935,14 @@ namespace GalaxyObfuscator
                     SetTipsToMainThread("功能未选择！");
                     break;
                 case 0:
-                    SetTipsToMainThread("（选择处理目录）执行将批处理混肴文件夹内所有.SC2Map地图文件");
+                    SetTipsToMainThread("（选择处理目录）执行将批处理混淆文件夹内所有.SC2Map地图文件");
                     panel1.Visible = true;
                     panel_Bottom.Visible = false;
                     checkBox_LC4.Enabled = true;
                     checkBox_Test.Enabled = true;
                     break;
                 case 1:
-                    SetTipsToMainThread("（左下文本）填入Galaxy代码，执行将进行混肴");
+                    SetTipsToMainThread("（左下文本）填入Galaxy代码，执行将进行混淆");
                     button_LoadContentFromFile.Text = "读取Map里的代码";
                     panel1.Visible = false;
                     panel_Bottom.Visible = true;
@@ -964,8 +965,8 @@ namespace GalaxyObfuscator
 
         void Form1_Load(object sender, EventArgs e)
         {
-            comboBox_SelectFunc.Items.Add("对.SC2Map地图文件进行混肴");
-            comboBox_SelectFunc.Items.Add("对自定义Galaxy代码进行混肴");
+            comboBox_SelectFunc.Items.Add("对.SC2Map地图文件进行混淆");
+            comboBox_SelectFunc.Items.Add("对自定义Galaxy代码进行混淆");
             comboBox_SelectFunc.Items.Add("[正在开发]将Objects等地形布置信息转Galaxy");
             comboBox_SelectFunc.SelectedIndex = 0;
         }

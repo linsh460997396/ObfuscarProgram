@@ -9,48 +9,64 @@ using StormLib;
 namespace GalaxyObfuscator
 {
     /// <summary>
-    /// 混肴器
+    /// 混淆器
     /// </summary>
     internal class Obfuscator
     {
         public static int mutiCount = 0;
         public static Form1 form1;
+        public string errFileName;
+
+        public Obfuscator()
+        {
+            //string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;//exe路径
+            //string exeDirectory = System.IO.Path.GetDirectoryName(exePath);
+
+            //返回调试目录（如bin\Debug或bin\Release）或打包后的exe所在目录
+            this.errFileName = AppDomain.CurrentDomain.BaseDirectory + @"/SyntaxErrorException.txt";
+        }
+
+        public Obfuscator(string fileName)
+        {
+            //初始化混淆器实例时记录errFileName
+            this.errFileName = fileName + @"_SyntaxErrorException.txt";
+        }
 
         /// <summary>
         /// 启动混淆过程。如果文件名不包含"Obfuscated"则创建混淆器实例并对目标文件进行混淆。
         /// </summary>
-        /// <param name="filename"></param>
+        /// <param name="fileName"></param>
         /// <param name="torf">是否跳过含关键字文件</param>
         /// <param name="key">关键字，默认值"Obfuscated"</param>
-        public static void Obfuscate(string filename, bool torf = true, string key = "Obfuscated")
+        public static void Obfuscate(string fileName, bool torf = true, string key = "Obfuscated")
         {
-            if (!torf || !filename.Contains(key))
+            if (!torf || !fileName.Contains(key))
             {//没有启用跳过含关键字文件或文件名不包含关键字时启动
                 mutiCount++;//记录执行次数，若为1则为单文件混淆，否则为多文件混淆
-                //创建混肴器实例
-                Obfuscator obfuscator = new Obfuscator();
-                //对目标文件进行混肴
-                obfuscator.ObfuscateFile(filename);
-                //↓如果勾选了打印报告（目前批量时只对第一个文件进行混肴时有调试报告，多文件暂不支持）
+                //创建混淆器实例
+                Obfuscator obfuscator = new Obfuscator(fileName);
+                //对目标文件进行混淆
+                obfuscator.ObfuscateFile(fileName);
+                //↓如果勾选了打印报告（目前批量时只对第一个文件进行混淆时有调试报告，多文件暂不支持）
                 //打印每个名称的混淆报告（会清空StringBuilder的缓存区，批量混淆时下个报告应能独立）
-                MMCore.WriteLine(filename + @"_混淆报告.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
+                MMCore.WriteLine(fileName + @"_混淆报告.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
             }
         }
         /// <summary>
-        /// 对目标文件进行混肴
+        /// 对目标文件进行混淆
         /// </summary>
-        /// <param name="filename">目标文件</param>
-        public void ObfuscateFile(string filename)
+        /// <param name="fileName">目标文件</param>
+        public void ObfuscateFile(string fileName)
         {
             //确立混淆后的文件名
-            string text = filename.Substring(0, filename.LastIndexOf('.')) + " Obfuscated.SC2Map";
+            string text = fileName.Substring(0, fileName.LastIndexOf('.')) + " Obfuscated.SC2Map";
             //文件已存在则删除
             if (File.Exists(text))
             {
                 File.Delete(text);
             }
             //复制原始文件到目标文件位置
-            File.Copy(filename, text);
+            File.Copy(fileName, text);
             //引用StormLib.dll创建MPQ档案管理器
             using (MpqArchive mpqArchive = new MpqArchive(text))
             {
@@ -130,7 +146,7 @@ namespace GalaxyObfuscator
         /// <summary>
         /// 混淆脚本
         /// </summary>
-        /// <returns>返回对Obfuscator.script混肴后的结果</returns>
+        /// <returns>返回对Obfuscator.script混淆后的结果</returns>
         public string obfuscateScript()
         {
             if (form1.GetCheckLC4StateFromMainThread() == true)
@@ -169,7 +185,7 @@ namespace GalaxyObfuscator
             {
                 //将保留标识符转换为Sequence类型（为了方便比较或存储）
                 Sequence key = new Sequence(str);
-                //参与混肴的identifierTable中包含该保留标识符的映射则将其移除，以便保留标识符在混淆后脚本中保持不变
+                //参与混淆的identifierTable中包含该保留标识符的映射则将其移除，以便保留标识符在混淆后脚本中保持不变
                 if (this.identifierTable.ContainsKey(key))
                 {
                     //移除保留标识符
@@ -199,7 +215,7 @@ namespace GalaxyObfuscator
         {
             string tempStr; int tempInt;
             //初始化扫描器，用于扫描原始脚本
-            this.scanner = new Scanner(this.script);
+            this.scanner = new Scanner(this.script, this.errFileName);
             //初始化StringBuilder，用于构建混淆后的脚本
             //乘以10是为了预留足够的空间，避免频繁扩容
             StringBuilder stringBuilder = new StringBuilder(this.script.Length * 10);
@@ -230,7 +246,7 @@ namespace GalaxyObfuscator
                 {
                     //处理独立token之间的换行
                     //如果当前token和上一个token都是独立的标记则在StringBuilder中添加一个换行符保持混淆后脚本的可读性
-                    //但显然混肴是不需要可读性的，这里直接将前后串起来
+                    //但显然混淆是不需要可读性的，这里直接将前后串起来
                     if (Obfuscator.isSeparateToken(token2) && Obfuscator.isSeparateToken(token))
                     {
                         stringBuilder.AppendLine();
@@ -242,7 +258,7 @@ namespace GalaxyObfuscator
                         case TokenType.Identifier:
                             if (this.identifierTable.ContainsKey(token2.Sequence))
                             {
-                                //附加混肴后的标识符
+                                //附加混淆后的标识符
                                 stringBuilder.Append(this.identifierTable[token2.Sequence]);
                             }
                             else
@@ -537,7 +553,7 @@ namespace GalaxyObfuscator
             //检查当前标记是否为标识符（变量名）
             if (this.scanner.Current.Type != TokenType.Identifier)
             {
-                //如果不是则抛出语法错误异常，函数内if...;}DataTableSetBool(...问题发生时指针位置在(，标记是DataTableSetBool但它不是标识符（Native函数未在代码文件声明）
+                //如果不是则抛出语法错误异常，函数内if...;}DataTableSetBool(...问题发生时指针位置在(符号处，标记是DataTableSetBool但它不是标识符（Native函数未在代码文件声明）
                 //DataTableSetBool(false,lll[(l1I1^0x2a397^(~-0X1e1f9d8c))][((1<<(-0x2B+IIl))^((~-1785843762)^l1Il))][((-0X99^llII)+lllI+(~0X57F5F7D0))],lp_bool0);
                 //实际上有非空内容应处理而非随意跳过（待处理）
                 MMCore.WriteLine("期望是变量但不是所以抛出！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.ToString()}");

@@ -29,9 +29,9 @@ namespace StormLib
 		private static extern bool SFileReadFile(IntPtr hFile, out byte lpBuffer, uint dwToRead, out uint pdwRead, IntPtr lpOverlapped);
 
 		// Token: 0x06000011 RID: 17 RVA: 0x000021A8 File Offset: 0x000003A8
-		internal MpqStream(IntPtr mpq, string filename)
+		internal MpqStream(IntPtr mpq, string fileName)
 		{
-			if (!MpqStream.SFileOpenFileEx(mpq, filename, 0U, out this.file))
+			if (!MpqStream.SFileOpenFileEx(mpq, fileName, 0U, out this.file))
 			{
 				throw new IOException(new Win32Exception(Marshal.GetLastWin32Error()).Message);
 			}

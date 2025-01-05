@@ -4,7 +4,7 @@ using System.Text;
 namespace GalaxyObfuscator
 {
     /// <summary>
-    /// 内部混肴器
+    /// 内部混淆器
     /// </summary>
     internal class IntegerObfuscator
     {
@@ -104,9 +104,9 @@ namespace GalaxyObfuscator
         }
 
         /// <summary>
-        /// 混肴一个整数为（^）形式。
+        /// 混淆一个整数为（^）形式。
         /// </summary>
-        /// <param name="number">用于混肴的整数</param>
+        /// <param name="number">用于混淆的整数</param>
         /// <returns>返回混淆后的字符串</returns>
         public string Obfuscate(int number)
         {

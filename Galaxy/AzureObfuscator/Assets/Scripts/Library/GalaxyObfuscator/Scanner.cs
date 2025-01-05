@@ -12,11 +12,32 @@ namespace GalaxyObfuscator
     internal class Scanner : IEnumerator<Token>, IDisposable, IEnumerator
     {
         /// <summary>
+        /// 强力打印错误报告的模式。出现错误立即写入，防止无限循环导致的中断不打印报告而不断打印覆盖（性能差，慎用）
+        /// </summary>
+        public static bool forceDebugPrint = false;
+        /// <summary>
+        /// 打印异常报告用的文件写入器
+        /// </summary>
+        public static FileWriter errFileWriter;
+        /// <summary>
+        /// 错误报告写入路径
+        /// </summary>
+        public string errFileName;
+
+        /// <summary>
         /// [构造函数]扫描器。用于解析输入字符串并生成标记，初始token.Type = TokenType.None，Start = 0，End = 0
         /// </summary>
         /// <param name="str"></param>
         public Scanner(string str)
         {
+            this.errFileName = AppDomain.CurrentDomain.BaseDirectory + @"/SyntaxErrorException.txt";
+            this.token.Sequence = new Sequence(str, 0, 0);
+            this.token.Type = TokenType.None;
+        }
+
+        public Scanner(string str, string errFile)
+        {
+            this.errFileName = errFile;
             this.token.Sequence = new Sequence(str, 0, 0);
             this.token.Type = TokenType.None;
         }
@@ -347,7 +368,7 @@ namespace GalaxyObfuscator
                     this.readComment();
                 }
             }
-            //设置当前标记类型为无并将Sequence.Start = Sequence.End
+            //设置当前标记类型为无并将Sequence.Start = Sequence.End（表示已处理夹着的内容）
             this.setNil();
         }
         /// <summary>
