@@ -421,7 +421,7 @@ namespace GalaxyObfuscator
             //将当前指针位置作为序列开始
             this.token.Sequence.Start = this.position;
             while (this.forward())
-            {//前进并判断当前字符是否非十进制数且不为_，直到下一字符是结尾
+            {//前进并判断当前字符是否非十进制数且不为_
                 if (!char.IsLetterOrDigit(this.get()) && this.get() != '_')
                 {
                     return;

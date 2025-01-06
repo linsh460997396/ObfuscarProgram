@@ -1,6 +1,5 @@
 ﻿using MetalMaxSystem;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -19,14 +18,16 @@ namespace GalaxyObfuscator
         /// <summary>
         /// 混淆处理（将字符串转义序列）。字符串中每个字符将被转换为八进制或十六进制（X2）表示
         /// </summary>
-        /// <param name="str"></param>
+        /// <param name="str">可以是夹在冒号间的原文</param>
+        /// <param name="torf">true处理连续的两个\字符为1个\（即处理双\的转义），如需保留两个\或变成1个/或其他字符串时则应设置torf=false（默认）</param>
+        /// <param name="torfString">torf=false时生效，当torfString不为null则连续2个\字符将被处理为自定义torfString（默认值"/"），只改torf=false而torfString=null时将保留双\</param>
         /// <returns></returns>
-        public string Obfuscate(string str)
+        public string Obfuscate(string str, bool torf = false, string torfString = "/")
         {
             if (!str.Contains("bnet:"))
             {
                 string result;
-                byte[] bytes = Escape(str);
+                byte[] bytes = MMCore.Escape(str);//默认会将双\处理为"/"
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.Append('"');
                 result = string.Concat(bytes.Select(b =>
@@ -44,164 +45,6 @@ namespace GalaxyObfuscator
             {//不转义含bnet:的字符串，直接返回
                 return str;
             }
-        }
-
-        /// <summary>
-        /// 是否十六进制字符
-        /// </summary>
-        /// <param name="c"></param>
-        /// <returns></returns>
-        private static bool IsHexchar(byte c)
-        {
-            return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
-        }
-        /// <summary>
-        /// 是否八进制字符
-        /// </summary>
-        /// <param name="c"></param>
-        /// <returns></returns>
-        private static bool IsOctchar(byte c)
-        {
-            return (c >= '0' && c <= '7');
-        }
-        /// <summary>
-        /// 是否十进制字符
-        /// </summary>
-        /// <param name="c"></param>
-        /// <returns></returns>
-        private static bool IsDecchar(byte c)
-        {
-            return (c >= '0' && c <= '9');
-        }
-        /// <summary>
-        /// 对字符串中的特殊字符（如中文）进行转义处理，并将其转换为字节数组。该函数支持多种转义序列，包括十六进制、八进制和常见的转义字符（如 \n, \t, \r 等）。
-        /// 通过这种方式，可以确保字符串在某些特定上下文中（如网络传输或文件存储）能够正确解析。
-        /// </summary>
-        /// <param name="Text">任意字符串</param>
-        /// <returns></returns>
-        private static byte[] Escape(string Text)
-        {
-            byte[] bytes = Encoding.UTF8.GetBytes(Text);
-            List<byte> result = new List<byte>();
-
-            for (int i = 0; i < bytes.Length;)
-            {
-                if (bytes[i] != '\\')
-                {
-                    result.Add(bytes[i]);
-                    i++;
-                }
-                else
-                {
-                    i++;
-                    if (i < bytes.Length)
-                    {
-                        string s = "";
-                        if (bytes[i] == 'x')
-                        {
-                            s = "";
-                            i++;
-                            int k = 0;
-                            while (k < 2 && i + k < bytes.Length && IsHexchar(bytes[i + k])) k++;
-                            for (int j = 0; j < k; j++) s += (char)bytes[i + j];
-                            byte hexvalue = Convert.ToByte(s, 16);
-                            result.Add(hexvalue);
-                            i += k;
-                        }
-                        else if (bytes[i] == '0')
-                        {
-                            s = "";
-                            i++;
-                            int k = 0;
-                            while (k < 3 && i + k < bytes.Length && IsOctchar(bytes[i + k])) k++;
-                            //这里注意如果k等于3 并且转换后的值超过255 则应将k-1重新计算一次
-                            for (int j = 0; j < k; j++) s += (char)bytes[i + j];
-
-                            byte hexvalue;
-                            try
-                            {
-                                hexvalue = Convert.ToByte(s, 8);
-                            }
-                            catch
-                            {
-                                s = "";
-                                k--;
-                                for (int j = 0; j < k; j++) s += (char)bytes[i + j];
-                                if (s == "") hexvalue = 0;
-                                else hexvalue = Convert.ToByte(s, 8);
-                            }
-                            result.Add(hexvalue);
-                            i += k;
-                        }
-                        else if (char.IsDigit((char)bytes[i]))
-                        {
-                            s = "";
-                            int k = 0;
-                            while (k < 3 && i + k < bytes.Length && IsHexchar(bytes[i + k])) k++;
-                            //这里注意如果k等于3 并且转换后的值超过255 则应将k-1重新计算一次
-                            for (int j = 0; j < k; j++) s += (char)bytes[i + j];
-                            byte hexvalue;
-                            try
-                            {
-                                hexvalue = Convert.ToByte(s, 8);
-                            }
-                            catch
-                            {
-                                s = "";
-                                k--;
-                                for (int j = 0; j < k; j++) s += (char)bytes[i + j];
-                                hexvalue = Convert.ToByte(s, 8);
-                            }
-                            result.Add(hexvalue);
-                            i += k;
-                        }
-                        else
-                        {
-
-                            switch ((char)bytes[i])
-                            {
-                                case 'n':
-                                    result.Add((byte)'\n');
-                                    break;
-                                case 't':
-                                    result.Add((byte)'\t');
-                                    break;
-                                case 'r':
-                                    result.Add((byte)'\r');
-                                    break;
-                                case '\\':
-                                    result.Add((byte)'\\');
-                                    break;
-                                case '\'':
-                                    result.Add((byte)'\'');
-                                    break;
-                                case '\"':
-                                    result.Add((byte)'\"');
-                                    break;
-                                case 'b':
-                                    result.Add((byte)'\b');
-                                    break;
-                                case 'f':
-                                    result.Add((byte)'\f');
-                                    break;
-                                case 'v':
-                                    result.Add((byte)'\v');
-                                    break;
-                                default:
-                                    // 如果是未知的转义符，保留原样
-                                    result.Add((byte)'\\');
-                                    result.Add(bytes[i]);
-                                    break;
-                            }
-
-                            i++;
-                        }
-                    }
-                }
-            }
-
-            //if (bFirst) return Escape(Encoding.UTF8.GetString(result.ToArray()), false);
-            return result.ToArray();
         }
     }
 }

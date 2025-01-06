@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using MetalMaxSystem;
 using StormLib;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GalaxyObfuscator
 {
@@ -225,8 +226,10 @@ namespace GalaxyObfuscator
             {
                 //"include"后面紧跟着的是要"include"的加载文件名（作为字符串字面量）
                 //这里没有处理可能的错误情况，比如"include"后面不是字符串字面量
-                tempStr = scanner.Read().ParseStringLiteral();
-                MMCore.WriteLine("字符串字面量：" + tempStr);
+
+                tempStr = scanner.Read().Content();//冒号间内容：Assets\\Textures\\HongMaster1.dds
+                MMCore.WriteLine("字符串字面量：" + scanner.Current.ToString());//结果示范："Assets\\Textures\\HongMaster1.dds"
+                MMCore.WriteLine("解析字符串字面量：" + scanner.Current.ParseStringLiteral());//结果示范：Assets/Textures/HongMaster1.dds
                 tempStr = this.stringObfuscator.Obfuscate(tempStr);
                 MMCore.WriteLine("混淆后：" + tempStr);
                 stringBuilder.AppendLine("include " + tempStr);
@@ -276,9 +279,21 @@ namespace GalaxyObfuscator
                             else
                             {
                                 //否则，对字符串字面量进行混淆处理并附加混淆后的结果
-                                tempStr = token2.ParseStringLiteral();
-                                MMCore.WriteLine("字符串字面量：" + tempStr);
-                                tempStr = this.stringObfuscator.Obfuscate(tempStr);
+                                tempStr = token2.Content();//冒号间内容：Assets\\Textures\\HongMaster1.dds
+                                MMCore.WriteLine("字符串字面量：" + token2.ToString());//结果示范："Assets\\Textures\\HongMaster1.dds"
+                                MMCore.WriteLine("解析字符串字面量：" + token2.ParseStringLiteral());//结果示范：Assets/Textures/HongMaster1.dds
+                                //如果标识符表中有变量名=解析后的字符串字面量（如声明了gv_u_Ship=飞船单位后，在事件注册中作为变量参数名字符串填入的情况）
+                                Sequence tempSequence = new Sequence(token2.ParseStringLiteral());
+                                if (this.identifierTable.ContainsKey(tempSequence))
+                                {
+                                    //如果存在则取出
+                                    tempStr = '\"' + identifierTable[tempSequence] + '\"';
+                                }
+                                else
+                                {
+                                    //否则进行新混淆（会补上两侧冒号）
+                                    tempStr = this.stringObfuscator.Obfuscate(tempStr);
+                                }
                                 MMCore.WriteLine("混淆后：" + tempStr);
                                 stringBuilder.Append(tempStr);
                             }
@@ -959,11 +974,11 @@ namespace GalaxyObfuscator
         /// </summary>
         private IdentifierGenerator identifierGenerator;
         /// <summary>
-        /// 标识符表，存储已声明的标识符及其相关信息（如混淆后的名称）
+        /// 标识符表，存储已声明的标识符及其相关信息（混淆前后的名称）
         /// </summary>
         private IDictionary<Sequence, string> identifierTable;
         /// <summary>
-        /// 字面量表，存储已出现的字面量（如字符串、数字）及其相关信息（如混淆后的值）
+        /// 字面量表，存储已出现的字面量（如字符串、数字）及其相关信息（混淆前后的值）
         /// </summary>
         private IDictionary<Sequence, string> literalTable;
         /// <summary>

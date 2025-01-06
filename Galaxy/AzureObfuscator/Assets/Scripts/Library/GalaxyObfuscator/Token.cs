@@ -1,6 +1,8 @@
-﻿using System;
+﻿using MetalMaxSystem;
+using System;
 using System.Globalization;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GalaxyObfuscator
 {
@@ -17,6 +19,16 @@ namespace GalaxyObfuscator
         {
             return this.Sequence.ToString();
         }
+
+        /// <summary>
+        /// 返回当前Token的内容（去掉首尾的引号）
+        /// </summary>
+        /// <returns></returns>
+        public string Content()
+        {
+            return this.Sequence.ToString().Substring(1, this.Sequence.Length - 2);
+        }
+
         /// <summary>
         /// 判断当前Token是否为字面量，如果Type是字符串字面量、字符字面量、整数字面量、实数字面量或十六进制字面量，则返回true
         /// </summary>
@@ -58,34 +70,40 @@ namespace GalaxyObfuscator
             char c2 = c;
             if (c2 == '\'')
             {
-                return '\0';// 如果字符是单引号，返回空字符 
+                return '\0';// 如果字符是单引号，返回空字符（以便单引号中内容以实际解析）
             }
             if (c2 != '\\')
             {
                 return c;// 如果字符不是转义字符，直接返回
             }
-            return this.SpecialCharacter(this.Sequence[2]);// 处理转义字符
+            return this.SpecialCharacter(this.Sequence[2]);//处理转义字符
         }
         /// <summary>
-        /// 解析字符串字面量
+        /// 解析字符串字面量（Start与End之间，即冒号之间夹着的内容）。
+        /// <param name="torf">true处理连续的两个\字符为1个\（即处理双\的转义），如需保留两个\或变成1个/或其他字符串时则应设置torf=false（默认）</param>
+        /// <param name="torfString">torf=false时生效，当torfString不为null则连续2个\字符将被处理为自定义torfString（默认值"/"），只改torf=false而torfString=null时将保留双\</param>
         /// </summary>
-        /// <returns></returns>
-        public string ParseStringLiteral()
+        /// <returns>返回解析后的字符串</returns>
+        public string ParseStringLiteral(bool torf = false, string torfString = "/")
         {
-            // 创建StringBuilder对象，长度为Sequence长度减2 
-            StringBuilder stringBuilder = new StringBuilder(this.Sequence.Length - 2);
-            for (int i = 1; i < this.Sequence.Length - 1; i++)
-            {
-                if (this.Sequence[i] != '\\')
-                {
-                    stringBuilder.Append(this.Sequence[i]);// 如果当前字符不是转义字符，直接添加到StringBuilder中 
-                }
-                else
-                {
-                    stringBuilder.Append(this.SpecialCharacter(this.Sequence[++i]));// 处理转义字符
-                }
-            }
-            return stringBuilder.ToString();// 返回解析后的字符串
+            string s = this.Content();//夹在冒号间内容
+            return Encoding.UTF8.GetString(MMCore.Escape(s, torf, torfString));//返回解析后的字符串
+
+            //旧版本↓
+            //创建StringBuilder对象，初始长度为Sequence长度减2
+            //StringBuilder stringBuilder = new StringBuilder(this.Sequence.Length - 2);
+            //for (int i = 1; i < this.Sequence.Length - 1; i++)
+            //{
+            //    if (this.Sequence[i] != '\\')
+            //    {
+            //        stringBuilder.Append(this.Sequence[i]);//如果当前字符不是转义字符，直接添加到StringBuilder中 
+            //    }
+            //    else
+            //    {
+            //        stringBuilder.Append(this.SpecialCharacter(this.Sequence[++i]));//处理转义字符
+            //    }
+            //}
+            //return stringBuilder.ToString();// 返回解析后的字符串
         }
         /// <summary>
         /// 解析整数字面量 
@@ -110,19 +128,20 @@ namespace GalaxyObfuscator
         /// <summary>
         /// 处理特殊字符（转义字符）
         /// </summary>
-        /// <param name="ch"></param>
+        /// <param name="ch">\后面的字符，决定整个序列解析内容的返回</param>
         /// <returns></returns>
+        //[Obsolete("建议使用新版 byte[] Escape(string Text) 处理特殊字符")]
         public char SpecialCharacter(char ch)
         {
             if (ch == 'n')
             {
-                return '\n';// 换行符 
+                return '\n';//换行符 
             }
             if (ch != 't')
             {
-                return ch;// 如果不是制表符，返回原字符
+                return ch;//如果不是制表符，一律返回原字符
             }
-            return '\t';// 制表符 
+            return '\t';//制表符 
         }
         /// <summary>
         /// 定义静态的CultureInfo对象，用于解析实数字面量 
