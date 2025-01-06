@@ -30,3 +30,5 @@ S:\Document\Github\ObfuscarProgram\Galaxy\AzureObfuscator\obj\Debug\GalaxyObfusc
 S:\Document\Github\ObfuscarProgram\Galaxy\AzureObfuscator\obj\Debug\GalaxyOb.CF582F82.Up2Date
 S:\Document\Github\ObfuscarProgram\Galaxy\AzureObfuscator\obj\Debug\AzureObfuscator.exe
 S:\Document\Github\ObfuscarProgram\Galaxy\AzureObfuscator\obj\Debug\AzureObfuscator.pdb
+D:\VSWork\2022\Galaxy\AzureObfuscator\bin\Debug\Rules\SC2End
+D:\VSWork\2022\Galaxy\AzureObfuscator\bin\Debug\Rules\SC2Head

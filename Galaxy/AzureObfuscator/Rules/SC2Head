@@ -1,0 +1,64 @@
+﻿//-------------------------------------------------------------------------
+//     Encrypted Script     |                AzureGalaxy                  |
+//      nonReversible       |          SC2 MapScript ObFuscator           |
+//     Strength: DP-O8F     |             Ver 0.3.1 2025.1.7              |
+//-------------------------------------------------------------------------
+//>>>>>>>>>>>>>>>>Galaxy Obfuscator 2025.01.07 V0.3<<<<<<<<<<<<<<<<<<<<<<<|
+//---------------Settings & Functions [Dependent Mode]---------------------
+//    String Encryption: Cosmic    |      RTD System Injection: OFF       |
+//   Natives Func Hide: Syscall    |          LC4.2 Enabled: ON           |
+//       Array SAFE MR/W: ON       |       CSP-RNG Randomizer: OFF        |
+//          Renaming: www          |     Natives Constants Hide: Wrap     |
+//       Kernel Hookup: OFF        |    Catalog E-API Encryption: OFF     |
+//---------------------------Script Start----------------------------------
+
+const int ll1I=1161757475;
+const int lII1=508624490;
+const int I1ll=1854863678;
+const int lIII=304269175;
+const int lllI=1165285904;
+const int IllI=1932002490;
+const int llI=884072351;
+const int lI11=897254808;
+const int ll1=2109554239;
+const int lIl1=1560873081;
+const int III=2039149649;
+const int Il=295314113;
+const int Ill1=2052494309;
+const int lIl=1638542544;
+const int llIl=1668074523;
+const int lIlI=1698721095;
+const int l11I=1502856021;
+const int I1II=1753604179;
+const int I11=1740779913;
+const int ll1l=980604847;
+const int Il1I=1319319523;
+const int IlI=1981414152;
+const int l1I1=282199922;
+const int l1lI=1354352160;
+const int I1I=943072727;
+const int II=200;
+const int lI1I=188;
+const int lIIl=189;
+const int llII=184;
+const int I111=117;
+const int IIl=32;
+const int l1Il=34;
+const int II1=22;
+const int l1ll=197;
+const int lI=209;
+const int Ill=10;
+const int I11l=30;
+const int I1I1=128;
+const int lI1=158;
+const int l1II=41;
+const int lll1=65;
+const int Il1l=174;
+const int lll=119;
+const int lII=123;
+const int llll=111;
+const int I1=41;
+const int l11l=57;
+const int l1I=144;
+const int ll11=83;
+const int Illl=232;

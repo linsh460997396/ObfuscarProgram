@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using MetalMaxSystem;
 using StormLib;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace GalaxyObfuscator
 {
@@ -152,14 +151,14 @@ namespace GalaxyObfuscator
         {
             if (form1.GetCheckLC4StateFromMainThread() == true)
             {//LC4先添加到脚本头尾
-                string sCHeadPath = AppDomain.CurrentDomain.BaseDirectory + @"Rules/SCHead";
-                string sCEndPath = AppDomain.CurrentDomain.BaseDirectory + @"Rules/SCEnd";
+                string sCHeadPath = AppDomain.CurrentDomain.BaseDirectory + @"/Rules/SC2Head";
+                string sCEndPath = AppDomain.CurrentDomain.BaseDirectory + @"/Rules/SC2End";
                 string sCHead = File.ReadAllText(sCHeadPath);
                 string sCEnd = File.ReadAllText(sCEndPath);
                 this.script = sCHead + "\r\n" + this.script + "\r\n" + sCEnd;
                 if (form1.GetSelectedIndexFromMainThread() == 1)
                 {
-                    MMCore.WriteLine("添加LC4头尾");
+                    MMCore.WriteLine("█脚本初始化：添加LC4头尾");
                     form1.SetCodeToMainThread(this.script);
                 }
             }
