@@ -25,7 +25,7 @@ namespace GalaxyObfuscator
         public string errFileName;
 
         /// <summary>
-        /// [构造函数]扫描器。用于解析输入字符串并生成标记，初始token.Type = TokenType.None，Start = 0，End = 0
+        /// [构造函数]扫描器。用于解析输入字符串并生成标记，初始token.Type = TokenType.None，Start = 0，End = 0（全文第一个字符位置）
         /// </summary>
         /// <param name="str"></param>
         public Scanner(string str)
@@ -56,13 +56,13 @@ namespace GalaxyObfuscator
             this.token.Type = TokenType.None;
         }
         /// <summary>
-        /// 判断是否到达当前标记的序列（字符串）末尾
+        /// 判断尾部扫描指针是否到达全文末尾
         /// </summary>
         public bool End
         {
             get
             {
-                //当前扫描位置的索引达到序列字符串长度则返回真，反之返回假
+                //当前扫描位置的索引达到全文长度（超过全文字符串数组最大索引）则返回真（已扫描完，后面没有内容了），反之返回假
                 return this.position >= this.length;
             }
         }
@@ -87,10 +87,12 @@ namespace GalaxyObfuscator
             }
         }
         /// <summary>
-        /// 指针非末尾时执行读标记。具体流程：
-        /// 读空白字符和注释（是空格则前进，当字符不为斜杠或下一扫描位置 >= 长度或下一扫描字符不为斜杠和 * 时函数退出，否则说明是注释，开始读注释，
-        /// 最后设置当前标记类型为无并将Sequence.Start = Sequence.End），如果当前扫描位置是结尾字符则直接返回，反之下一步，当前位置的字符是：1）字母或下划线时执行读标识符；
+        /// 尾部指针未到全文结尾时正常读标记（并设置合适标记类型）并前进。具体流程：
+        /// 读空白字符和注释（是空格则前进，当字符不为斜杠或下一扫描位置 >= 长度或下一扫描字符不为斜杠和 * 时函数退出，
+        /// 否则说明是注释，开始读注释后设置当前标记类型为无并将Sequence.Start = Sequence.End）
+        /// 如果当前扫描位置是结尾字符则直接返回，反之下一步，当前位置的字符是：1）字母或下划线时执行读标识符；
         /// 2）十进制数或.且下一位置不是字符串末尾且下一位置也是十进制数则执行读数字字面量；3）单引号或双引号则执行读文本字面量；4）其他情况则读符号。
+        /// 读的作用是将当前指针范围夹着的内容变成标记序列并打上符合的标记类型（每次阅读指针前进位数不等，根据是否成功标记决定）。
         /// </summary>
         /// <returns>读标记成功返回真，否则返回假</returns>
         public bool MoveNext()
@@ -99,13 +101,13 @@ namespace GalaxyObfuscator
             {//指针在结尾返回假
                 return false;
             }
-            //读标记
+            //读标记（并设置合适标记类型）并前进
             this.readToken();
             //读标记成功返回真
             return true;
         }
         /// <summary>
-        /// 读当前标记并返回（扫描指针将前进）
+        /// 读标记（设置合适标记类型）并返回，尾部扫描指针将前进
         /// </summary>
         /// <returns></returns>
         public Token Read()
@@ -114,7 +116,7 @@ namespace GalaxyObfuscator
             return this.token;
         }
         /// <summary>
-        /// 如果不是当前标记的序列（字符串）结尾则读取标记并移动到下一个，如果是结尾则抛出异常
+        /// 如不是结尾则读标记（并设置合适标记类型），尾部指针继续移动到下一处，如是结尾则抛出异常
         /// </summary>
         /// <returns>返回当前标记</returns>
         /// <exception cref="UnexpectedEndOfFileException"></exception>
@@ -128,7 +130,7 @@ namespace GalaxyObfuscator
             return this.token;
         }
         /// <summary>
-        /// 读当前标记，如果标记类型不是符号或预期标记的序列（字符串）不等于参数symbol时抛出异常
+        /// 读当前标记（设置合适标记类型），如标记类型不是符号或预期标记的序列（字符串）不等于参数symbol时抛出异常
         /// </summary>
         /// <param name="symbol">预期标记的序列字符串</param>
         /// <exception cref="SyntaxErrorException">如果标记类型不是符号或当前标记的序列（字符串）不等于参数symbol时抛出异常</exception>
@@ -142,7 +144,7 @@ namespace GalaxyObfuscator
             }
         }
         /// <summary>
-        /// 读当前标记并期望特定的标记类型为参数type，否则抛出异常
+        /// 读当前标记（设置合适的标记类型），并期望当前标记类型与参数类型相等，否则抛出异常
         /// </summary>
         /// <param name="type"></param>
         /// <exception cref="SyntaxErrorException"></exception>
@@ -160,7 +162,7 @@ namespace GalaxyObfuscator
             }
         }
         /// <summary>
-        /// 跳过直到遇到指定的终止符，如果到当前标记的序列（字符串）末尾还没有遇到终止符则抛出异常
+        /// 跳过直到遇到指定的终止符，如到全文末尾还没有遇到终止符则抛出异常。尾部指针会停留在扫描符号的后一位
         /// </summary>
         /// <param name="terminate"></param>
         /// <exception cref="SyntaxErrorException"></exception>
@@ -177,7 +179,7 @@ namespace GalaxyObfuscator
             throw new SyntaxErrorException("Missing " + terminate);
         }
         /// <summary>
-        /// 跳过直到遇到指定的任意终止符，如果到当前标记的序列（字符串）末尾还没有遇到终止符则抛出异常
+        /// 跳过直到遇到指定的任意终止符，如到全文末尾还没有遇到终止符则抛出异常。尾部指针会停留在扫描符号的后一位
         /// </summary>
         /// <param name="terminate1">终止符1</param>
         /// <param name="terminate2">终止符2</param>
@@ -195,7 +197,7 @@ namespace GalaxyObfuscator
             throw new SyntaxErrorException("Missing " + terminate1 + "或" + terminate2);
         }
         /// <summary>
-        /// 跳过直到遇到指定的任意终止符，如果到当前标记的序列（字符串）末尾还没有遇到终止符则抛出异常
+        /// 跳过直到遇到指定的任意终止符，如到全文末尾还没有遇到终止符则抛出异常。尾部指针会停留在扫描符号的后一位
         /// </summary>
         /// <param name="terminate1"></param>
         /// <param name="terminate2"></param>
@@ -214,7 +216,7 @@ namespace GalaxyObfuscator
             throw new SyntaxErrorException("Missing " + terminate1 + "或" + terminate2 + "或" + terminate3);
         }
         /// <summary>
-        /// 跳过嵌套的代码块直到遇到指定的结束符，如果到当前标记的序列（字符串）末尾还没遇到有效的结束符则抛出异常
+        /// 跳过嵌套的代码块直到遇到指定的结束符，如到全文末尾还没遇到有效的结束符则抛出异常。尾部指针会停留在扫描符号的后一位
         /// </summary>
         /// <param name="o">字符串中期望的代码块标记类型符号头，可以不存在</param>
         /// <param name="e">结束符，如果不存在会抛出异常</param>
@@ -240,7 +242,7 @@ namespace GalaxyObfuscator
             throw new SyntaxErrorException("Missing " + e);
         }
         /// <summary>
-        /// 当前扫描位置（1=第一个元素，0=未开始扫描）。当前标记的序列（字符串）的尾部指针索引（this.token.Sequence.End）
+        /// 当前扫描位置（尾部指针索引this.token.Sequence.End），索引0是全文第一个字符
         /// </summary>
         public int position
         {
@@ -311,10 +313,11 @@ namespace GalaxyObfuscator
             }
         }
         /// <summary>
-        /// 读标记。读空白字符和注释（是空格则前进，当字符不为斜杠或下一扫描位置 >= 长度或下一扫描字符不为斜杠和 * 时函数退出，否则说明是注释，开始读注释，
+        /// 读标记（并设置合适标记类型）并前进。读空白字符和注释（是空格则前进，当字符不为斜杠或下一扫描位置 >= 长度或下一扫描字符不为斜杠和 * 时函数退出，否则说明是注释，开始读注释，
         /// 最后设置当前标记类型为无并将Sequence.Start = Sequence.End），如果当前扫描位置是结尾字符则直接返回，反之下一步，当前位置的字符是：1）字母或下划线时执行读标识符；
         /// 2）十进制数或.且下一位置不是字符串末尾且下一位置也是十进制数则执行读数字字面量；3）单引号或双引号则执行读文本字面量；4）其他情况则读符号。
-        /// 注：每次读标记只能在代码全文里读一种直到遇到结束符，作为一次标记。
+        /// 注：每次读标记只能在代码全文里读一种直到遇到结束符，作为一次标记，读符号成功后尾部扫描指针会前进（停留在符号后一位）。
+        /// 读的作用是将当前指针范围夹着的内容变成标记序列并打上符合的标记类型（每次阅读指针前进位数不等，根据是否成功标记决定）。
         /// </summary>
         private void readToken()
         {
@@ -327,25 +330,25 @@ namespace GalaxyObfuscator
             char c = this.get();
             if (char.IsLetter(c) || c == '_')
             {//如果当前位置的字符是字母或下划线
-                this.readIdentifier();//读取标识符
+                this.readIdentifier();//读取标识符（并设置合适标记类型）
                 return;
             }
             if (char.IsDigit(c) || (c == '.' && this.position + 1 < this.length && char.IsDigit(this[this.position + 1])))
             {//如果当前位置的字符是十进制数或（.且下一位置不是字符串末尾且下一位置也是十进制数说明是浮点数）
-                this.readNumberLiteral();//读取数字字面量
+                this.readNumberLiteral();//读取数字字面量（并设置合适标记类型）
                 return;
             }
             if (c == '\'' || c == '"')
             {
-                //单引号或双引号则执行读取文本字面量
+                //单引号或双引号则执行读取文本字面量（并设置合适标记类型）
                 this.readTextLiteral();
                 return;
             }
-            //读取符号
+            //最后读取符号
             this.readSymbol();
         }
         /// <summary>
-        /// 读空白字符和注释。
+        /// 读空白字符和注释（并设置合适标记类型）。
         /// 是空格则前进，当字符不为斜杠或下一扫描位置 >= 长度或下一扫描字符不为斜杠和 * 时函数退出，否则说明是注释，开始读注释，
         /// 最后设置当前标记类型为无并将Sequence.Start = Sequence.End
         /// </summary>
@@ -405,14 +408,13 @@ namespace GalaxyObfuscator
                 {//当前字符是反斜杠，说明是单行注释的头，继续前进直到遇到换行符
                     if (!this.End)
                     {//非末尾字符
-                        //前进
-                        this.forward();
+                        this.forward();//前进
                     }
                 }
             }
         }
         /// <summary>
-        /// 读标识符
+        /// 读标识符（并设置标记类型）。函数直接将当前标记的类型设置为标识符并将Sequence.Start = 当前指针位置，然后一直前进直到遇到非十进制数且不为_的字符
         /// </summary>
         private void readIdentifier()
         {
@@ -438,7 +440,7 @@ namespace GalaxyObfuscator
             return char.IsDigit(ch) || "abcdefABCDEF".Contains(ch);
         }
         /// <summary>
-        /// 读数字字面量
+        /// 读数字字面量（并设置合适标记类型），指针停留在最后扫描的字符
         /// </summary>
         private void readNumberLiteral()
         {
@@ -465,17 +467,17 @@ namespace GalaxyObfuscator
                     this.token.Type = TokenType.RealLiteral;
                 }
                 else if (!func(this.get()))
-                {//委托检查当前字符不符合上述十六进制或十进制字符的，打断循环并结束函数
+                {//委托检查当前字符不符合上述十六进制或十进制字符的，打断循环并结束函数（此时指针停留在该字符）
                     break;
                 }
                 if (!this.forward())
-                {//下一个字符不是末尾则下一个，是末尾则打断循环并结束函数
+                {//下一个字符不是末尾则前进到该字符，是末尾则打断循环并结束函数
                     return;
                 }
             }
         }
         /// <summary>
-        /// 读文本字面量
+        /// 读文本字面量（并设置合适标记类型），指针停留在最后的冒号字符
         /// </summary>
         /// <exception cref="SyntaxErrorException"></exception>
         /// <exception cref="UnexpectedEndOfFileException"></exception>
@@ -509,7 +511,7 @@ namespace GalaxyObfuscator
             throw new UnexpectedEndOfFileException();
         }
         /// <summary>
-        /// 读符号
+        /// 读符号（并设置合适标记类型）并前进1位，支持读1~2个字符如+=、++、--等，尾部扫描指针停留在最后符号的后一位。
         /// </summary>
         private void readSymbol()
         {

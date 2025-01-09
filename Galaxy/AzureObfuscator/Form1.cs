@@ -376,7 +376,6 @@ namespace GalaxyObfuscator
             }
             foreach (FileInfo newInfo in dirInfo.GetFiles("*.SC2Map"))
             {
-                //ProcessingFile(newInfo.FullName);
                 Obfuscator.Obfuscate(newInfo.FullName);
             }
         }

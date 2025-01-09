@@ -1,16 +1,6 @@
-//-------------------------------------------------------------------------
-//     Encrypted Script     |                DreamProtocol                |
-//      nonReversible       |          SC2 MapScript ObFuscator           |
-//     Strength: DP-O8F     |             Ver 4.61  2023.7.10             |
-//-------------------------------------------------------------------------
-//>>>>>>>>>>>>>>>>>Indentifier: (C-T)2023/9/1 2:08:58<<<<<<<<<<<<<<<<<<<<<|
-//---------------Settings & Functions [Dependent Mode]---------------------
-//    String Encryption: Cosmic    |      RTD System Injection: OFF       |
-//   Natives Func Hide: Syscall    |          LC4.2 Enabled: ON           |
-//       Array SAFE MR/W: ON       |       CSP-RNG Randomizer: OFF        |
-//          Renaming: www          |     Natives Constants Hide: Wrap     |
-//       Kernel Hookup: OFF        |    Catalog E-API Encryption: OFF     |
+﻿//>>>>>>>>>>>>>>>>Galaxy Obfuscator 2025.01.07 V0.3<<<<<<<<<<<<<<<<<<<<<<<|
 //---------------------------Script Start----------------------------------
+
 const int
 l111=(((0X430ce^((0x51FE1FD7^0X658ecc)-0xAF5149))-(~-((105240-0X73E8+0x2F971)^(~-0X2e21)))+(2548^(0x199D8-149729+(~-137151))))^(~-((((~40665197)-2559935)^0X7074a2)+0x2e3e971)));const int
 IlI=(((~-1247779)^((51890264^(~-1227959))-0X86db19))+((((((~60451958)-0X7828b1)^0xB8A2FE)+0x4aa37e1)<<(~-((~-0x8000f)^(1<<0x13))))^(((3271689+((~-0x82d)^(0x9a8^((~-0x1c76d)-19105+(~0XA2E4))))+((~-3271690)^((-0X23A57-157670+(~-360287))^3439))+(2073085^2366117)+-0X9EEBBC)-(1372648^(~-0X968bf)))^-0X20A01048)));const int

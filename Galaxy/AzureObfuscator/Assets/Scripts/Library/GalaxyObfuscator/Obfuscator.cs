@@ -15,7 +15,15 @@ namespace GalaxyObfuscator
     {
         public static int mutiCount = 0;
         public static Form1 form1;
+        public static string sCHeadPath = AppDomain.CurrentDomain.BaseDirectory + @"/Rules/SC2Head";
+        public static string sCEndPath = AppDomain.CurrentDomain.BaseDirectory + @"/Rules/SC2End";
+        public static string sCHead = File.ReadAllText(sCHeadPath);
+        public static string sCEnd = File.ReadAllText(sCEndPath);
         public string errFileName;
+        /// <summary>
+        /// 用于字面量打印时include的状态索引，0为不打印，1为打印，2为打印紧跟的字符串字面量
+        /// </summary>
+        private bool includeIndex = false;
 
         public Obfuscator()
         {
@@ -151,10 +159,6 @@ namespace GalaxyObfuscator
         {
             if (form1.GetCheckLC4StateFromMainThread() == true)
             {//LC4先添加到脚本头尾
-                string sCHeadPath = AppDomain.CurrentDomain.BaseDirectory + @"/Rules/SC2Head";
-                string sCEndPath = AppDomain.CurrentDomain.BaseDirectory + @"/Rules/SC2End";
-                string sCHead = File.ReadAllText(sCHeadPath);
-                string sCEnd = File.ReadAllText(sCEndPath);
                 this.script = sCHead + "\r\n" + this.script + "\r\n" + sCEnd;
                 if (form1.GetSelectedIndexFromMainThread() == 1)
                 {
@@ -222,7 +226,7 @@ namespace GalaxyObfuscator
             //处理脚本中的"include"指令
             //如果当前token是标识符且为"include"，则读取下一个token作为"include"的加载文件名
             while (this.scanner.Read().Type == TokenType.Identifier && this.scanner.Current.Sequence == "include")
-            {
+            {//这里的"include"打印需要放在脚本最前，否则由下面的标识符、字面量打印动作处理
                 //"include"后面紧跟着的是要"include"的加载文件名（作为字符串字面量）
                 //这里没有处理可能的错误情况，比如"include"后面不是字符串字面量
 
@@ -266,7 +270,13 @@ namespace GalaxyObfuscator
                             else
                             {
                                 //否则直接附加原始的标识符
-                                stringBuilder.Append(token2.ToString());
+                                if (token2.Sequence == "include")
+                                {
+                                    //如include不集中在代码最前，则在这里打印中间夹杂的include动作
+                                    includeIndex = true;
+                                    stringBuilder.Append("include ");
+                                }
+                                else { stringBuilder.Append(token2.ToString()); }
                             }
                             break;
                         case TokenType.StringLiteral:
@@ -294,7 +304,13 @@ namespace GalaxyObfuscator
                                     tempStr = this.stringObfuscator.Obfuscate(tempStr);
                                 }
                                 MMCore.WriteLine("混淆后：" + tempStr);
-                                stringBuilder.Append(tempStr);
+                                if (includeIndex)
+                                {
+                                    //如include不集中在代码最前，则在这里打印中间夹杂的include动作，此处是打印紧跟的字符串字面量
+                                    includeIndex = false;
+                                    stringBuilder.Append(tempStr + " ");
+                                }
+                                else { stringBuilder.Append(tempStr); }
                             }
                             break;
                         case TokenType.CharLiteral:
@@ -476,8 +492,25 @@ namespace GalaxyObfuscator
                 this.literalTable.Add(new Sequence("\"" + text + "\""), temp);
                 MMCore.WriteLine("存储至字面量表 " + $"Key: {text}, Value: {temp}");
             }
-            //跳过至下一个分号，表示触发器定义的结束
-            this.scanner.SkipBlock(";");
+
+            this.scanner.SkipBlockPro("{", ";");//跳到指定符号之一，表示触发器定义的结束，非函数体才可以使用
+            if (this.scanner.Current.Sequence.String.Substring(this.scanner.position - 1, 1) == "{")
+            {//如果是分号不处理直接结束，但如果是左花括号说明直接声明了函数体，需要跳过
+                this.scanner.SkipBlock("{", "}");
+            }
+
+            //注意，如果是直接声明的函数体，会停留在gv_inlineprevent += 1;后面的}并报错
+            //trigger gf_ObfAuto_DataTableGetTrigger(bool lp_bool0, string lp_string1)
+            //{
+            //    if (gv_inlineprevent == 2)
+            //    {
+            //        gv_inlineprevent += 1;
+            //    }
+            //    DataTableSetBool(false, "syscall_0", lp_bool0);
+            //    DataTableSetString(false, "syscall_1", lp_string1);
+            //    gf_ObfAuto_syscall[2141]();
+            //    return DataTableGetTrigger(false, "syscall_ret");
+            //}
         }
 
         /// <summary>
@@ -491,7 +524,7 @@ namespace GalaxyObfuscator
                 //读取下一个预期的标记并立即检查其类型是否为符号
                 if (this.scanner.ReadExpectedToken().Type == TokenType.Symbol)
                 {
-                    //获取当前标记的引用
+                    //获取当前标记的引用对象
                     Token token = this.scanner.Current;
                     //将标记转换为字符串形式以便进行后续比较
                     //此处的转换通常不会返回null因为Token的ToString方法应当总是返回有效的字符串
@@ -524,6 +557,89 @@ namespace GalaxyObfuscator
         }
 
         /// <summary>
+        /// 处理变量声明语句中的嵌套内容（如数组维度、特殊类型声明等）
+        /// </summary>
+        /// <exception cref="SyntaxErrorException"></exception>
+        private void ScanVariableHandle()
+        {
+            //是以下符号则继续获取有效标记
+            if (this.scanner.Current.Sequence == "[")
+            {//当前标记是'['则尾部指针跳过数组维度
+                //处理可能存在的数组维度（例如 int[] arr）
+                while (this.scanner.Current.Type == TokenType.Symbol && this.scanner.Current.Sequence == "[")
+                {
+                    // 标记数组维度内的所有内容直到找到闭合的']'
+                    do
+                    {
+                        this.scanner.ReadExpectedToken();
+                    }
+                    while (this.scanner.Current.Type != TokenType.Symbol || this.scanner.Current.Sequence != "]");//现在尾部指针在]处
+                    //读取标记并让尾部扫描指针跳过闭合的']'
+                    this.scanner.ReadExpectedToken();
+                }
+            }
+            else if (this.scanner.Current.Sequence == "<")
+            {//当前标记是'<'则尾部指针跳过特殊类型声明
+                //处理特殊类型声明（例如arrayref<>或funcref<>）
+                while (this.scanner.Current.Type == TokenType.Symbol && this.scanner.Current.Sequence == "<")
+                {
+                    //标记维度内的所有内容直到找到闭合的'>'
+                    do
+                    {
+                        this.scanner.ReadExpectedToken();
+                    }
+                    while (this.scanner.Current.Type != TokenType.Symbol || this.scanner.Current.Sequence != ">");//现在尾部指针在>处
+                    //读取标记并让尾部扫描指针跳过闭合的'>'
+                    this.scanner.ReadExpectedToken();
+                }
+                //补丁记录：
+                //gf_ObfAuto_syscalltemplate(){};funcref<gf_ObfAuto_syscalltemplate>[...问题发生时指针位置在>后的[，尖括号不能比[]先处理否则指针跨度太大导致没有处理到关键内容
+                //除非符号或空格，否则不应跳过（[]后面一般不会直接连着<>所以跳跃动作虽然连着但不会发生，如果发生就要处理[]和<>代码块里的内容）
+            }
+            else if (this.scanner.Current.Sequence == "(")
+            {//当前标记是'('则尾部指针跳过()块内的内容，嵌套纬度内允许有()块，所以可以放在这里参与处理
+                //处理函数声明（例如 void func(int a, int b)）
+                while (this.scanner.Current.Type == TokenType.Symbol && this.scanner.Current.Sequence == "(")
+                {
+                    //标记维度内的所有内容直到找到闭合的')'
+                    do
+                    {
+                        this.scanner.ReadExpectedToken();
+                    }
+                    while (this.scanner.Current.Type != TokenType.Symbol || this.scanner.Current.Sequence != ")");//现在尾部指针在)处
+                    //读取标记并让尾部扫描指针跳过闭合的')'
+                    this.scanner.ReadExpectedToken();
+                }
+                //补丁记录：
+                //如果不是则抛出语法错误异常，函数内if...;}DataTableSetBool(...问题发生时指针位置在(符号处，标记是DataTableSetBool但它不是标识符
+                //Native函数未在代码文件声明，不被认为是有效标识符（如果不用上面循环继续让尾指针走，那么指针停留在(符号处报错）
+                //DataTableSetBool(false,lll[(l1I1^0x2a397^(~-0X1e1f9d8c))][((1<<(-0x2B+IIl))^((~-1785843762)^l1Il))][((-0X99^llII)+lllI+(~0X57F5F7D0))],lp_bool0);
+            }
+            //上述if ... else if几种情况只处理一种，然后让尾指针走，最后读取新的标记（头尾扫描指针间的内容）转由下方处理
+            //检查当前标记是否为标识符（变量名）
+            if (this.scanner.Current.Type != TokenType.Identifier)
+            {//遇到非标识符转到此处异常点处理（非空内容都应处理而非随意跳过）
+                //上方多种情况只处理一种后依然有连续跟着的开闭符格式嵌套，再遇它们时可在这里进行递归处理
+                if (this.scanner.Current.Sequence == "[" || this.scanner.Current.Sequence == "<" || this.scanner.Current.Sequence == "(")
+                {//再次处理嵌套纬度
+                    //funcref<gf_ObfAuto_syscalltemplate>[2686] gf_ObfAuto_syscall; 问题发生时指针位置在[后的数字或分号，递归处理动作解决后，指针会跑到分号处
+                    ScanVariableHandle();
+                }
+                //else if (this.scanner.Current.Sequence == ";")
+                //{//这里的嵌套块应该是没有分号的
+                //}
+                else
+                {
+                    MMCore.WriteLine("期望是变量但不是所以抛出！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.ToString()}");
+                    throw new SyntaxErrorException(this.scanner);
+                }
+            }
+            //这里开始处理明确的标识符，所以上述动作一定要把异常全都排除掉
+            //嵌套纬度内不可能有变量声明了，但可以有正常函数或变量、数字或计算符号，后者在递归处理中已经标记完毕并跳过了
+            //如标识符表中不包含当前标识符，嵌套处理时不再将其添加进去，因为只有声明的才会添加，这里仅递归处理嵌套纬度
+        }
+
+        /// <summary>
         /// 扫描变量声明语句
         /// </summary>
         /// <param name="allowMultiple">表示是否允许声明多个变量（通过逗号分隔）</param>
@@ -532,68 +648,110 @@ namespace GalaxyObfuscator
         {
             if (this.scanner.Current.Sequence == "const")
             {
-                //如果当前扫描到的标记是"const"则读取接下来的标识符（变量名）
+                //如当前扫描到的标记是"const"则读取接下来的预期标识符-变量名
                 this.scanner.ReadExpectedToken(TokenType.Identifier);
             }
-            //读取并跳过变量类型（假设类型已经在之前被读取）
-            this.scanner.ReadExpectedToken();
-            //处理可能存在的数组维度（例如 int[] arr）
-            while (this.scanner.Current.Type == TokenType.Symbol && this.scanner.Current.Sequence == "[")
-            {
-                // 跳过数组维度内的所有内容直到找到闭合的']'
-                do
+            //读当前标记（并设置合适标记类型），尾部指针前进1位
+            this.scanner.ReadExpectedToken();//如果读到数字或符号会设置为整数字面量或符号类型
+            //是以下符号则继续获取有效标记
+            if (this.scanner.Current.Sequence == "[")
+            {//当前标记是'['则尾部指针跳过数组维度
+                //处理可能存在的数组维度（例如 int[] arr）
+                while (this.scanner.Current.Type == TokenType.Symbol && this.scanner.Current.Sequence == "[")
                 {
+                    // 标记数组维度内的所有内容直到找到闭合的']'
+                    do
+                    {
+                        this.scanner.ReadExpectedToken();
+                    }
+                    while (this.scanner.Current.Type != TokenType.Symbol || this.scanner.Current.Sequence != "]");//现在尾部指针在]处
+                    //读取标记并让尾部扫描指针跳过闭合的']'
                     this.scanner.ReadExpectedToken();
                 }
-                while (this.scanner.Current.Type != TokenType.Symbol || this.scanner.Current.Sequence != "]");
-                //读取并跳过闭合的']'
-                this.scanner.ReadExpectedToken();
             }
-            //处理特殊类型声明（例如arrayref<>或funcref<>）
-            while (this.scanner.Current.Type == TokenType.Symbol && this.scanner.Current.Sequence == "<")
-            {
-                //跳过直到找到闭合的'>'
-                do
+            else if (this.scanner.Current.Sequence == "<")
+            {//当前标记是'<'则尾部指针跳过特殊类型声明
+                //处理特殊类型声明（例如arrayref<>或funcref<>）
+                while (this.scanner.Current.Type == TokenType.Symbol && this.scanner.Current.Sequence == "<")
                 {
+                    //标记维度内的所有内容直到找到闭合的'>'
+                    do
+                    {
+                        this.scanner.ReadExpectedToken();
+                    }
+                    while (this.scanner.Current.Type != TokenType.Symbol || this.scanner.Current.Sequence != ">");//现在尾部指针在>处
+                    //读取标记并让尾部扫描指针跳过闭合的'>'
                     this.scanner.ReadExpectedToken();
                 }
-                while (this.scanner.Current.Type != TokenType.Symbol || this.scanner.Current.Sequence != ">");
-                //读取并跳过闭合的'>'
-                this.scanner.ReadExpectedToken();
+                //补丁记录：
+                //gf_ObfAuto_syscalltemplate(){};funcref<gf_ObfAuto_syscalltemplate>[...问题发生时指针位置在>后的[，尖括号不能比[]先处理否则指针跨度太大导致没有处理到关键内容
+                //除非符号或空格，否则不应跳过（[]后面一般不会直接连着<>所以跳跃动作虽然连着但不会发生，如果发生就要处理[]和<>代码块里的内容）
             }
-            //gf_ObfAuto_syscalltemplate(){};funcref<gf_ObfAuto_syscalltemplate>[...问题发生时指针位置在>后的[，尖括号不能比[]先处理否则指针跨度太大导致没有处理到关键内容
-            //除非符号或空格，否则不应跳过（[]后面一般不会直接连着<>所以跳跃动作虽然连着但不会发生，如果发生就要处理[]和<>代码块里的内容）
-
+            //else if (this.scanner.Current.Sequence == "(")
+            //{//当前标记是'('则尾部指针跳过()块内的内容，这个不是处理变量声明相关，不能放这里替这个函数跳过，不是变量声明就该函数返回了
+            //    //处理函数声明（例如 void func(int a, int b)）
+            //    while (this.scanner.Current.Type == TokenType.Symbol && this.scanner.Current.Sequence == "(")
+            //    {
+            //        //标记维度内的所有内容直到找到闭合的')'
+            //        do
+            //        {
+            //            this.scanner.ReadExpectedToken();
+            //        }
+            //        while (this.scanner.Current.Type != TokenType.Symbol || this.scanner.Current.Sequence != ")");//现在尾部指针在)处
+            //        //读取标记并让尾部扫描指针跳过闭合的')'
+            //        this.scanner.ReadExpectedToken();
+            //    }
+            //    //补丁记录：
+            //    //如果不是则抛出语法错误异常，函数内if...;}DataTableSetBool(...问题发生时指针位置在(符号处，标记是DataTableSetBool但它不是标识符
+            //    //Native函数未在代码文件声明，不被认为是有效标识符（如果不用上面循环继续让尾指针走，那么指针停留在(符号处报错）
+            //    //DataTableSetBool(false,lll[(l1I1^0x2a397^(~-0X1e1f9d8c))][((1<<(-0x2B+IIl))^((~-1785843762)^l1Il))][((-0X99^llII)+lllI+(~0X57F5F7D0))],lp_bool0);
+            //}
+            //上述if ... else if几种情况只处理一种，然后让尾指针走，最后读取新的标记（头尾扫描指针间的内容）转由下方处理
             //检查当前标记是否为标识符（变量名）
             if (this.scanner.Current.Type != TokenType.Identifier)
-            {
-                //如果不是则抛出语法错误异常，函数内if...;}DataTableSetBool(...问题发生时指针位置在(符号处，标记是DataTableSetBool但它不是标识符（Native函数未在代码文件声明）
-                //DataTableSetBool(false,lll[(l1I1^0x2a397^(~-0X1e1f9d8c))][((1<<(-0x2B+IIl))^((~-1785843762)^l1Il))][((-0X99^llII)+lllI+(~0X57F5F7D0))],lp_bool0);
-                //实际上有非空内容应处理而非随意跳过（待处理）
-                MMCore.WriteLine("期望是变量但不是所以抛出！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.ToString()}");
-                throw new SyntaxErrorException(this.scanner);
+            {//遇到非标识符转到此处异常点处理（非空内容都应处理而非随意跳过）
+                //上方多种情况只处理一种后依然有连续跟着的开闭符格式嵌套，再遇它们时可在这里进行递归处理
+                if (this.scanner.Current.Sequence == "[" || this.scanner.Current.Sequence == "<")
+                {
+                    //funcref<gf_ObfAuto_syscalltemplate>[2686] gf_ObfAuto_syscall; 问题发生时指针位置在[后的数字或分号，递归处理动作解决后，指针会跑到分号处
+                    ScanVariableHandle();//嵌套纬度内没有后面多个变量声明的情况，该动作不处理变量仅处理跳过嵌套纬度并对内容标记类型
+                }
+                //else if (this.scanner.Current.Sequence == ";")
+                //{//如果上面加()，会让本来扫描变量的，结果轻易通过那些实际是函数扫描，会致如lib_Init(){函数动作名}后的{处报错
+                // //因lib_Init被识别是变量成功（作为函数与变量通用标识符类型虽没标错，但非声明的函数体名不应被加入混淆表）
+                // //处理变量声明后预期紧跟分号，结果是函数体名，导致另一处理异常点报错
+                // //如当前扫描标记是分号则设置标记类型为符号后跳过，函数退出
+                //    this.scanner.ReadExpectedToken();
+                //    return;
+                //}
+                else
+                {
+                    MMCore.WriteLine("期望是变量但不是所以抛出！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.ToString()}");
+                    throw new SyntaxErrorException(this.scanner);
+                }
             }
+            //这里开始处理明确的标识符，所以上述动作一定要把异常全都排除掉
             //如果标识符表中不包含当前标识符则将其添加进去
             if (!this.identifierTable.ContainsKey(this.scanner.Current.Sequence))
             {
                 this.addIdentifier();
             }
-            //读取并跳过'='符号（如果存在表示有初始化表达式）
+            //读取并跳过期望的'='符号（如存在表示有初始化表达式应跳过）
             this.scanner.ReadExpectedToken(TokenType.Symbol);
             //如果当前标记是'='则跳过初始化表达式
             if (this.scanner.Current.Sequence == "=")
             {
                 this.skipExpression();
             }
-            //如果允许声明多个变量则继续处理逗号分隔的变量声明
+            //如允许声明多个变量则继续处理逗号分隔的变量声明
             if (allowMultiple)
             {
                 //循环处理每个逗号分隔的变量声明
                 while (this.scanner.Current.Sequence == ",")
                 {
-                    //读取并跳过逗号
-                    this.scanner.ReadExpectedToken(TokenType.Identifier);
-                    //添加新的标识符到标识符表中
+                    //读取逗号后面内容进行标记，期望该标记为标识符（声明的变量）
+                    this.scanner.ReadExpectedToken(TokenType.Identifier);//这里必须是标识符，否则抛出异常，并需要在上面处理异常情况
+                    //添加新的（已确定的）标识符到标识符表中
                     this.addIdentifier();
                     //读取并跳过'='符号（如果存在）
                     this.scanner.ReadExpectedToken(TokenType.Symbol);
@@ -695,7 +853,7 @@ namespace GalaxyObfuscator
                 MMCore.WriteLine("期望是右括号来结束函数参数列表但不是所以抛出！" + $"Type: {this.scanner.Current.Type.ToString()}, Value: {this.scanner.Current.Sequence.ToString()}");
                 throw new SyntaxErrorException(this.scanner);
             }
-            //读取并跳过右括号
+            //读取并标记类型然后跳过右括号，并期望下一个标记是分号
             this.scanner.ReadExpectedToken(TokenType.Symbol);
             //接下来的标记应该是分号表示声明语句结束或者是左大括号表示函数体的开始
             if (this.scanner.Current.Sequence == ";")
@@ -751,7 +909,7 @@ namespace GalaxyObfuscator
                         }
                     }
                 }
-                //读取并跳过当前标记，继续检查下一个标记
+                //读取并跳过当前标记（并设置这些内容的合适标记类型），指针移动到下一位
                 this.scanner.ReadExpectedToken();
             }
             //当退出循环时说明遇到了左大括号{表示代码块开始，此时调用scanBlock方法来扫描并处理该代码块
@@ -808,7 +966,7 @@ namespace GalaxyObfuscator
                         //↓修复如下
                         //MMCore.WriteLine("指针位置：" + scanner.position + " 准备一直跳，直到指针停在指定符号之一的后面1位");
                         this.scanner.SkipBlockPro(";", "{", "}");//一直跳直到指针停在指定符号之一的后面1位
-                        end = scanner.position - 1;//指针停在指定符号之一的后面1位
+                        end = scanner.position - 1;//指针停在符号上，要-1才是符号所在
                     }
                 }
                 //如果当前标记不是标识符则跳转到Block_4标签抛出语法错误异常，或在此处处理异常

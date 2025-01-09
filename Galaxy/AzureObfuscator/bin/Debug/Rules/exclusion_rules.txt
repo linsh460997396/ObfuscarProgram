@@ -10,8 +10,6 @@ while
 switch
 foreach
 break
-Loop
-LoopCurrent
 GalaxyNativeInvalid
 DebugString
 DebugUnit

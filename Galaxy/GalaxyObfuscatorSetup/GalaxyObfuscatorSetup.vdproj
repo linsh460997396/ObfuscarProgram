@@ -430,7 +430,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:GalaxyObfuscator"
         "ProductCode" = "8:{6DE3D1D2-F330-4A38-9327-47993AE1EB46}"
-        "PackageCode" = "8:{0F76B72A-BB49-44AC-8414-D7666158A46C}"
+        "PackageCode" = "8:{7734217A-9F94-49DB-854C-13AC3C507347}"
         "UpgradeCode" = "8:{F223446D-B735-4108-838F-41B39BD5EDF4}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
