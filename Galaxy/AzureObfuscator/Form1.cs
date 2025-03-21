@@ -1,6 +1,7 @@
 ﻿using MetalMaxSystem;
 using StormLib;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -306,6 +307,9 @@ namespace GalaxyObfuscator
                     case 2:
                         SelectedFunc_2();
                         break;
+                    case 3:
+                        SelectedFunc_3();
+                        break;
                     default:
                         SetTipsToMainThread("功能无效！");
                         break;
@@ -336,7 +340,7 @@ namespace GalaxyObfuscator
         {
             for (int i = 0; i < 1; i++)
             {
-                if (MMCore.IsDFPath(textBox_workPath.Text) || GetSelectedIndexFromMainThread() == 1 || GetSelectedIndexFromMainThread() == 2)
+                if (MMCore.IsDFPath(textBox_workPath.Text) || GetSelectedIndexFromMainThread() == 1 || GetSelectedIndexFromMainThread() == 2 || GetSelectedIndexFromMainThread() == 3)
                 {
                     //开始工作，大部分界面置灰（用户不可操作）
                     UserOpEnableChange(false);
@@ -582,6 +586,40 @@ namespace GalaxyObfuscator
                 //处理文件读取过程中的异常
                 Debug.WriteLine("Error: " + ex.Message);
             }
+        }
+
+        /// <summary>
+        /// 对代码中的乱码进行中文转换
+        /// </summary>
+        void SelectedFunc_3()
+        {
+            string workDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string pattern = @"([A-Za-z][A-Za-z0-9]*[0-9][A-Za-z0-9]*)";
+            string code = GetCodeFromMainThread();
+            //存储替换记录的列表
+            var replacements = new List<Tuple<string, string>>();
+            //执行正则替换
+            string outputText = Regex.Replace(code, pattern, match =>
+            {
+                string original = match.Value;
+                string transformed = MMCore.HexStringToChineseCharacter(original);
+                if (transformed != "") 
+                {
+                    replacements.Add(Tuple.Create(original, transformed));
+                }
+                else
+                {
+                    transformed = original;
+                }
+                return transformed;
+            });
+            SetCodeToMainThread(outputText);
+            //打印报告
+            foreach (var replacement in replacements)
+            {
+                MMCore.WriteLine($"替换前: {replacement.Item1} \t 替换后: {replacement.Item2}");
+            }
+            MMCore.WriteLine(workDirectory + @"/中文转换报告.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
         }
 
         public static double RadianToDegree(double radian)
@@ -956,6 +994,14 @@ namespace GalaxyObfuscator
                     checkBox_LC4.Enabled = false;
                     checkBox_Test.Enabled = false;
                     break;
+                case 3:
+                    SetTipsToMainThread("（左下文本）填入Galaxy代码，执行将尝试中文转换");
+                    button_LoadContentFromFile.Text = "读取Map里的代码";
+                    panel1.Visible = false;
+                    panel_Bottom.Visible = true;
+                    checkBox_LC4.Enabled = false;
+                    checkBox_Test.Enabled = false;
+                    break;
                 default:
                     SetTipsToMainThread("功能无效！");
                     break;
@@ -967,6 +1013,7 @@ namespace GalaxyObfuscator
             comboBox_SelectFunc.Items.Add("对.SC2Map地图文件进行混淆");
             comboBox_SelectFunc.Items.Add("对自定义Galaxy代码进行混淆");
             comboBox_SelectFunc.Items.Add("[正在开发]将Objects等地形布置信息转Galaxy");
+            comboBox_SelectFunc.Items.Add("[仅测试]尝试将乱码转回中文");
             comboBox_SelectFunc.SelectedIndex = 0;
         }
 
@@ -979,6 +1026,9 @@ namespace GalaxyObfuscator
                     break;
                 case 2:
                     LoadContentFromFile_Objects();
+                    break;
+                case 3:
+                    LoadContentFromFile_Galaxy();
                     break;
                 default:
                     break;

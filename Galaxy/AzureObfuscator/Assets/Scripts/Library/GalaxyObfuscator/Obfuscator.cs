@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -200,6 +201,7 @@ namespace GalaxyObfuscator
             //构建混淆后的脚本
             return this.construct();
         }
+
         /// <summary>
         /// 判断给定的Token对象是否应该被视为一个独立的标记
         /// </summary>
