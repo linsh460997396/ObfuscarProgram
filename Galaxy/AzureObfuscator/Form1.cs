@@ -116,12 +116,33 @@ namespace GalaxyObfuscator
             }
         }
 
+        string GetListFromMainThread()
+        {
+            if (richTextBox_Code.InvokeRequired)
+            {
+                return (string)richTextBox_List.Invoke(new Func<string>(GetListFromMainThread));
+            }
+            else
+            {
+                return richTextBox_List.Text;
+            }
+        }
+
         public void SetCodeToMainThread(string code)
         {
             // 调用 Invoke 方法将操作发送到主线程
             Invoke((MethodInvoker)delegate ()
             {
                 richTextBox_Code.Text = code;
+            });
+        }
+
+        public void SetListToMainThread(string list)
+        {
+            // 调用 Invoke 方法将操作发送到主线程
+            Invoke((MethodInvoker)delegate ()
+            {
+                richTextBox_List.Text = list;
             });
         }
 
@@ -310,6 +331,9 @@ namespace GalaxyObfuscator
                     case 3:
                         SelectedFunc_3();
                         break;
+                    case 4:
+                        SelectedFunc_4();
+                        break;
                     default:
                         SetTipsToMainThread("功能无效！");
                         break;
@@ -340,7 +364,7 @@ namespace GalaxyObfuscator
         {
             for (int i = 0; i < 1; i++)
             {
-                if (MMCore.IsDFPath(textBox_workPath.Text) || GetSelectedIndexFromMainThread() == 1 || GetSelectedIndexFromMainThread() == 2 || GetSelectedIndexFromMainThread() == 3)
+                if (MMCore.IsDFPath(textBox_workPath.Text) || GetSelectedIndexFromMainThread() == 1 || GetSelectedIndexFromMainThread() == 2 || GetSelectedIndexFromMainThread() == 3 || GetSelectedIndexFromMainThread() == 4)
                 {
                     //开始工作，大部分界面置灰（用户不可操作）
                     UserOpEnableChange(false);
@@ -620,6 +644,25 @@ namespace GalaxyObfuscator
                 MMCore.WriteLine($"替换前: {replacement.Item1} \t 替换后: {replacement.Item2}");
             }
             MMCore.WriteLine(workDirectory + @"/中文转换报告.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
+        }
+
+        /// <summary>
+        /// 将代码中的UnitCreate转回地形信息格式（ObjectUnit）
+        /// </summary>
+        void SelectedFunc_4()
+        {
+            string workDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            int idCounter = 2001;
+            string code = GetCodeFromMainThread();
+            string list = GetListFromMainThread();
+            if (list != null && int.TryParse(list.ToString(), out int parsedValue))
+            {
+                idCounter = parsedValue;
+            }
+            string outputText =  UnitConverter.Go(code, idCounter);
+            SetCodeToMainThread(outputText);
+            MMCore.WriteLine(outputText);
+            MMCore.WriteLine(workDirectory + @"/转换报告.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
         }
 
         public static double RadianToDegree(double radian)
@@ -1002,6 +1045,14 @@ namespace GalaxyObfuscator
                     checkBox_LC4.Enabled = false;
                     checkBox_Test.Enabled = false;
                     break;
+                case 4:
+                    SetTipsToMainThread("左下文本填代码执行将UnitCreate转地形信息格式ObjectUnit，右下文本可填整数干预ID");
+                    button_LoadContentFromFile.Text = "读取Map里的代码";
+                    panel1.Visible = false;
+                    panel_Bottom.Visible = true;
+                    checkBox_LC4.Enabled = false;
+                    checkBox_Test.Enabled = false;
+                    break;
                 default:
                     SetTipsToMainThread("功能无效！");
                     break;
@@ -1014,6 +1065,7 @@ namespace GalaxyObfuscator
             comboBox_SelectFunc.Items.Add("对自定义Galaxy代码进行混淆");
             comboBox_SelectFunc.Items.Add("[正在开发]将Objects等地形布置信息转Galaxy");
             comboBox_SelectFunc.Items.Add("[仅测试]尝试将乱码转回中文");
+            comboBox_SelectFunc.Items.Add("将代码中的UnitCreate转回地形信息格式（ObjectUnit）");
             comboBox_SelectFunc.SelectedIndex = 0;
         }
 
@@ -1028,6 +1080,9 @@ namespace GalaxyObfuscator
                     LoadContentFromFile_Objects();
                     break;
                 case 3:
+                    LoadContentFromFile_Galaxy();
+                    break;
+                case 4:
                     LoadContentFromFile_Galaxy();
                     break;
                 default:
