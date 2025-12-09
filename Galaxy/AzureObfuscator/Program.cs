@@ -12,7 +12,7 @@ namespace GalaxyObfuscator
         [STAThread]
         static void Main()
         {
-            MMCore.writeTell = true;//调用功能库打印方法同时开启调试
+            MMCore.writeTell = true;//调用功能库打印方法时开启调试
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Obfuscator.form1 = new Form1();

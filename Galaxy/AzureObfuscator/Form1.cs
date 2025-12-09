@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -16,10 +17,10 @@ namespace GalaxyObfuscator
 {
     public partial class Form1 : Form
     {
+        StringBuilder globalSB = new StringBuilder();
+        StringBuilder globalSB2 = new StringBuilder();
+
         static bool _userOpEnable = true;
-        /// <summary>
-        /// 用户操作许可
-        /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         /// <summary>
         /// 用户操作许可
@@ -27,9 +28,6 @@ namespace GalaxyObfuscator
         public static bool UserOpEnable { get => _userOpEnable; set => _userOpEnable = value; }
 
         static bool _workStatus = false;
-        /// <summary>
-        /// 工作状态
-        /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         /// <summary>
         /// 工作状态
@@ -37,9 +35,6 @@ namespace GalaxyObfuscator
         public static bool WorkStatus { get => _workStatus; set => _workStatus = value; }
 
         static bool _workStop = false;
-        /// <summary>
-        /// 打断工作用的状态变量
-        /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         /// <summary>
         /// 打断工作用的状态变量
@@ -47,9 +42,6 @@ namespace GalaxyObfuscator
         public static bool WorkStop { get => _workStop; set => _workStop = value; }
 
         static Thread _workThread;
-        /// <summary>
-        /// 工作专用后台子线程，防止工作时UI主线程界面卡住无法点击等问题
-        /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         /// <summary>
         /// 工作专用后台子线程，防止工作时UI主线程界面卡住无法点击等问题
@@ -127,19 +119,23 @@ namespace GalaxyObfuscator
                 return richTextBox_List.Text;
             }
         }
-
+        /// <summary>
+        /// 调用Invoke方法将code发送到主线程代码文本框
+        /// </summary>
+        /// <param name="code"></param>
         public void SetCodeToMainThread(string code)
         {
-            // 调用 Invoke 方法将操作发送到主线程
             Invoke((MethodInvoker)delegate ()
             {
                 richTextBox_Code.Text = code;
             });
         }
-
+        /// <summary>
+        /// 调用Invoke方法将list发送到主线程列表文本框
+        /// </summary>
+        /// <param name="list"></param>
         public void SetListToMainThread(string list)
         {
-            // 调用 Invoke 方法将操作发送到主线程
             Invoke((MethodInvoker)delegate ()
             {
                 richTextBox_List.Text = list;
@@ -334,6 +330,11 @@ namespace GalaxyObfuscator
                     case 4:
                         SelectedFunc_4();
                         break;
+                    case 5:
+                        SelectedFunc_5();
+                        SetCodeToMainThread(globalSB.ToString());
+                        SetListToMainThread(globalSB2.ToString());
+                        break;
                     default:
                         SetTipsToMainThread("功能无效！");
                         break;
@@ -348,10 +349,62 @@ namespace GalaxyObfuscator
             if (WorkStop) { SetStatisticsToMainThread("用户取消！"); }
             WorkStop = false;//重置_workStop状态，如果是用户取消的，打印告知
             UserOpEnableChange(true);//重置用户操作状态
+            OpStateReset();
             SetBtnRunTextToMainThread("执行");
             //Debug.WriteLine("子线程已经完成！");
             //线程清除（如果不放心，Abort方法能在目标线程中抛出一个ThreadAbortException异常从而导致目标线程的终止）
             //WorkThread.Abort();
+        }
+
+        /// <summary>
+        /// 刷新用户所选功能下的控件状态
+        /// </summary>
+        void OpStateReset()
+        {
+            switch (GetSelectedIndexFromMainThread())
+            {
+                case -1:
+                    SetTipsToMainThread("功能未选择！");
+                    break;
+                case 0:
+                    SetTipsToMainThread("（选择处理目录）执行将批处理混淆文件夹内所有.SC2Map地图文件");
+                    SetControlEnableToMainThread(checkBox_LC4, true);
+                    SetControlEnableToMainThread(checkBox_Test, true);
+                    break;
+                case 1:
+                    SetTipsToMainThread("（左下文本）填入Galaxy代码，执行将进行混淆");
+                    SetControlEnableToMainThread(checkBox_LC4, true);
+                    SetControlEnableToMainThread(checkBox_Test, true);
+                    break;
+                case 2:
+                    SetTipsToMainThread("（左下文本）填入Objects内容，执行将单位装饰等地形布置信息转Galaxy");
+                    SetControlEnableToMainThread(checkBox_LC4, false);
+                    SetControlEnableToMainThread(checkBox_Test, false);
+                    break;
+                case 3:
+                    SetTipsToMainThread("（左下文本）填入Galaxy代码，执行将尝试中文转换");
+                    SetControlEnableToMainThread(checkBox_LC4, false);
+                    SetControlEnableToMainThread(checkBox_Test, false);
+                    break;
+                case 4:
+                    SetTipsToMainThread("左下文本填代码执行将UnitCreate转地形信息格式ObjectUnit，右下文本可填整数干预ID");
+                    SetControlEnableToMainThread(checkBox_LC4, false);
+                    SetControlEnableToMainThread(checkBox_Test, false);
+                    break;
+                case 5:
+                    SetTipsToMainThread("（选择处理目录）执行将批扫描虫出封锁线N档案并生成恢复用文本");
+                    SetControlEnableToMainThread(checkBox_LC4, false);
+                    SetControlEnableToMainThread(checkBox_Test, false);
+                    break;
+                case 6:
+                    SetTipsToMainThread("读取星际录像或其他二进制文件");
+                    SetControlEnableToMainThread(checkBox_LC4, false);
+                    SetControlEnableToMainThread(checkBox_Test, false);
+                    break;
+                default:
+                    SetTipsToMainThread("功能无效！");
+                    break;
+            }
         }
 
         /// <summary>
@@ -411,6 +464,196 @@ namespace GalaxyObfuscator
         {
             DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
             ObDirectoryRecursively(dirInfo);
+        }
+
+        /// <summary>
+        /// 递归方式处理文件夹内所有虫出封锁线N档
+        /// </summary>
+        /// <param name="dirInfo"></param>
+        void NBankDirectoryRecursively(DirectoryInfo dirInfo)
+        {
+            foreach (DirectoryInfo newInfo in dirInfo.GetDirectories())
+            {
+                NBankDirectoryRecursively(newInfo);
+            }
+            foreach (FileInfo newInfo in dirInfo.GetFiles("*.SC2Bank"))
+            {
+                HandleUBankFile(newInfo.FullName);
+            }
+        }
+        void NBankDirectoryRecursively(string dirPath)
+        {
+            globalSB.Clear(); globalSB2.Clear();
+            globalSB.AppendLine("//█注：以下信息用于战网-LoadBank指令恢复档案█");
+            DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
+            NBankDirectoryRecursively(dirInfo);
+        }
+
+        void HandleUBankFile(string filePath)
+        {
+            string sectionName, tempStringValue;
+            XElement tempElement;
+            try
+            {
+                //从newInfo.FullName 即 参数filePath 读取XML文件全部文本内容以便交给XDocument.Parse
+                string xmlContent = File.ReadAllText(filePath);
+                //使用XDocument.Parse来解析XML字符串
+                XDocument doc = XDocument.Parse(xmlContent);
+                //遍历所有的Section元素
+                foreach (var section in doc.Descendants("Section"))
+                {
+                    //提取name属性值
+                    sectionName = section.Attribute("name")?.Value ?? "";
+                    //根据Section的name属性名称处理不同的KeyValue
+                    switch (sectionName)
+                    {
+                        case "Check":
+                            //处理Check节的Key,提取JuBing键值
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "JuBing");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("string")?.Value;
+                            if (string.IsNullOrEmpty(tempStringValue))
+                            {
+                                tempStringValue = "5-S2-1-请补充句柄";
+                            }
+                            else
+                            {
+                                globalSB2.AppendLine(tempStringValue);
+                            }
+                            globalSB.AppendLine($"if (lp_id == \"{tempStringValue}\") {{");
+                            break;
+                        case "Main":
+                            //处理Main节的Key
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "Tz");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("string")?.Value;
+                            if (string.IsNullOrEmpty(tempStringValue))
+                            {
+                                tempStringValue = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+                            }
+                            globalSB.AppendLine($"    if (lp_type == \"TZ\") {{ lv_torf = \"{tempStringValue}\";}}");
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "TzEx");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("string")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"TZEX\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "Bd");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("string")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"BD\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "EX");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("string")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"EX\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "TF");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("string")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"TF\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "AWin");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("int")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"胜场\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "PWin");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("int")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"有效胜场\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "AGameSum");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("int")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"场次\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "PGameSum");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("int")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"有效场次\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "Exploit");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("int")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"功勋\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "WSZGJS");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("int")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"王兽最高击杀\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "WSQHLV");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("int")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"王兽挑战等级\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "JF");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("int")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"积分\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "Money");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("int")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"资金\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "Ws");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("int")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"瓦斯\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "En");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("int")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"能源\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+
+                            tempElement = section.Descendants("Key").FirstOrDefault(x => x.Attribute("name")?.Value == "Rare");
+                            tempStringValue = tempElement?.Element("Value")?.Attribute("int")?.Value;
+                            if (!string.IsNullOrEmpty(tempStringValue))
+                            {
+                                globalSB.AppendLine($"    else if (lp_type == \"稀金\"){{ lv_torf = \"{tempStringValue}\";}}");
+                            }
+                            globalSB.AppendLine($"}}");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            catch (IOException ex)
+            {
+                //处理文件读取过程中的异常
+                Debug.WriteLine("Error: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -627,7 +870,7 @@ namespace GalaxyObfuscator
             {
                 string original = match.Value;
                 string transformed = MMCore.HexStringToChineseCharacter(original);
-                if (transformed != "") 
+                if (transformed != "")
                 {
                     replacements.Add(Tuple.Create(original, transformed));
                 }
@@ -659,12 +902,33 @@ namespace GalaxyObfuscator
             {
                 idCounter = parsedValue;
             }
-            string outputText =  UnitConverter.Go(code, idCounter);
+            string outputText = UnitConverter.Go(code, idCounter);
             SetCodeToMainThread(outputText);
             MMCore.WriteLine(outputText);
             MMCore.WriteLine(workDirectory + @"/转换报告.txt", "████████████████████████████████████████████" + "\r\n" + "", true, true, false);//尾行留空
         }
 
+        /// <summary>
+        /// 执行将批扫描虫出封锁线U、N档案并生成恢复用文本
+        /// </summary>
+        void SelectedFunc_5()
+        {
+            try
+            {
+                NBankDirectoryRecursively(GetWorkPathFromMainThread());
+            }
+            catch (Exception ex)
+            {
+                //处理可能出现的异常，例如访问被拒绝等
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 弧度转度数
+        /// </summary>
+        /// <param name="radian"></param>
+        /// <returns></returns>
         public static double RadianToDegree(double radian)
         {
             return radian * (180.0 / Math.PI);
@@ -881,6 +1145,302 @@ namespace GalaxyObfuscator
             }
         }
 
+        // 检查字符串是否可打印
+        static bool IsPrintable(string text)
+        {
+            return text.All(c => c >= 32 && c <= 126);
+        }
+        /// <summary>
+        /// 提取录像信息文本中所有句柄然后存放到列表中返回
+        /// </summary>
+        /// <param name="replayContent"></param>
+        /// <returns></returns>
+        public List<string> ExtractAllReplayIds(string replayContent)
+        {
+            var replayIds = new List<string>();
+
+            // 匹配所有符合格式的录像ID：数字-字母数字-数字-数字
+            string pattern = @"\d+-[A-Za-z0-9]+-\d+-\d+";
+            MatchCollection matches = Regex.Matches(replayContent, pattern);
+
+            foreach (Match match in matches)
+            {
+                if (IsValidReplayId(match.Value))
+                {
+                    replayIds.Add(match.Value);
+                }
+            }
+
+            return replayIds.Distinct().ToList();
+        }
+        /// <summary>
+        /// 符合格式的玩家ID验证
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private bool IsValidReplayId(string id)
+        {
+            // 验证ID格式：例如 "5-S2-1-3372089"
+            string[] parts = id.Split('-');
+            return parts.Length == 4 &&
+                   int.TryParse(parts[0], out _) &&
+                   int.TryParse(parts[2], out _) &&
+                   int.TryParse(parts[3], out _);
+        }
+
+        /// <summary>
+        /// 提取指定ID的录像数据.并生成对应的Galaxy代码段.
+        /// </summary>
+        /// <param name="fileContent"></param>
+        /// <param name="targetReplayId"></param>
+        /// <returns></returns>
+        public string GenerateCodeFromReplay(string fileContent, string targetReplayId)
+        {
+            //提取指定ID的数据
+            var replayData = ExtractReplayData(fileContent, targetReplayId);
+
+            //生成代码
+            StringBuilder codeBuilder = new StringBuilder();
+            codeBuilder.AppendLine($"if (lp_id == \"{targetReplayId}\") {{");
+
+            bool firstCondition = true;
+            foreach (var data in replayData)
+            {
+                if (firstCondition)
+                {
+                    codeBuilder.AppendLine($"    if (lp_type == \"{data.Key}\") {{ lv_torf = \"{data.Value}\";}}");
+                    firstCondition = false;
+                }
+                else
+                {
+                    codeBuilder.AppendLine($"    else if (lp_type == \"{data.Key}\"){{ lv_torf = \"{data.Value}\";}}");
+                }
+            }
+
+            codeBuilder.AppendLine("}");
+            return codeBuilder.ToString();
+        }
+
+        public void ProcessReplayFile(string inputFilePath, string outputFilePath, string replayId)
+        {
+            try
+            {
+                string generatedCode = GenerateCodeFromReplay(inputFilePath, replayId);
+                File.WriteAllText(outputFilePath, generatedCode);
+                Console.WriteLine("生成成功！");
+            }
+            catch (Exception ex)
+            {
+                label_Tips.Text = $"发生错误: {ex.Message}";
+            }
+        }
+
+        Dictionary<string, string> ExtractReplayData(string replayContent, string replayId)
+        {
+            var result = new Dictionary<string, string>();
+
+            // 定义要提取的数据类型及其对应的关键词
+            var dataTypes = new Dictionary<string, string[]>
+        {
+            { "TZ", new[] { "TzValue" } },
+            { "TZEX", new[] { "TzEx" } },
+            { "BD", new[] { "Bd" } },
+            { "EX", new[] { "EX" } },
+            { "TF", new[] { "TF" } },
+            { "胜场", new[] { "Win", "AWin" } },
+            { "有效胜场", new[] { "PWin" } },
+            { "场次", new[] { "GameSum" } },
+            { "有效场次", new[] { "PGameSum" } },
+            { "功勋", new[] { "Exploit" } },
+            { "王兽最高击杀", new[] { "WSZGJS" } },
+            { "王兽挑战等级", new[] { "WSQHLV" } },
+            { "积分", new[] { "JF" } },
+            { "资金", new[] { "Money" } },
+            { "瓦斯", new[] { "Ws" } },
+            { "能源", new[] { "En" } },
+            { "稀金", new[] { "Rare" } }
+        };
+
+            foreach (var dataType in dataTypes)
+            {
+                string value = ExtractValueByKeywords(replayContent, dataType.Value);
+                if (!string.IsNullOrEmpty(value))
+                {
+                    result[dataType.Key] = value;
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 根据所提供的关键词从指定内容中提取出相应的值.
+        /// Extracts a value from the specified content based on the provided keywords.
+        /// </summary>
+        /// <remarks>The method searches the content for the first occurrence of any keyword followed by a
+        /// numeric  value (e.g., "123") or a binary value (e.g., "101"). The search is case-sensitive and stops at the 
+        /// first successful match.</remarks>
+        /// <param name="content">The input string to search for a value matching the keywords.</param>
+        /// <param name="keywords">An array of keywords used to locate the value. Each keyword is matched against the content,  followed by a
+        /// numeric or binary value.</param>
+        /// <returns>The first value found in the content that matches a keyword followed by a numeric or binary value;  or <see
+        /// langword="null"/> if no match is found.</returns>
+        string ExtractValueByKeywords(string content, string[] keywords)
+        {
+            foreach (string keyword in keywords)
+            {
+                // 匹配模式：关键词 + 数字/二进制值
+                string pattern = keyword + @"(\d+|[01]+)";
+                Match match = Regex.Match(content, pattern);
+
+                if (match.Success)
+                {
+                    return match.Groups[1].Value;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 读取SC2Replay或其他二进制文件内容到代码编辑区（过滤输出可打印字符）
+        /// </summary>
+        void LoadContentFromFile_Read()
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "SC2Replay Files (*.SC2Replay)|*.SC2Replay|Files (replay.game.events)|replay.game.events|All Files (*.*)|*.*";
+                DialogResult result = ofd.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    string str; StringBuilder sb = new StringBuilder();
+                    string path = ofd.FileName; //文件完整路径
+                    string fileExtension = Path.GetExtension(path).ToLower(); // 获取文件扩展名并转换为小写
+                    switch (fileExtension)
+                    {
+                        case ".sc2replay":
+                            // 处理MPQ文件
+                            using (MpqArchive mpqArchive = new MpqArchive(path))
+                            {
+                                //打开MPQ格式文件中的指定名称文件
+                                using (StreamReader streamReader = new StreamReader(new BufferedStream(mpqArchive.OpenFile("replay.game.events"))))
+                                {
+                                    //字节转字符串
+                                    str = streamReader.ReadToEnd();
+                                    //过滤出可打印字符
+                                    str = new string(str.Where(c => c >= 32 && c <= 126).ToArray());
+                                    //脚本内容显示到窗口
+                                    richTextBox_Code.Text = str;
+                                }
+                            }
+                            break;
+                        default:
+                            //处理二进制文件
+                            byte[] binaryData;
+                            try
+                            {
+                                binaryData = File.ReadAllBytes(path);
+                                //过滤出字符
+                                string filteredText = new string(binaryData.Where(b => b >= 32 && b <= 126).Select(b => (char)b).ToArray());
+                                //内容显示到窗口
+                                richTextBox_Code.Text = filteredText;
+                            }
+                            catch (FileNotFoundException)
+                            {
+                                label_Tips.Text = "文件未找到";
+                            }
+                            catch (Exception ex)
+                            {
+                                label_Tips.Text = $"发生错误: {ex.Message}";
+                            }
+                            break;
+                    }
+                }
+                else if (result == DialogResult.Cancel)
+                {
+                    //MessageBox.Show("用户取消了文件选择！");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 读取SC2Replay或replay.game.events文件内容到代码编辑区并自动执行转换
+        /// </summary>
+        void LoadContentFromFile_Replay()
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "SC2Replay Files (*.SC2Replay)|*.SC2Replay|Files (replay.game.events)|replay.game.events|All Files (*.*)|*.*";
+                DialogResult result = ofd.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    string str; StringBuilder sb = new StringBuilder();
+                    string path = ofd.FileName; //文件完整路径
+                    string fileExtension = Path.GetExtension(path).ToLower(); // 获取文件扩展名并转换为小写
+                    switch (fileExtension)
+                    {
+                        case ".sc2replay":
+                            // 处理MPQ文件
+                            using (MpqArchive mpqArchive = new MpqArchive(path))
+                            {
+                                //打开MPQ格式文件中的指定名称文件
+                                using (StreamReader streamReader = new StreamReader(new BufferedStream(mpqArchive.OpenFile("replay.game.events"))))
+                                {
+                                    //字节转字符串
+                                    str = streamReader.ReadToEnd();
+                                    str = new string(str.Where(c => c >= 32 && c <= 126).ToArray());
+                                    //提取录像中的所有玩家ID
+                                    List<string> replayIds = ExtractAllReplayIds(str);
+                                    //遍历所有玩家ID
+                                    foreach (string replayId in replayIds)
+                                    {
+                                        sb.AppendLine(GenerateCodeFromReplay(str, replayId));
+                                    }
+                                    //脚本内容显示到窗口
+                                    richTextBox_Code.Text = sb.ToString();
+                                }
+                            }
+                            break;
+
+                        case ".events":
+                            //处理二进制文件
+                            byte[] binaryData;
+                            try
+                            {
+                                binaryData = File.ReadAllBytes(path);
+                                //过滤出字符
+                                string filteredText = new string(binaryData.Where(b => b >= 32 && b <= 126).Select(b => (char)b).ToArray());
+                                //提取录像中的所有玩家ID
+                                List<string> replayIds = ExtractAllReplayIds(filteredText);
+                                //遍历所有玩家ID
+                                foreach (string replayId in replayIds)
+                                {
+                                    sb.AppendLine(GenerateCodeFromReplay(filteredText, replayId));
+                                }
+                                //内容显示到窗口
+                                richTextBox_Code.Text = sb.ToString();
+                            }
+                            catch (FileNotFoundException)
+                            {
+                                label_Tips.Text = "文件未找到";
+                            }
+                            catch (Exception ex)
+                            {
+                                label_Tips.Text = $"发生错误: {ex.Message}";
+                            }
+                            break;
+                        default:
+                            // 未知文件类型
+                            MessageBox.Show("必须是*.SC2Replay或名为replay.game.events的文件");
+                            break;
+                    }
+                }
+                else if (result == DialogResult.Cancel)
+                {
+                    //MessageBox.Show("用户取消了文件选择！");
+                }
+            }
+        }
+
         void LoadContentFromFile_Galaxy()
         {
             using (OpenFileDialog ofd = new OpenFileDialog())
@@ -970,7 +1530,7 @@ namespace GalaxyObfuscator
                             }
                             break;
 
-                        case "Objects":
+                        case "":
                             // 处理.galaxy文件
                             byte[] binaryData;
                             try
@@ -1053,6 +1613,22 @@ namespace GalaxyObfuscator
                     checkBox_LC4.Enabled = false;
                     checkBox_Test.Enabled = false;
                     break;
+                case 5:
+                    SetTipsToMainThread("（选择处理目录）执行将批扫描虫出封锁线N档案并生成恢复用文本");
+                    button_LoadContentFromFile.Text = "处理录像信息";
+                    panel1.Visible = true;
+                    panel_Bottom.Visible = true;
+                    checkBox_LC4.Enabled = false;
+                    checkBox_Test.Enabled = false;
+                    break;
+                case 6:
+                    SetTipsToMainThread("读取星际录像或其他二进制文件");
+                    button_LoadContentFromFile.Text = "读取信息";
+                    panel1.Visible = false;
+                    panel_Bottom.Visible = true;
+                    checkBox_LC4.Enabled = false;
+                    checkBox_Test.Enabled = false;
+                    break;
                 default:
                     SetTipsToMainThread("功能无效！");
                     break;
@@ -1066,6 +1642,8 @@ namespace GalaxyObfuscator
             comboBox_SelectFunc.Items.Add("[正在开发]将Objects等地形布置信息转Galaxy");
             comboBox_SelectFunc.Items.Add("[仅测试]尝试将乱码转回中文");
             comboBox_SelectFunc.Items.Add("将代码中的UnitCreate转回地形信息格式（ObjectUnit）");
+            comboBox_SelectFunc.Items.Add("批扫描虫出封锁线N档案或星际录像并生成恢复用文本");
+            comboBox_SelectFunc.Items.Add("读取星际录像或其他二进制文件");
             comboBox_SelectFunc.SelectedIndex = 0;
         }
 
@@ -1084,6 +1662,12 @@ namespace GalaxyObfuscator
                     break;
                 case 4:
                     LoadContentFromFile_Galaxy();
+                    break;
+                case 5:
+                    LoadContentFromFile_Replay();
+                    break;
+                case 6:
+                    LoadContentFromFile_Read();
                     break;
                 default:
                     break;

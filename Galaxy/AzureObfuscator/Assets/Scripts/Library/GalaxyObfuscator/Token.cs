@@ -144,7 +144,7 @@ namespace GalaxyObfuscator
             return '\t';//制表符 
         }
         /// <summary>
-        /// 定义静态的CultureInfo对象，用于解析实数字面量 
+        /// 定义静态的CultureInfo对象
         /// </summary>
         private static readonly CultureInfo Culture = CultureInfo.CreateSpecificCulture("en-US");
         /// <summary>
