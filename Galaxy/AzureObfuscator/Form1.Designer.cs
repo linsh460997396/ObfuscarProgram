@@ -32,6 +32,7 @@ namespace GalaxyObfuscator
         private void InitializeComponent()
         {
             this.panel_Top = new System.Windows.Forms.Panel();
+            this.checkBox_Test = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button_selectWorkPath = new System.Windows.Forms.Button();
             this.textBox_workPath = new System.Windows.Forms.TextBox();
@@ -44,7 +45,7 @@ namespace GalaxyObfuscator
             this.label_Tips = new System.Windows.Forms.Label();
             this.button_Run = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.checkBox_Test = new System.Windows.Forms.CheckBox();
+            this.checkBox_Event = new System.Windows.Forms.CheckBox();
             this.label_SelectFunc = new System.Windows.Forms.Label();
             this.comboBox_SelectFunc = new System.Windows.Forms.ComboBox();
             this.checkBox_LC4 = new System.Windows.Forms.CheckBox();
@@ -61,6 +62,7 @@ namespace GalaxyObfuscator
             // 
             // panel_Top
             // 
+            this.panel_Top.Controls.Add(this.checkBox_Test);
             this.panel_Top.Controls.Add(this.panel1);
             this.panel_Top.Controls.Add(this.panel2);
             this.panel_Top.Controls.Add(this.label_Statistics);
@@ -71,6 +73,20 @@ namespace GalaxyObfuscator
             this.panel_Top.Name = "panel_Top";
             this.panel_Top.Size = new System.Drawing.Size(806, 85);
             this.panel_Top.TabIndex = 1;
+            // 
+            // checkBox_Test
+            // 
+            this.checkBox_Test.Enabled = false;
+            this.checkBox_Test.Font = new System.Drawing.Font("宋体", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.checkBox_Test.ForeColor = System.Drawing.Color.Red;
+            this.checkBox_Test.Location = new System.Drawing.Point(724, 0);
+            this.checkBox_Test.Margin = new System.Windows.Forms.Padding(0);
+            this.checkBox_Test.Name = "checkBox_Test";
+            this.checkBox_Test.Size = new System.Drawing.Size(82, 21);
+            this.checkBox_Test.TabIndex = 21;
+            this.checkBox_Test.Text = "实验版混淆";
+            this.checkBox_Test.UseVisualStyleBackColor = true;
+            this.checkBox_Test.Visible = false;
             // 
             // panel1
             // 
@@ -187,7 +203,7 @@ namespace GalaxyObfuscator
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.checkBox_Test);
+            this.panel3.Controls.Add(this.checkBox_Event);
             this.panel3.Controls.Add(this.label_SelectFunc);
             this.panel3.Controls.Add(this.comboBox_SelectFunc);
             this.panel3.Controls.Add(this.checkBox_LC4);
@@ -197,18 +213,20 @@ namespace GalaxyObfuscator
             this.panel3.Size = new System.Drawing.Size(806, 21);
             this.panel3.TabIndex = 4;
             // 
-            // checkBox_Test
+            // checkBox_Event
             // 
-            this.checkBox_Test.Enabled = false;
-            this.checkBox_Test.Font = new System.Drawing.Font("宋体", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkBox_Test.ForeColor = System.Drawing.Color.Red;
-            this.checkBox_Test.Location = new System.Drawing.Point(721, 0);
-            this.checkBox_Test.Margin = new System.Windows.Forms.Padding(0);
-            this.checkBox_Test.Name = "checkBox_Test";
-            this.checkBox_Test.Size = new System.Drawing.Size(82, 21);
-            this.checkBox_Test.TabIndex = 21;
-            this.checkBox_Test.Text = "实验版混淆";
-            this.checkBox_Test.UseVisualStyleBackColor = true;
+            this.checkBox_Event.Checked = true;
+            this.checkBox_Event.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_Event.Enabled = false;
+            this.checkBox_Event.Font = new System.Drawing.Font("宋体", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.checkBox_Event.ForeColor = System.Drawing.Color.Red;
+            this.checkBox_Event.Location = new System.Drawing.Point(718, -1);
+            this.checkBox_Event.Margin = new System.Windows.Forms.Padding(0);
+            this.checkBox_Event.Name = "checkBox_Event";
+            this.checkBox_Event.Size = new System.Drawing.Size(88, 21);
+            this.checkBox_Event.TabIndex = 22;
+            this.checkBox_Event.Text = "事件变量数组";
+            this.checkBox_Event.UseVisualStyleBackColor = true;
             // 
             // label_SelectFunc
             // 
@@ -296,7 +314,7 @@ namespace GalaxyObfuscator
             this.Controls.Add(this.panel_Bottom);
             this.Controls.Add(this.panel_Top);
             this.Name = "Form1";
-            this.Text = "代码混淆器V0.4.4（For Galaxy） By 蔚蓝星海";
+            this.Text = "代码混淆器V0.5.1（For Galaxy） By 蔚蓝星海";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel_Top.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
@@ -331,6 +349,7 @@ namespace GalaxyObfuscator
         System.Windows.Forms.RichTextBox richTextBox_Code;
         System.Windows.Forms.RichTextBox richTextBox_List;
         System.Windows.Forms.CheckBox checkBox_Test;
+        System.Windows.Forms.CheckBox checkBox_Event;
     }
 }
 

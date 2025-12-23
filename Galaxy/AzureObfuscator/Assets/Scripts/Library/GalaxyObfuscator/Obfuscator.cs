@@ -1,11 +1,12 @@
-﻿using System;
+﻿using MetalMaxSystem;
+using StormLib;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using MetalMaxSystem;
-using StormLib;
+using System.Text.RegularExpressions;
 
 namespace GalaxyObfuscator
 {
@@ -213,13 +214,15 @@ namespace GalaxyObfuscator
             //则认为它是一个独立的标记返回true，否则返回false
             return token.Type == TokenType.Identifier || token.Type == TokenType.HexLiteral || token.Type == TokenType.IntegerLiteral || token.Type == TokenType.RealLiteral;
         }
+
         /// <summary>
         /// 构建混淆后的脚本 
         /// </summary>
         /// <returns></returns>
         private string construct()
         {
-            string tempStr; int tempInt;
+            string tempStr; int tempInt; Match match; Sequence tempSequence;
+            bool checkEvent = form1.GetCheckEventStateFromMainThread();
             //初始化扫描器，用于扫描原始脚本
             this.scanner = new Scanner(this.script, this.errFileName);
             //初始化StringBuilder，用于构建混淆后的脚本
@@ -294,7 +297,7 @@ namespace GalaxyObfuscator
                                 MMCore.WriteLine("字符串字面量：" + token2.ToString());//结果示范："Assets\\Textures\\HongMaster1.dds"
                                 MMCore.WriteLine("解析字符串字面量：" + token2.ParseStringLiteral());//结果示范：Assets/Textures/HongMaster1.dds
                                 //如果标识符表中有变量名=解析后的字符串字面量（如声明了gv_u_Ship=飞船单位后，在事件注册中作为变量参数名字符串填入的情况）
-                                Sequence tempSequence = new Sequence(token2.ParseStringLiteral());
+                                tempSequence = new Sequence(token2.ParseStringLiteral());
                                 if (this.identifierTable.ContainsKey(tempSequence))
                                 {
                                     //如果存在则取出
@@ -302,8 +305,32 @@ namespace GalaxyObfuscator
                                 }
                                 else
                                 {
-                                    //否则进行新混淆（会补上两侧冒号）
-                                    tempStr = this.stringObfuscator.Obfuscate(tempStr);
+                                    if (checkEvent)
+                                    {
+                                        match = Regex.Match(tempSequence.ToString(), @"(\w+)(\[.*?\])");
+
+                                        if (match.Success)
+                                        {
+                                            tempSequence = new Sequence(match.Groups[1].Value);
+                                            if (this.identifierTable.ContainsKey(tempSequence))
+                                            {
+                                                tempStr = '\"' + identifierTable[tempSequence] + match.Groups[2].Value + '\"';
+                                            }
+                                            else
+                                            {
+                                                tempStr = this.stringObfuscator.Obfuscate(tempStr);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            tempStr = this.stringObfuscator.Obfuscate(tempStr);
+                                        }
+                                    }
+                                    else 
+                                    {
+                                        //否则进行新混淆（会补上两侧冒号）
+                                        tempStr = this.stringObfuscator.Obfuscate(tempStr);
+                                    }
                                 }
                                 MMCore.WriteLine("混淆后：" + tempStr);
                                 if (includeIndex)
