@@ -1,4 +1,5 @@
-﻿//想要函数(str)中str不被混淆,请将函数名加入此表,一行一个(后面不跟空格).注:触发器定义部分字面量表是必混淆的,不受此表影响.
+﻿//想要函数(str)中str不被混淆,请将函数名加入此表,一行一个(后面不跟空格).注:触发器定义部分字面量表是必混淆的,不受此表影响
+//请不要在有效行后面添加注释,否则注释部分会被当作排除内容
 
-//GameAttributeGameValue
+//GameAttributeGameValue 
 //GameAttributePlayerValue

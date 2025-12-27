@@ -285,8 +285,15 @@ namespace GalaxyObfuscator
         /// <returns></returns>
         private string construct()
         {
-            string tempStr; int tempInt; Match match; Sequence tempSequence; Token tokenBeforeLast; Token token; Token tokenCurrent;
+            string tempStr; int tempInt; Match match; Sequence tempSequence;
+            Token tokenBeforeLast; Token token; Token tokenCurrent;
             bool checkEvent = form1.GetCheckEventStateFromMainThread();
+            string nameSpace = form1.GetNameSpaceFromMainThread();
+            //nameSpace必须是有效数字
+            if (string.IsNullOrEmpty(nameSpace) || !Regex.IsMatch(nameSpace, @"^\d+$"))
+            {
+                nameSpace = "-1";
+            }
             //初始化扫描器，用于扫描原始脚本
             this.scanner = new Scanner(this.script, this.errFileName);
             //初始化StringBuilder，用于构建混淆后的脚本
@@ -372,6 +379,21 @@ namespace GalaxyObfuscator
                                 {
                                     tempStr = '\"' + tempStr + '\"';
                                     MMCore.WriteLine("用户排除(指定函数内字符串)：" + tempStr);
+                                }
+                                else if (nameSpace != "-1" && tokenBeforeLast.Type != TokenType.None && (tokenBeforeLast.Sequence == "GameAttributeGameValue" || tokenBeforeLast.Sequence == "GameAttributePlayerValue"))
+                                {
+                                    //如果tempStr本身就含bnet则忽略
+                                    if (tempStr.Contains("bnet:"))
+                                    {
+                                        tempStr = '\"' + tempStr + '\"';
+                                    }
+                                    else
+                                    {
+                                        //NameSpace处理
+                                        tempStr = "[bnet:local/0.0/" + nameSpace + "]" + tempStr;
+                                        tempStr = '\"' + tempStr + '\"';
+                                        MMCore.WriteLine("用户添加(指定NameSpace)后：" + tempStr);
+                                    }
                                 }
                                 else
                                 {

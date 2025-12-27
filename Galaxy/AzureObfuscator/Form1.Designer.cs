@@ -32,6 +32,7 @@ namespace GalaxyObfuscator
         private void InitializeComponent()
         {
             this.panel_Top = new System.Windows.Forms.Panel();
+            this.textBox_nameSpace = new System.Windows.Forms.TextBox();
             this.checkBox_Test = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button_selectWorkPath = new System.Windows.Forms.Button();
@@ -62,6 +63,7 @@ namespace GalaxyObfuscator
             // 
             // panel_Top
             // 
+            this.panel_Top.Controls.Add(this.textBox_nameSpace);
             this.panel_Top.Controls.Add(this.checkBox_Test);
             this.panel_Top.Controls.Add(this.panel1);
             this.panel_Top.Controls.Add(this.panel2);
@@ -73,6 +75,18 @@ namespace GalaxyObfuscator
             this.panel_Top.Name = "panel_Top";
             this.panel_Top.Size = new System.Drawing.Size(806, 85);
             this.panel_Top.TabIndex = 1;
+            // 
+            // textBox_nameSpace
+            // 
+            this.textBox_nameSpace.Location = new System.Drawing.Point(726, 0);
+            this.textBox_nameSpace.Margin = new System.Windows.Forms.Padding(0);
+            this.textBox_nameSpace.MaximumSize = new System.Drawing.Size(80, 21);
+            this.textBox_nameSpace.MinimumSize = new System.Drawing.Size(80, 21);
+            this.textBox_nameSpace.Name = "textBox_nameSpace";
+            this.textBox_nameSpace.Size = new System.Drawing.Size(80, 21);
+            this.textBox_nameSpace.TabIndex = 23;
+            this.textBox_nameSpace.Tag = "";
+            this.textBox_nameSpace.Text = "NameSpaceID";
             // 
             // checkBox_Test
             // 
@@ -114,10 +128,10 @@ namespace GalaxyObfuscator
             // 
             this.textBox_workPath.Location = new System.Drawing.Point(86, 0);
             this.textBox_workPath.Margin = new System.Windows.Forms.Padding(0);
-            this.textBox_workPath.MaximumSize = new System.Drawing.Size(640, 30);
-            this.textBox_workPath.MinimumSize = new System.Drawing.Size(640, 28);
+            this.textBox_workPath.MaximumSize = new System.Drawing.Size(592, 21);
+            this.textBox_workPath.MinimumSize = new System.Drawing.Size(592, 21);
             this.textBox_workPath.Name = "textBox_workPath";
-            this.textBox_workPath.Size = new System.Drawing.Size(640, 21);
+            this.textBox_workPath.Size = new System.Drawing.Size(592, 21);
             this.textBox_workPath.TabIndex = 7;
             // 
             // label_workPath
@@ -156,10 +170,10 @@ namespace GalaxyObfuscator
             // 
             this.textBox_rulePath.Location = new System.Drawing.Point(86, 0);
             this.textBox_rulePath.Margin = new System.Windows.Forms.Padding(0);
-            this.textBox_rulePath.MaximumSize = new System.Drawing.Size(640, 30);
-            this.textBox_rulePath.MinimumSize = new System.Drawing.Size(640, 28);
+            this.textBox_rulePath.MaximumSize = new System.Drawing.Size(592, 21);
+            this.textBox_rulePath.MinimumSize = new System.Drawing.Size(592, 21);
             this.textBox_rulePath.Name = "textBox_rulePath";
-            this.textBox_rulePath.Size = new System.Drawing.Size(640, 21);
+            this.textBox_rulePath.Size = new System.Drawing.Size(592, 21);
             this.textBox_rulePath.TabIndex = 10;
             // 
             // label_rulePath
@@ -314,9 +328,10 @@ namespace GalaxyObfuscator
             this.Controls.Add(this.panel_Bottom);
             this.Controls.Add(this.panel_Top);
             this.Name = "Form1";
-            this.Text = "代码混淆器V0.6（For Galaxy） By 蔚蓝星海";
+            this.Text = "代码混淆器V0.7（For Galaxy） By 蔚蓝星海";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel_Top.ResumeLayout(false);
+            this.panel_Top.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -350,6 +365,7 @@ namespace GalaxyObfuscator
         System.Windows.Forms.RichTextBox richTextBox_List;
         System.Windows.Forms.CheckBox checkBox_Test;
         System.Windows.Forms.CheckBox checkBox_Event;
+        System.Windows.Forms.TextBox textBox_nameSpace;
     }
 }
 

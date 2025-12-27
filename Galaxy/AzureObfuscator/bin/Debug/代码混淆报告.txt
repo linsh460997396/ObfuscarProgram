@@ -10,7 +10,7 @@
 得到预期标记类型！Type: StringLiteral, Value: "LibBC0D3AAD"
 新的遍历标记！Type: Identifier, Value: void
 进入检查！Type: Identifier, Value: void
-存储标识符表Key: InitLibs, Value: I1IIl1l1l
+存储标识符表Key: InitLibs, Value: I1l
 得到预期标记类型！Type: Symbol, Value: (
 得到预期标记类型！Type: Symbol, Value: {
 期望是变量但不是所以抛出！Type: Symbol, Value: (
@@ -19,21 +19,21 @@
 新的遍历标记！Type: Identifier, Value: trigger
 进入检查！Type: Identifier, Value: trigger
 得到预期标记类型！Type: Identifier, Value: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4
-存储标识符表Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4, Value: I
-扫描存至字面量表 Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4_Func, Value: "\111\x31\x49\111\154\x31\154\x31\061\x31\x31\111\154\111"
-扫描存至字面量表 Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4Func, Value: "\x6C\x31\x31\061\061"
+存储标识符表Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4, Value: Il1llIIll1II1ll1
+扫描存至字面量表 Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4_Func, Value: "\x6C\x49\111\061\x31\061\061\061\111\061\x6C\061\x6C\x31\111\154"
+扫描存至字面量表 Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4Func, Value: "\x49\x31\x49\x49\x49\x31\x49\111\x49\154\111\x6C\154\061\x6C"
 新的遍历标记！Type: Identifier, Value: trigger
 进入检查！Type: Identifier, Value: trigger
 得到预期标记类型！Type: Identifier, Value: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95
-存储标识符表Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95, Value: lll1IIl
-扫描存至字面量表 Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95_Func, Value: "\154\x49\x49\x31\111\111"
-扫描存至字面量表 Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95Func, Value: "\x49\x31\x49\154\111\x31\x31\111\x49\111\x31"
+存储标识符表Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95, Value: Il1I
+扫描存至字面量表 Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95_Func, Value: "\154\061\111\111\111\061\x6C\061\x49\x31\111\x6C\061\111"
+扫描存至字面量表 Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95Func, Value: "\x6C\111\x31\x6C\111\111\154\x49"
 新的遍历标记！Type: Identifier, Value: trigger
 进入检查！Type: Identifier, Value: trigger
 得到预期标记类型！Type: Identifier, Value: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95
-存储标识符表Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95, Value: I1l111IlIl1
-扫描存至字面量表 Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95_Func, Value: "\154\x31\111\061\x6C\154\061"
-扫描存至字面量表 Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95Func, Value: "\154\x49\x49\061\x6C\111\x49\111"
+存储标识符表Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95, Value: II1I
+扫描存至字面量表 Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95_Func, Value: "\x6C\x49\x31\154\x6C\061\x6C\x31\x31\x49\x31\x31\111"
+扫描存至字面量表 Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95Func, Value: "\154\x6C\061\154\x49\061\061\x6C\x49\x49\111\154\x6C\061\x6C\154"
 新的遍历标记！Type: Identifier, Value: include
 进入检查！Type: Identifier, Value: include
 得到预期标记类型！Type: StringLiteral, Value: "TriggerLibs/NativeLib"
@@ -45,7 +45,7 @@
 得到预期标记类型！Type: StringLiteral, Value: "LibDA0A55AD"
 新的遍历标记！Type: Identifier, Value: void
 进入检查！Type: Identifier, Value: void
-存储标识符表Key: Init_Libs, Value: Il111I1
+存储标识符表Key: Init_Libs, Value: IllIllIl
 得到预期标记类型！Type: Symbol, Value: (
 得到预期标记类型！Type: Symbol, Value: {
 期望是变量但不是所以抛出！Type: Symbol, Value: (
@@ -53,45 +53,45 @@
 期望是变量但不是所以抛出！Type: Symbol, Value: (
 新的遍历标记！Type: Identifier, Value: void
 进入检查！Type: Identifier, Value: void
-存储标识符表Key: gf_initSetRoomValue, Value: lIlllllIIllI
+存储标识符表Key: gf_initSetRoomValue, Value: IlI111IllI1lI
 得到预期标记类型！Type: Symbol, Value: (
 得到预期标记类型！Type: Symbol, Value: ;
 新的遍历标记！Type: Identifier, Value: void
 进入检查！Type: Identifier, Value: void
-存储标识符表Key: gf_initSetOther, Value: lI1II1lI1I111I
+存储标识符表Key: gf_initSetOther, Value: IlI1I1llIllll1
 得到预期标记类型！Type: Symbol, Value: (
 得到预期标记类型！Type: Symbol, Value: ;
 新的遍历标记！Type: Identifier, Value: void
 进入检查！Type: Identifier, Value: void
-存储标识符表Key: gf_initSyncBank, Value: l1l
+存储标识符表Key: gf_initSyncBank, Value: l1IlII
 得到预期标记类型！Type: Symbol, Value: (
 得到预期标记类型！Type: Symbol, Value: ;
 新的遍历标记！Type: Identifier, Value: void
 进入检查！Type: Identifier, Value: void
-存储标识符表Key: gf_SetLogPath, Value: I1l1Il11I
+存储标识符表Key: gf_SetLogPath, Value: II1I1IIlI
 得到预期标记类型！Type: Symbol, Value: (
 得到预期标记类型！Type: Symbol, Value: ;
 新的遍历标记！Type: Identifier, Value: trigger
 进入检查！Type: Identifier, Value: trigger
 得到预期标记类型！Type: Identifier, Value: gt_init
-存储标识符表Key: gt_init, Value: l
-扫描存至字面量表 Key: gt_init_Func, Value: "\x49\061\x6C\111\x6C"
-扫描存至字面量表 Key: gt_initFunc, Value: "\154\154\154\111\x49\x49\x31\x49\111\x6C\061\061\x6C\x49\154"
+存储标识符表Key: gt_init, Value: lII1l1lIlII11
+扫描存至字面量表 Key: gt_init_Func, Value: "\x49\111\x31\061\x6C\061\111\x31\061\154\154\x6C\x49\x49\061"
+扫描存至字面量表 Key: gt_initFunc, Value: "\x6C\111\x31\x6C\x31\x49\x49\154\x31\154\x31\x49\154\x49"
 新的遍历标记！Type: Identifier, Value: void
 进入检查！Type: Identifier, Value: void
 得到预期标记类型！Type: Symbol, Value: (
 得到预期标记类型！Type: Symbol, Value: {
-存储标识符表Key: lv_playerHuaZhi, Value: ll1Il111I1Il1
+存储标识符表Key: lv_playerHuaZhi, Value: Il1I1IIl11II
 得到预期标记类型！Type: Symbol, Value: ;
-存储标识符表Key: lv_gameNanDu, Value: l1l11I1l1
+存储标识符表Key: lv_gameNanDu, Value: I1ll1Ill1l1l11
 得到预期标记类型！Type: Symbol, Value: ;
-存储标识符表Key: lv_player, Value: IlI11lI1lIII1Il1
+存储标识符表Key: lv_player, Value: I
 得到预期标记类型！Type: Symbol, Value: ;
 得到预期标记类型！Type: Identifier, Value: int
-存储标识符表Key: auto5849EE27_ae, Value: IllI1
+存储标识符表Key: auto5849EE27_ae, Value: l11lI
 得到预期标记类型！Type: Symbol, Value: =
 得到预期标记类型！Type: Identifier, Value: int
-存储标识符表Key: auto5849EE27_ai, Value: l1IIIl1l1II
+存储标识符表Key: auto5849EE27_ai, Value: I1ll1Ill
 得到预期标记类型！Type: Symbol, Value: =
 期望是变量但不是所以抛出！Type: Symbol, Value: =
 期望是变量但不是所以抛出！Type: Symbol, Value: =
@@ -155,10 +155,10 @@
 新的遍历标记！Type: Identifier, Value: bool
 进入检查！Type: Identifier, Value: bool
 得到预期标记类型！Type: Symbol, Value: (
-存储标识符表Key: testConds, Value: IlI
+存储标识符表Key: testConds, Value: IIlIIl111
 得到预期标记类型！Type: Symbol, Value: ,
 得到预期标记类型！Type: Identifier, Value: bool
-存储标识符表Key: runActions, Value: l11III11ll11l11l
+存储标识符表Key: runActions, Value: Il1l1lIlI1
 得到预期标记类型！Type: Symbol, Value: )
 得到预期标记类型！Type: Symbol, Value: {
 期望是变量但不是所以抛出！Type: Symbol, Value: .
@@ -173,20 +173,20 @@
 期望是变量但不是所以抛出！Type: Symbol, Value: (
 新的遍历标记！Type: Identifier, Value: void
 进入检查！Type: Identifier, Value: void
-存储标识符表Key: gt_init_Init, Value: II1l1l1llI1II
+存储标识符表Key: gt_init_Init, Value: lI
 得到预期标记类型！Type: Symbol, Value: (
 得到预期标记类型！Type: Symbol, Value: {
 期望是变量但不是所以抛出！Type: Symbol, Value: =
 期望是变量但不是所以抛出！Type: Symbol, Value: (
 新的遍历标记！Type: Identifier, Value: void
 进入检查！Type: Identifier, Value: void
-存储标识符表Key: Init_Triggers, Value: lI1ll1lIlll11
+存储标识符表Key: Init_Triggers, Value: lI11I11IlIIl1l1
 得到预期标记类型！Type: Symbol, Value: (
 得到预期标记类型！Type: Symbol, Value: {
 期望是变量但不是所以抛出！Type: Symbol, Value: (
 新的遍历标记！Type: Identifier, Value: void
 进入检查！Type: Identifier, Value: void
-存储标识符表Key: InitCustomScript, Value: III1
+存储标识符表Key: InitCustomScript, Value: ll
 得到预期标记类型！Type: Symbol, Value: (
 得到预期标记类型！Type: Symbol, Value: {
 期望是变量但不是所以抛出！Type: Symbol, Value: (
@@ -198,22 +198,22 @@
 得到预期标记类型！Type: Identifier, Value: bool
 得到预期标记类型！Type: Symbol, Value: )
 得到预期标记类型！Type: Symbol, Value: {
-存储标识符表Key: lv_e6958CE5869B, Value: I1lI1ll11IIIl
+存储标识符表Key: lv_e6958CE5869B, Value: IllI1l1II1lll
 得到预期标记类型！Type: Symbol, Value: ;
-存储标识符表Key: lv_e4B8B4E697B6E58D95E4BD8DE7BB84, Value: III
+存储标识符表Key: lv_e4B8B4E697B6E58D95E4BD8DE7BB84, Value: II11l11I11I11
 得到预期标记类型！Type: Symbol, Value: ;
 得到预期标记类型！Type: Identifier, Value: int
-存储标识符表Key: autoB30414D7_n, Value: II11II
+存储标识符表Key: autoB30414D7_n, Value: IlI1IIlI1l1llIl
 得到预期标记类型！Type: Symbol, Value: =
-存储标识符表Key: autoB30414D7_i, Value: lll
+存储标识符表Key: autoB30414D7_i, Value: IIll1111lI11l1lI
 得到预期标记类型！Type: Symbol, Value: ;
-存储标识符表Key: auto822FC715_val, Value: ll11l1
+存储标识符表Key: auto822FC715_val, Value: lIlIIlI11l1I1Il1
 得到预期标记类型！Type: Symbol, Value: ;
-存储标识符表Key: auto6EF44425_g, Value: l1l11llI111I1l11
+存储标识符表Key: auto6EF44425_g, Value: Il111IlI1lIll1
 得到预期标记类型！Type: Symbol, Value: ;
-存储标识符表Key: auto6EF44425_u, Value: l1IIll11
+存储标识符表Key: auto6EF44425_u, Value: l
 得到预期标记类型！Type: Symbol, Value: ;
-存储标识符表Key: auto6EF44425_var, Value: IIIIll1II
+存储标识符表Key: auto6EF44425_var, Value: lI1I
 得到预期标记类型！Type: Symbol, Value: ;
 期望是变量但不是所以抛出！Type: Symbol, Value: =
 期望是变量但不是所以抛出！Type: Symbol, Value: =
@@ -239,7 +239,7 @@
 期望是变量但不是所以抛出！Type: Symbol, Value: ;
 新的遍历标记！Type: Identifier, Value: void
 进入检查！Type: Identifier, Value: void
-存储标识符表Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4_Init, Value: lI1IllI1I1
+存储标识符表Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4_Init, Value: ll11lI11llI1
 得到预期标记类型！Type: Symbol, Value: (
 得到预期标记类型！Type: Symbol, Value: {
 期望是变量但不是所以抛出！Type: Symbol, Value: =
@@ -251,11 +251,11 @@
 得到预期标记类型！Type: Identifier, Value: bool
 得到预期标记类型！Type: Symbol, Value: )
 得到预期标记类型！Type: Symbol, Value: {
-存储标识符表Key: lv_p, Value: lllI1llI1I
+存储标识符表Key: lv_p, Value: ll11111l1Il1lIIl
 得到预期标记类型！Type: Symbol, Value: ;
-存储标识符表Key: lv_e8A7A6E58F91E68C89E994AE, Value: l11llI1
+存储标识符表Key: lv_e8A7A6E58F91E68C89E994AE, Value: lI11I11lIIII
 得到预期标记类型！Type: Symbol, Value: ;
-存储标识符表Key: lv_e58D95E4BD8D, Value: l1II1lllI1
+存储标识符表Key: lv_e58D95E4BD8D, Value: IlI1Ill1lI1II1l
 得到预期标记类型！Type: Symbol, Value: ;
 期望是变量但不是所以抛出！Type: Symbol, Value: =
 期望是变量但不是所以抛出！Type: Symbol, Value: =
@@ -263,7 +263,7 @@
 期望是变量但不是所以抛出！Type: Symbol, Value: (
 新的遍历标记！Type: Identifier, Value: void
 进入检查！Type: Identifier, Value: void
-存储标识符表Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95_Init, Value: ll1III
+存储标识符表Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95_Init, Value: lIIl1111IlIIII
 得到预期标记类型！Type: Symbol, Value: (
 得到预期标记类型！Type: Symbol, Value: {
 期望是变量但不是所以抛出！Type: Symbol, Value: =
@@ -277,11 +277,11 @@
 得到预期标记类型！Type: Symbol, Value: {
 得到预期标记类型！Type: Symbol, Value: ;
 得到预期标记类型！Type: Symbol, Value: ;
-存储标识符表Key: lv_e58D95E4BD8DE6A087E7ADBE, Value: I1I
+存储标识符表Key: lv_e58D95E4BD8DE6A087E7ADBE, Value: I1I1I1
 得到预期标记类型！Type: Symbol, Value: ;
-存储标识符表Key: lv_name, Value: Il1
+存储标识符表Key: lv_name, Value: IIl1l1lII
 得到预期标记类型！Type: Symbol, Value: ;
-存储标识符表Key: lv_e8B7AFE5BE84, Value: I1I1lI1IIl1I
+存储标识符表Key: lv_e8B7AFE5BE84, Value: IlllIIIl
 得到预期标记类型！Type: Symbol, Value: ;
 期望是变量但不是所以抛出！Type: Symbol, Value: =
 期望是变量但不是所以抛出！Type: Symbol, Value: =
@@ -293,14 +293,14 @@
 期望是变量但不是所以抛出！Type: Symbol, Value: (
 新的遍历标记！Type: Identifier, Value: void
 进入检查！Type: Identifier, Value: void
-存储标识符表Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95_Init, Value: Ill11ll1
+存储标识符表Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95_Init, Value: Il1I1
 得到预期标记类型！Type: Symbol, Value: (
 得到预期标记类型！Type: Symbol, Value: {
 期望是变量但不是所以抛出！Type: Symbol, Value: =
 期望是变量但不是所以抛出！Type: Symbol, Value: (
 新的遍历标记！Type: Identifier, Value: void
 进入检查！Type: Identifier, Value: void
-存储标识符表Key: InitTriggers, Value: lI1ll1
+存储标识符表Key: InitTriggers, Value: lI1IlII
 得到预期标记类型！Type: Symbol, Value: (
 得到预期标记类型！Type: Symbol, Value: {
 期望是变量但不是所以抛出！Type: Symbol, Value: (
@@ -308,7 +308,7 @@
 期望是变量但不是所以抛出！Type: Symbol, Value: (
 新的遍历标记！Type: Identifier, Value: void
 进入检查！Type: Identifier, Value: void
-存储标识符表Key: InitMap, Value: ll
+存储标识符表Key: InitMap, Value: llI1llIIIllII111
 得到预期标记类型！Type: Symbol, Value: (
 得到预期标记类型！Type: Symbol, Value: {
 期望是变量但不是所以抛出！Type: Symbol, Value: (
@@ -317,363 +317,359 @@
 █Scan End█
 
 █↓标识符表(支持排除规则)↓█
-Key: InitLibs, Value: I1IIl1l1l,
-Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4, Value: I,
-Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4_Func, Value: I1IIl1l1111IlI,
-Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4Func, Value: l1111,
-Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95, Value: lll1IIl,
-Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95_Func, Value: lII1II,
-Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95Func, Value: I1IlI11III1,
-Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95, Value: I1l111IlIl1,
-Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95_Func, Value: l1I1ll1,
-Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95Func, Value: lII1lIII,
-Key: Init_Libs, Value: Il111I1,
-Key: gf_initSetRoomValue, Value: lIlllllIIllI,
-Key: gf_initSetOther, Value: lI1II1lI1I111I,
-Key: gf_initSyncBank, Value: l1l,
-Key: gf_SetLogPath, Value: I1l1Il11I,
-Key: gt_init, Value: l,
-Key: gt_init_Func, Value: I1lIl,
-Key: gt_initFunc, Value: lllIII1IIl11lIl,
-Key: lv_playerHuaZhi, Value: ll1Il111I1Il1,
-Key: lv_gameNanDu, Value: l1l11I1l1,
-Key: lv_player, Value: IlI11lI1lIII1Il1,
-Key: auto5849EE27_ae, Value: IllI1,
-Key: auto5849EE27_ai, Value: l1IIIl1l1II,
-Key: testConds, Value: IlI,
-Key: runActions, Value: l11III11ll11l11l,
-Key: gt_init_Init, Value: II1l1l1llI1II,
-Key: Init_Triggers, Value: lI1ll1lIlll11,
-Key: InitCustomScript, Value: III1,
-Key: lv_e6958CE5869B, Value: I1lI1ll11IIIl,
-Key: lv_e4B8B4E697B6E58D95E4BD8DE7BB84, Value: III,
-Key: autoB30414D7_n, Value: II11II,
-Key: autoB30414D7_i, Value: lll,
-Key: auto822FC715_val, Value: ll11l1,
-Key: auto6EF44425_g, Value: l1l11llI111I1l11,
-Key: auto6EF44425_u, Value: l1IIll11,
-Key: auto6EF44425_var, Value: IIIIll1II,
-Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4_Init, Value: lI1IllI1I1,
-Key: lv_p, Value: lllI1llI1I,
-Key: lv_e8A7A6E58F91E68C89E994AE, Value: l11llI1,
-Key: lv_e58D95E4BD8D, Value: l1II1lllI1,
-Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95_Init, Value: ll1III,
-Key: lv_e58D95E4BD8DE6A087E7ADBE, Value: I1I,
-Key: lv_name, Value: Il1,
-Key: lv_e8B7AFE5BE84, Value: I1I1lI1IIl1I,
-Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95_Init, Value: Ill11ll1,
-Key: InitTriggers, Value: lI1ll1,
-Key: InitMap, Value: ll
+Key: InitLibs, Value: I1l,
+Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4, Value: Il1llIIll1II1ll1,
+Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4_Func, Value: lII11111I1l1l1Il,
+Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4Func, Value: I1III1IIIlIll1l,
+Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95, Value: Il1I,
+Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95_Func, Value: l1III1l1I1Il1I,
+Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95Func, Value: lI1lIIlI,
+Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95, Value: II1I,
+Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95_Func, Value: lI1ll1l11I11I,
+Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95Func, Value: ll1lI11lIIIll1ll,
+Key: Init_Libs, Value: IllIllIl,
+Key: gf_initSetRoomValue, Value: IlI111IllI1lI,
+Key: gf_initSetOther, Value: IlI1I1llIllll1,
+Key: gf_initSyncBank, Value: l1IlII,
+Key: gf_SetLogPath, Value: II1I1IIlI,
+Key: gt_init, Value: lII1l1lIlII11,
+Key: gt_init_Func, Value: II11l1I11lllII1,
+Key: gt_initFunc, Value: lI1l1IIl1l1IlI,
+Key: lv_playerHuaZhi, Value: Il1I1IIl11II,
+Key: lv_gameNanDu, Value: I1ll1Ill1l1l11,
+Key: lv_player, Value: I,
+Key: auto5849EE27_ae, Value: l11lI,
+Key: auto5849EE27_ai, Value: I1ll1Ill,
+Key: testConds, Value: IIlIIl111,
+Key: runActions, Value: Il1l1lIlI1,
+Key: gt_init_Init, Value: lI,
+Key: Init_Triggers, Value: lI11I11IlIIl1l1,
+Key: InitCustomScript, Value: ll,
+Key: lv_e6958CE5869B, Value: IllI1l1II1lll,
+Key: lv_e4B8B4E697B6E58D95E4BD8DE7BB84, Value: II11l11I11I11,
+Key: autoB30414D7_n, Value: IlI1IIlI1l1llIl,
+Key: autoB30414D7_i, Value: IIll1111lI11l1lI,
+Key: auto822FC715_val, Value: lIlIIlI11l1I1Il1,
+Key: auto6EF44425_g, Value: Il111IlI1lIll1,
+Key: auto6EF44425_u, Value: l,
+Key: auto6EF44425_var, Value: lI1I,
+Key: gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4_Init, Value: ll11lI11llI1,
+Key: lv_p, Value: ll11111l1Il1lIIl,
+Key: lv_e8A7A6E58F91E68C89E994AE, Value: lI11I11lIIII,
+Key: lv_e58D95E4BD8D, Value: IlI1Ill1lI1II1l,
+Key: gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95_Init, Value: lIIl1111IlIIII,
+Key: lv_e58D95E4BD8DE6A087E7ADBE, Value: I1I1I1,
+Key: lv_name, Value: IIl1l1lII,
+Key: lv_e8B7AFE5BE84, Value: IlllIIIl,
+Key: gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95_Init, Value: Il1I1,
+Key: InitTriggers, Value: lI1IlII,
+Key: InitMap, Value: llI1llIIIllII111
 █identifierTable End█
 █注：排除规则文本中InitMap必填！是不可参与混淆的标识符！█
 
 █↓字面量表(触发器定义部分,不受排除规则干扰)↓█
-Key: "gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4_Func", Value: "\111\x31\x49\111\154\x31\154\x31\061\x31\x31\111\154\111",
-Key: "gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4Func", Value: "\x6C\x31\x31\061\061",
-Key: "gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95_Func", Value: "\154\x49\x49\x31\111\111",
-Key: "gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95Func", Value: "\x49\x31\x49\154\111\x31\x31\111\x49\111\x31",
-Key: "gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95_Func", Value: "\154\x31\111\061\x6C\154\061",
-Key: "gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95Func", Value: "\154\x49\x49\061\x6C\111\x49\111",
-Key: "gt_init_Func", Value: "\x49\061\x6C\111\x6C",
-Key: "gt_initFunc", Value: "\154\154\154\111\x49\x49\x31\x49\111\x6C\061\061\x6C\x49\154"
+Key: "gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4_Func", Value: "\x6C\x49\111\061\x31\061\061\061\111\061\x6C\061\x6C\x31\111\154",
+Key: "gt_E5BC80E58F91E88085E8818AE5A4A9E68C87E4BBA4Func", Value: "\x49\x31\x49\x49\x49\x31\x49\111\x49\154\111\x6C\154\061\x6C",
+Key: "gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95_Func", Value: "\154\061\111\111\111\061\x6C\061\x49\x31\111\x6C\061\111",
+Key: "gt_E58D95E4BD8DE58F8CE587BBE6B58BE8AF95Func", Value: "\x6C\111\x31\x6C\111\111\154\x49",
+Key: "gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95_Func", Value: "\x6C\x49\x31\154\x6C\061\x6C\x31\x31\x49\x31\x31\111",
+Key: "gt_E9BCA0E6A087E682ACE5819CE6B58BE8AF95Func", Value: "\154\x6C\061\154\x49\061\061\x6C\x49\x49\111\154\x6C\061\x6C\154",
+Key: "gt_init_Func", Value: "\x49\111\x31\061\x6C\061\111\x31\061\154\154\x6C\x49\x49\061",
+Key: "gt_initFunc", Value: "\x6C\111\x31\x6C\x31\x49\x49\154\x31\154\x31\x49\154\x49"
 █literalTable End█
 █注：其他字面量可接受排除规则,需带上双引号填写█
 
-排除规则改回标识符：ll -> InitMap
+排除规则改回标识符：llI1llIIIllII111 -> InitMap
 字符串字面量："TriggerLibs/NativeLib"
 解析Include内容：TriggerLibs/NativeLib
-混淆后："\124\162\x69\147\147\x65\162\114\x69\142\163\057\x4E\141\x74\151\166\x65\x4C\x69\x62"
+混淆后："\x54\162\151\147\x67\x65\x72\x4C\x69\x62\x73\057\x4E\x61\164\151\x76\145\x4C\x69\142"
 字符串字面量："Lib50770149"
 解析Include内容：Lib50770149
-混淆后："\114\151\x62\065\x30\067\067\x30\061\x34\071"
+混淆后："\x4C\151\x62\x35\x30\067\x37\x30\061\064\x39"
 字符串字面量："LibBC0D3AAD"
 解析Include内容：LibBC0D3AAD
-混淆后："\x4C\151\x62\x42\x43\060\x44\x33\x41\x41\104"
+混淆后："\x4C\x69\142\102\x43\x30\x44\063\101\x41\x44"
 字符串字面量："TriggerLibs/NativeLib"
 解析字符串字面量：TriggerLibs/NativeLib
-混淆后："\x54\x72\151\147\147\145\x72\114\x69\x62\x73\057\x4E\x61\164\151\x76\145\114\x69\142"
+混淆后："\124\x72\x69\147\147\x65\x72\114\151\x62\x73\057\x4E\141\x74\x69\166\x65\114\151\x62"
 字符串字面量："Lib50770149"
 解析字符串字面量：Lib50770149
-混淆后："\x4C\151\142\065\x30\067\x37\x30\x31\x34\071"
+混淆后："\114\x69\142\x35\060\067\067\060\061\x34\071"
 字符串字面量："LibDA0A55AD"
 解析字符串字面量：LibDA0A55AD
-混淆后："\114\x69\142\104\x41\x30\101\x35\065\101\104"
+混淆后："\114\151\x62\x44\101\x30\101\x35\065\x41\x44"
 整数字面量：5
-混淆后：(0x17961^01531623^0X7caf7)
+混淆后：(0612317+0x1fb3c-0x2c773^0660046+0417003-0632614)
 整数字面量：1
-混淆后：(372158-0446631+052412^0x601cd-0446237)
+混淆后：(01121476^01114017+05460)
 字符串字面量："0002"
 解析字符串字面量：0002
-用户排除："0002"
-混淆后："0002"
+混淆后："\x30\060\060\x32"
 字符串字面量："0001"
 解析字符串字面量：0001
-混淆后："\060\060\x30\061"
+混淆后："\060\060\x30\x31"
 字符串字面量："[bnet:local/0.0/96155]4"
 解析字符串字面量：[bnet:local/0.0/96155]4
-混淆后：[bnet:local/0.0/96155]4
+混淆后："[bnet:local/0.0/96155]4"
 字符串字面量："0002"
 解析字符串字面量：0002
-用户排除："0002"
-混淆后："0002"
+混淆后："\060\060\x30\062"
 整数字面量：1
-混淆后：(01100427-0336474^0x2c3da)
+混淆后：(483293^01473517+0304260-0xa023)
 字符串字面量："Param/Value/7DF030B1"
 解析字符串字面量：Param/Value/7DF030B1
-混淆后："\x50\141\162\141\x6D\x2F\126\141\154\165\145\x2F\x37\104\x46\060\x33\x30\x42\061"
+混淆后："\x50\141\162\141\x6D\x2F\x56\141\x6C\x75\x65\x2F\x37\104\x46\x30\063\x30\x42\061"
 整数字面量：1
-混淆后：(181569^0x2c540)
+混淆后：(01627467-0103122^0473367^0X31919+01026244-0463652)
 字符串字面量："Param/Value/300BA5EC"
 解析字符串字面量：Param/Value/300BA5EC
-混淆后："\x50\141\162\x61\x6D\057\126\141\154\165\x65\057\063\060\060\x42\101\065\105\103"
+混淆后："\x50\x61\162\141\155\x2F\x56\x61\154\165\x65\057\x33\060\060\x42\x41\065\105\x43"
 整数字面量：1
-混淆后：(-0x4dd+0133471-0xb25b)
+混淆后：(0x1)
 整数字面量：0
-混淆后：(01353531^0135123^355594)
+混淆后：(01153146^0X4cf2a^014514)
 整数字面量：0
-混淆后：(359739^0X7ffff-164548)
+混淆后：(0232^0232)
 整数字面量：1
-混淆后：(0305521^0Xf0aa+0774537-0202754^336639-0531662)
+混淆后：(524287-027101^01777777-0605041+187361)
 字符串字面量："Param/Value/10810DB9"
 解析字符串字面量：Param/Value/10810DB9
-混淆后："\x50\x61\162\x61\x6D\x2F\126\x61\x6C\x75\x65\057\061\x30\070\061\060\x44\x42\x39"
+混淆后："\120\141\x72\x61\x6D\057\x56\141\x6C\165\145\057\061\x30\070\061\x30\x44\x42\x39"
 字符串字面量："[bnet:local/0.0/96155]5"
 解析字符串字面量：[bnet:local/0.0/96155]5
-混淆后：[bnet:local/0.0/96155]5
+混淆后："[bnet:local/0.0/96155]5"
 字符串字面量："0002"
 解析字符串字面量：0002
-用户排除："0002"
-混淆后："0002"
+混淆后："\060\x30\060\062"
 整数字面量：1
-混淆后：(0x5e95a^01030247+0X1b8b4)
+混淆后：(0xa911+047441^0X7830c^0x77b3f)
 字符串字面量："Param/Value/AD7AF7D3"
 解析字符串字面量：Param/Value/AD7AF7D3
-混淆后："\120\141\x72\x61\155\x2F\x56\141\x6C\165\x65\057\x41\104\067\x41\106\067\x44\x33"
+混淆后："\120\141\162\x61\155\057\x56\141\154\x75\x65\x2F\x41\104\x37\101\106\x37\104\x33"
 字符串字面量："Param/Value/11E54D37"
 解析字符串字面量：Param/Value/11E54D37
-混淆后："\x50\141\162\141\x6D\x2F\x56\x61\154\x75\145\x2F\x31\x31\105\x35\x34\104\063\x37"
+混淆后："\120\141\x72\x61\x6D\057\x56\141\x6C\x75\x65\x2F\061\061\x45\065\064\104\063\067"
 字符串字面量："[bnet:local/0.0/96155]5"
 解析字符串字面量：[bnet:local/0.0/96155]5
-混淆后：[bnet:local/0.0/96155]5
+混淆后："[bnet:local/0.0/96155]5"
 字符串字面量："0001"
 解析字符串字面量：0001
-混淆后："\060\060\060\x31"
+混淆后："\x30\060\060\x31"
 整数字面量：1
-混淆后：(0xb84e+0X2f024^0337306^0x216b5)
+混淆后：(252360-0307136+0265125^0x5f787^01441071)
 字符串字面量："Param/Value/44729220"
 解析字符串字面量：Param/Value/44729220
-混淆后："\120\141\x72\141\155\057\126\x61\x6C\x75\x65\x2F\x34\x34\067\x32\071\x32\062\x30"
+混淆后："\120\141\162\141\155\x2F\x56\x61\x6C\165\145\x2F\x34\064\x37\x32\071\x32\x32\x30"
 字符串字面量："Param/Value/ECC5BF92"
 解析字符串字面量：Param/Value/ECC5BF92
-混淆后："\x50\141\162\x61\155\x2F\x56\x61\154\165\x65\x2F\105\x43\103\065\x42\x46\x39\x32"
+混淆后："\120\141\162\x61\x6D\x2F\126\x61\154\x75\145\x2F\105\103\x43\065\x42\x46\x39\x32"
 字符串字面量："[bnet:local/0.0/96155]5"
 解析字符串字面量：[bnet:local/0.0/96155]5
-混淆后：[bnet:local/0.0/96155]5
+混淆后："[bnet:local/0.0/96155]5"
+字符串字面量："0003"
+解析字符串字面量：0003
+混淆后："\x30\060\x30\x33"
+整数字面量：1
+混淆后：(01)
+字符串字面量："Param/Value/4BABA884"
+解析字符串字面量：Param/Value/4BABA884
+混淆后："\x50\x61\162\x61\155\057\126\x61\x6C\165\x65\x2F\064\x42\101\102\x41\x38\070\x34"
+字符串字面量："Param/Value/C2A454AF"
+解析字符串字面量：Param/Value/C2A454AF
+混淆后："\x50\x61\x72\x61\155\057\126\x61\x6C\x75\145\x2F\103\062\x41\064\065\064\101\106"
+整数字面量：1
+混淆后：(-0236524+0624533-0355615^0X2710b-0754453+0274233)
+字符串字面量："Param/Value/3A666424"
+解析字符串字面量：Param/Value/3A666424
+混淆后："\x50\141\162\141\x6D\057\126\141\154\165\145\x2F\063\101\066\066\x36\x34\062\064"
+字符串字面量："[bnet:local/0.0/96155]3"
+解析字符串字面量：[bnet:local/0.0/96155]3
+混淆后："[bnet:local/0.0/96155]3"
+字符串字面量："0001"
+解析字符串字面量：0001
+混淆后："\060\060\060\061"
+整数字面量：1
+混淆后：(01)
+字符串字面量："Param/Value/B561DACC"
+解析字符串字面量：Param/Value/B561DACC
+混淆后："\120\x61\x72\x61\x6D\057\126\141\154\x75\145\x2F\x42\x35\066\061\x44\x41\x43\103"
+字符串字面量："Param/Value/80B7A82F"
+解析字符串字面量：Param/Value/80B7A82F
+混淆后："\120\141\x72\x61\155\057\126\x61\x6C\165\x65\057\x38\x30\x42\067\101\x38\062\x46"
+字符串字面量："3"
+解析字符串字面量：3
+用户添加(指定NameSpace)后："[bnet:local/0.0/181836]3"
+混淆后："[bnet:local/0.0/181836]3"
+字符串字面量："0002"
+解析字符串字面量：0002
+混淆后："\060\x30\060\062"
+整数字面量：1
+混淆后：(01211551^01777777-0x2ec97)
+字符串字面量："Param/Value/E271AD56"
+解析字符串字面量：Param/Value/E271AD56
+混淆后："\120\141\x72\141\x6D\057\126\141\x6C\165\x65\057\x45\x32\067\x31\x41\x44\x35\x36"
+字符串字面量："Param/Value/BA5DE626"
+解析字符串字面量：Param/Value/BA5DE626
+混淆后："\120\x61\x72\x61\x6D\057\126\141\154\x75\x65\057\x42\x41\x35\104\x45\066\062\x36"
+字符串字面量："[bnet:local/0.0/96155]3"
+解析字符串字面量：[bnet:local/0.0/96155]3
+混淆后："[bnet:local/0.0/96155]3"
+字符串字面量："0003"
+解析字符串字面量：0003
+混淆后："\060\060\060\x33"
+整数字面量：1
+混淆后：(0332222-111761)
+字符串字面量："Param/Value/35EF4DB2"
+解析字符串字面量：Param/Value/35EF4DB2
+混淆后："\120\x61\162\141\x6D\x2F\126\x61\154\165\145\x2F\x33\065\105\106\064\104\102\062"
+字符串字面量："Param/Value/F4F6F823"
+解析字符串字面量：Param/Value/F4F6F823
+混淆后："\120\x61\162\x61\155\x2F\x56\x61\x6C\165\x65\x2F\106\x34\x46\066\x46\x38\062\x33"
+字符串字面量："[bnet:local/0.0/96155]2"
+解析字符串字面量：[bnet:local/0.0/96155]2
+混淆后："[bnet:local/0.0/96155]2"
+字符串字面量："0001"
+解析字符串字面量：0001
+混淆后："\x30\060\x30\061"
+整数字面量：1
+混淆后：(215061^0644024)
+字符串字面量："0002"
+解析字符串字面量：0002
+混淆后："\x30\060\060\062"
+整数字面量：1
+混淆后：(01555670^01777777-0135527^106257)
 字符串字面量："0003"
 解析字符串字面量：0003
 混淆后："\x30\x30\x30\063"
-整数字面量：1
-混淆后：(0x116bc+01120526-0x29109^-0x1059+046027+0602126^-0523121+0606555)
-字符串字面量："Param/Value/4BABA884"
-解析字符串字面量：Param/Value/4BABA884
-混淆后："\x50\141\x72\141\155\057\126\141\154\165\x65\x2F\x34\x42\101\102\101\070\070\064"
-字符串字面量："Param/Value/C2A454AF"
-解析字符串字面量：Param/Value/C2A454AF
-混淆后："\120\141\x72\141\x6D\x2F\126\x61\154\165\145\057\103\062\x41\x34\x35\x34\x41\x46"
-整数字面量：1
-混淆后：(01124153^0X7ffff-0X35795)
-字符串字面量："Param/Value/3A666424"
-解析字符串字面量：Param/Value/3A666424
-混淆后："\x50\141\x72\141\x6D\057\x56\x61\154\165\x65\057\063\x41\x36\x36\x36\x34\x32\064"
-字符串字面量："[bnet:local/0.0/96155]3"
-解析字符串字面量：[bnet:local/0.0/96155]3
-混淆后：[bnet:local/0.0/96155]3
-字符串字面量："0001"
-解析字符串字面量：0001
-混淆后："\060\x30\060\061"
-整数字面量：1
-混淆后：(01673213^01673212)
-字符串字面量："Param/Value/B561DACC"
-解析字符串字面量：Param/Value/B561DACC
-混淆后："\x50\x61\x72\x61\155\057\x56\x61\x6C\165\x65\x2F\x42\x35\066\061\104\101\103\103"
-字符串字面量："Param/Value/80B7A82F"
-解析字符串字面量：Param/Value/80B7A82F
-混淆后："\x50\141\x72\x61\155\057\126\x61\x6C\165\x65\057\070\x30\102\067\x41\070\x32\106"
-字符串字面量："[bnet:local/0.0/96155]3"
-解析字符串字面量：[bnet:local/0.0/96155]3
-混淆后：[bnet:local/0.0/96155]3
-字符串字面量："0002"
-解析字符串字面量：0002
-用户排除："0002"
-混淆后："0002"
-整数字面量：1
-混淆后：(0612202-0X1702-0415761^0X84e4+0x5caa)
-字符串字面量："Param/Value/E271AD56"
-解析字符串字面量：Param/Value/E271AD56
-混淆后："\120\x61\x72\x61\x6D\057\126\141\x6C\x75\145\x2F\105\062\067\x31\x41\104\065\x36"
-字符串字面量："Param/Value/BA5DE626"
-解析字符串字面量：Param/Value/BA5DE626
-混淆后："\x50\141\x72\141\155\057\x56\141\154\x75\x65\057\x42\101\x35\x44\x45\x36\x32\066"
-字符串字面量："[bnet:local/0.0/96155]3"
-解析字符串字面量：[bnet:local/0.0/96155]3
-混淆后：[bnet:local/0.0/96155]3
-字符串字面量："0003"
-解析字符串字面量：0003
-混淆后："\x30\060\x30\063"
-整数字面量：1
-混淆后：(0155765-022116+187357^01241122^01225651+0552126-0227050)
-字符串字面量："Param/Value/35EF4DB2"
-解析字符串字面量：Param/Value/35EF4DB2
-混淆后："\120\141\x72\x61\155\057\126\x61\x6C\x75\145\057\x33\065\105\x46\064\104\x42\x32"
-字符串字面量："Param/Value/F4F6F823"
-解析字符串字面量：Param/Value/F4F6F823
-混淆后："\120\141\x72\141\155\x2F\126\x61\154\x75\x65\x2F\106\x34\x46\066\106\070\062\x33"
-字符串字面量："[bnet:local/0.0/96155]2"
-解析字符串字面量：[bnet:local/0.0/96155]2
-混淆后：[bnet:local/0.0/96155]2
-字符串字面量："0001"
-解析字符串字面量：0001
-混淆后："\060\x30\060\x31"
-整数字面量：1
-混淆后：(01777777+00-0x2881a^0356520+0X18f77^0x7ffff+00-0362334)
-字符串字面量："0002"
-解析字符串字面量：0002
-用户排除："0002"
-混淆后："0002"
-整数字面量：1
-混淆后：(061710+0432353^01720212^01210531+0X2eea6-182215)
-字符串字面量："0003"
-解析字符串字面量：0003
-混淆后："\x30\060\x30\063"
 整数字面量：2
-混淆后：(0X62b6f^01315353-0322232^01740246-0361552)
+混淆后：(0X16abd^93459^-0736462+0x42c0d-063457)
 字符串字面量："0004"
 解析字符串字面量：0004
-混淆后："\060\x30\060\x34"
+混淆后："\060\060\x30\064"
 整数字面量：3
-混淆后：(-0240353-0x1ca00+0605356)
+混淆后：(287260^242065+0130216)
 字符串字面量："0005"
 解析字符串字面量：0005
-混淆后："\060\x30\060\065"
+混淆后："\060\x30\x30\x35"
 整数字面量：4
-混淆后：(0305410-0143324^0X18be5-0502663+0336776)
+混淆后：(01664767^0x4dfb3+169687^0x30e1c-0X633b8+0642425)
 字符串字面量："0006"
 解析字符串字面量：0006
-混淆后："\060\x30\060\066"
+混淆后："\x30\060\x30\066"
 整数字面量：5
-混淆后：(01566655^0500673^0X2147a-0xceee+0623207)
+混淆后：(59162^143859+060144+0171266^01117405+0x25e4-0261327)
 字符串字面量："0007"
 解析字符串字面量：0007
-混淆后："\x30\060\060\067"
+混淆后："\x30\x30\060\x37"
 整数字面量：6
-混淆后：(0X47aae^074522^0x403fa)
+混淆后：(0715742-0131720-190476)
 字符串字面量："0008"
 解析字符串字面量：0008
-混淆后："\x30\x30\060\070"
+混淆后："\x30\060\x30\070"
 整数字面量：7
-混淆后：(01447477^01447470)
+混淆后：(01417110^0151102+0761650^0525645)
 字符串字面量："0009"
 解析字符串字面量：0009
-混淆后："\060\060\060\071"
+混淆后："\x30\060\060\x39"
 整数字面量：8
-混淆后：(-0222046+0400412^01404515^01777777-0x12a5e)
+混淆后：(0264257^48368^0352127)
 字符串字面量："0010"
 解析字符串字面量：0010
-混淆后："\060\x30\x31\060"
+混淆后："\x30\060\061\060"
 整数字面量：9
-混淆后：(484652^0X169df^0X78271-0546311+0253522)
+混淆后：(0556145+0527364^130935+0332466^01777777-0x4c34c+0x3034a)
 字符串字面量："0011"
 解析字符串字面量：0011
-混淆后："\x30\060\061\061"
+混淆后："\060\060\x31\061"
 整数字面量：10
-混淆后：(074540^-0X2d8ab+24151+0571676)
+混淆后：(0522766+0457002^0X2a912+0455340)
 字符串字面量："Invisible"
 解析字符串字面量：Invisible
-混淆后："\x49\156\x76\151\x73\151\142\154\145"
+混淆后："\111\x6E\166\151\163\151\x62\154\x65"
 整数字面量：1
-混淆后：(256521+0570171^01555203)
+混淆后：(01221673-0X699a^0475247+030616+134635)
 字符串字面量："MainLog.txt"
 解析字符串字面量：MainLog.txt
-混淆后："\x4D\x61\x69\x6E\x4C\157\147\x2E\164\x78\164"
+混淆后："\115\x61\151\156\x4C\157\147\x2E\x74\x78\x74"
 整数字面量：3
-混淆后：(01270343^0Xfefd^0755772+0331043)
+混淆后：(01777777-0Xc769^473237)
 字符串字面量："V1SaveLog.txt"
 解析字符串字面量：V1SaveLog.txt
-混淆后："\x56\x31\x53\141\x76\145\x4C\x6F\147\056\164\170\164"
+混淆后："\x56\061\123\141\x76\x65\x4C\157\147\x2E\164\170\x74"
 整数字面量：4
-混淆后：(04)
+混淆后：(0656752-0443600+0244633^452955^0X3d1cc-154224+0x311fe)
 字符串字面量："V1LoadLog.txt"
 解析字符串字面量：V1LoadLog.txt
-混淆后："\126\x31\x4C\x6F\x61\144\x4C\157\147\x2E\x74\170\x74"
+混淆后："\x56\x31\114\157\x61\x64\114\157\x67\056\164\x78\164"
 整数字面量：8
-混淆后：(-0X37c86-0x6502+254352)
+混淆后：(679^687)
 字符串字面量："DSESEncode.txt"
 解析字符串字面量：DSESEncode.txt
-混淆后："\104\x53\x45\123\105\x6E\143\x6F\144\145\056\164\x78\x74"
+混淆后："\104\123\x45\x53\105\x6E\x63\x6F\144\145\056\164\170\164"
 整数字面量：9
-混淆后：(0X7e4d9-0612141^01340100^0x19305+0xcac-0107600)
+混淆后：(0674052^01204356+92355-0X2f98e)
 字符串字面量："DSESDecode.txt"
 解析字符串字面量：DSESDecode.txt
-混淆后："\104\123\x45\123\104\x65\143\157\x64\145\056\164\x78\x74"
+混淆后："\x44\x53\x45\123\104\145\143\x6F\x64\145\x2E\164\170\164"
 整数字面量：10
-混淆后：(448884^0X53663^0X3ef1d)
+混淆后：(0X4b12a^208112^0x7ffff-25135)
 字符串字面量："DSESCheck.txt"
 解析字符串字面量：DSESCheck.txt
-混淆后："\x44\x53\x45\123\x43\150\x65\143\x6B\x2E\x74\170\164"
+混淆后："\x44\123\105\x53\103\150\145\143\153\x2E\164\x78\x74"
 整数字面量：14
-混淆后：(0x7ffff-01275766+0671752^01627544^0X2d899)
+混淆后：(0X13bce+0x7694^0331154)
 字符串字面量："LoadBankLog.txt"
 解析字符串字面量：LoadBankLog.txt
-混淆后："\114\x6F\x61\x64\x42\x61\x6E\x6B\x4C\157\x67\056\x74\170\x74"
+混淆后："\x4C\x6F\x61\x64\102\141\156\x6B\x4C\x6F\x67\056\164\x78\x74"
 整数字面量：15
-混淆后：(0x6f472^01572175)
+混淆后：(0X20c0a^-112712+162373^0433503+0113265)
 字符串字面量："SaveBankLog.txt"
 解析字符串字面量：SaveBankLog.txt
-混淆后："\x53\x61\166\145\102\141\156\x6B\114\x6F\147\x2E\x74\x78\x74"
+混淆后："\x53\x61\166\145\102\141\156\x6B\114\157\x67\056\x74\170\164"
 整数字面量：5
-混淆后：(0x7ffff-0275627^01502155)
+混淆后：(-0X20d85+0562411^0x33954+066604+0617727^01410456)
 字符串字面量："ItemList.txt"
 解析字符串字面量：ItemList.txt
-混淆后："\x49\x74\x65\x6D\x4C\x69\x73\164\x2E\164\x78\164"
+混淆后："\111\164\x65\x6D\114\x69\x73\164\056\x74\170\x74"
 整数字面量：1
-混淆后：(0X7ee8^-0Xf364+01264337-0773222)
+混淆后：(022376^0x940f+0X2771e^-0126070+01372052-0414040)
 整数字面量：1
-混淆后：(01420333-01016655+0x1f1ed^041766+0730444)
+混淆后：(0645016-033165^01032066^01623656)
 整数字面量：1
-混淆后：(0x70dc1+0171076-91445^0x71e27^0571515-01056346+0567205)
+混淆后：(01777777-0523024^350698)
 字符串字面量："-hero"
 解析字符串字面量：-hero
-混淆后："\x2D\150\145\x72\157"
+混淆后："\055\150\145\x72\157"
 整数字面量：520000
-混淆后：(0X7ffff-06427^0X1041f^-0217157+0434046)
+混淆后：(01777777+0X0-0X10bf)
 整数字面量：520000
-混淆后：(524287-0532735+173342)
+混淆后：(0X6b599^01251743-0xe6f-0X3ea9b)
 整数字面量：520000
-混淆后：(01356167-241106+0X2ff22^0541207)
+混淆后：(62138+0x31516^0123050+0617266^0464267-43046-0X19443)
 整数字面量：520000
-混淆后：(0x12166-248028+0x3a40d^01274646-0X3a6e0^01540421)
+混淆后：(-0X1e008+0X38514^01613001-52149)
 字符串字面量："-kill"
 解析字符串字面量：-kill
-混淆后："\x2D\x6B\151\154\x6C"
+混淆后："\055\x6B\x69\x6C\154"
 整数字面量：13
-混淆后：(0Xe4fb^0Xe4f6)
+混淆后：(0X3be6e^061364+0655557)
 整数字面量：0
-混淆后：(0X150be-01065715+203535)
+混淆后：(0533440+0x3c22b-0x68f5^0x58689^0X396df)
 整数字面量：0
-混淆后：(01172326^01473024+0251675-0374300^01123547-480527+250735)
+混淆后：(00)
 整数字面量：1
-混淆后：(027552+0167765-0x11f5e)
+混淆后：(0x6458f^0540620+0X53e6f-0x15de5^0Xe794)
 整数字面量：1
-混淆后：(01)
+混淆后：(01605251+0172526-82010^01537644)
 整数字面量：32
-混淆后：(0X3176d^01777777+00-11852^01143376)
+混淆后：(0700606^38021^0612443)
 整数字面量：0
-混淆后：(0217236+0364340-0451270^0x20946-0x3767c+0320005^0x8609)
+混淆后：(253535-0504775-0117701^-0112611+47959+0107323)
 整数字面量：1
-混淆后：(01741446^0X40a4c-0x15ccb^01777777-171588+06353)
+混淆后：(0X7db18^76970+0544211^01375437-0346365)
 字符串字面量："-"
 解析字符串字面量：-
-混淆后："\x2D"
+混淆后："\055"
 字符串字面量：""
 解析字符串字面量：
 混淆后：""
@@ -682,15 +678,15 @@ Key: "gt_initFunc", Value: "\154\154\154\111\x49\x49\x31\x49\111\x6C\061\061\x6C
 混淆后：""
 字符串字面量："Name"
 解析字符串字面量：Name
-混淆后："\116\x61\155\145"
+混淆后："\116\x61\x6D\x65"
 整数字面量：11
-混淆后：(282557+0234051+046767^0x4d9ac-0765324+0235203^01776215)
+混淆后：(227977-0572^0x23a54+114365-234981^01311653-0326065-0xcd4e)
 字符串字面量："["
 解析字符串字面量：[
-混淆后："\133"
+混淆后："\x5B"
 字符串字面量："]["
 解析字符串字面量：][
-混淆后："\x5D\133"
+混淆后："\x5D\x5B"
 字符串字面量："]"
 解析字符串字面量：]
 混淆后："\135"

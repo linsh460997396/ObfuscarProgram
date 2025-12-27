@@ -199,6 +199,18 @@ namespace GalaxyObfuscator
             }
         }
 
+        public string GetNameSpaceFromMainThread()
+        {
+            if (textBox_nameSpace.InvokeRequired)
+            {
+                return (string)textBox_nameSpace.Invoke(new Func<string>(GetNameSpaceFromMainThread));
+            }
+            else
+            {
+                return textBox_nameSpace.Text;
+            }
+        }
+
         string GetWorkPathFromMainThread()
         {
             if (textBox_workPath.InvokeRequired)
@@ -1593,6 +1605,7 @@ namespace GalaxyObfuscator
                     checkBox_LC4.Enabled = true;
                     checkBox_Test.Enabled = false;
                     checkBox_Event.Enabled = true;
+                    textBox_nameSpace.Enabled = true;
                     break;
                 case 1:
                     SetTipsToMainThread("（左下文本）填入Galaxy代码，执行将进行混淆");
@@ -1602,6 +1615,7 @@ namespace GalaxyObfuscator
                     checkBox_LC4.Enabled = true;
                     checkBox_Test.Enabled = false;
                     checkBox_Event.Enabled = true;
+                    textBox_nameSpace.Enabled = true;
                     break;
                 case 2:
                     SetTipsToMainThread("（左下文本）填入Objects内容，执行将单位装饰等地形布置信息转Galaxy");
@@ -1611,6 +1625,7 @@ namespace GalaxyObfuscator
                     checkBox_LC4.Enabled = false;
                     checkBox_Test.Enabled = false;
                     checkBox_Event.Enabled = false;
+                    textBox_nameSpace.Enabled = false;
                     break;
                 case 3:
                     SetTipsToMainThread("（左下文本）填入Galaxy代码，执行将尝试中文转换");
@@ -1620,6 +1635,7 @@ namespace GalaxyObfuscator
                     checkBox_LC4.Enabled = false;
                     checkBox_Test.Enabled = false;
                     checkBox_Event.Enabled = false;
+                    textBox_nameSpace.Enabled = false;
                     break;
                 case 4:
                     SetTipsToMainThread("左下文本填代码执行将UnitCreate转地形信息格式ObjectUnit，右下文本可填整数干预ID");
@@ -1629,6 +1645,7 @@ namespace GalaxyObfuscator
                     checkBox_LC4.Enabled = false;
                     checkBox_Test.Enabled = false;
                     checkBox_Event.Enabled = false;
+                    textBox_nameSpace.Enabled = false;
                     break;
                 case 5:
                     SetTipsToMainThread("（选择处理目录）执行将批扫描虫出封锁线N档案并生成恢复用文本");
@@ -1638,6 +1655,7 @@ namespace GalaxyObfuscator
                     checkBox_LC4.Enabled = false;
                     checkBox_Test.Enabled = false;
                     checkBox_Event.Enabled = false;
+                    textBox_nameSpace.Enabled = false;
                     break;
                 case 6:
                     SetTipsToMainThread("读取星际录像或其他二进制文件");
@@ -1647,6 +1665,7 @@ namespace GalaxyObfuscator
                     checkBox_LC4.Enabled = false;
                     checkBox_Test.Enabled = false;
                     checkBox_Event.Enabled = false;
+                    textBox_nameSpace.Enabled = false;
                     break;
                 default:
                     SetTipsToMainThread("功能无效！");
