@@ -45,6 +45,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C03D7D8819AE48888F04B5F92C59ACC8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C63A5A0259A04E44A9BC5FC8668A0C36"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -302,6 +308,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C03D7D8819AE48888F04B5F92C59ACC8"
+            {
+            "SourcePath" = "8:..\\AzureObfuscator\\Rules\\exclusion_tokenBeforeLast.txt"
+            "TargetName" = "8:exclusion_tokenBeforeLast.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_C081CEE6AF8443C4B53BC9DD1B69596B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D1259CFEB4BE467FAFD9BA09AA097592"
             {
             "SourcePath" = "8:..\\AzureObfuscator\\Rules\\exclusion_rules.txt"
@@ -430,7 +456,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:GalaxyObfuscator"
         "ProductCode" = "8:{6DE3D1D2-F330-4A38-9327-47993AE1EB46}"
-        "PackageCode" = "8:{7734217A-9F94-49DB-854C-13AC3C507347}"
+        "PackageCode" = "8:{2E330DBA-6F24-4D59-9385-FE7B32AE5DC2}"
         "UpgradeCode" = "8:{F223446D-B735-4108-838F-41B39BD5EDF4}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"

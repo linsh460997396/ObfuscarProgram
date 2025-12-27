@@ -32,3 +32,4 @@ S:\Document\Github\ObfuscarProgram\Galaxy\AzureObfuscator\obj\Debug\AzureObfusca
 S:\Document\Github\ObfuscarProgram\Galaxy\AzureObfuscator\obj\Debug\AzureObfuscator.pdb
 D:\VSWork\2022\Galaxy\AzureObfuscator\bin\Debug\Rules\SC2End
 D:\VSWork\2022\Galaxy\AzureObfuscator\bin\Debug\Rules\SC2Head
+D:\VSWork\2022\Galaxy\AzureObfuscator\bin\Debug\Rules\exclusion_tokenBeforeLast.txt

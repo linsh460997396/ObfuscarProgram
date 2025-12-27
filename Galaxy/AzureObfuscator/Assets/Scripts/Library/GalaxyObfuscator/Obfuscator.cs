@@ -26,6 +26,14 @@ namespace GalaxyObfuscator
         /// 用于字面量打印时include的状态索引，0为不打印，1为打印，2为打印紧跟的字符串字面量
         /// </summary>
         private bool includeIndex = false;
+        /// <summary>
+        /// 不参与混淆的字面量列表.在exclusion_rules.txt中以双引号开头的条目会被添加到此列表.
+        /// </summary>
+        public static List<string> quotedIdentifiers = new List<string>();
+        /// <summary>
+        /// 不参与混淆的字面量列表.要求它的上上个token为exclusion_tokenBeforeLast.txt中的标识符时有效.
+        /// </summary>
+        public static List<string> quotedIdentifiers_tokenBeforeLast = new List<string>();
 
         public Obfuscator()
         {
@@ -159,6 +167,7 @@ namespace GalaxyObfuscator
         /// <returns>返回对Obfuscator.script混淆后的结果</returns>
         public string obfuscateScript()
         {
+            Sequence key;
             if (form1.GetCheckLC4StateFromMainThread() == true)
             {//LC4先添加到脚本头尾
                 this.script = sCHead + "\r\n" + this.script + "\r\n" + sCEnd;
@@ -169,6 +178,10 @@ namespace GalaxyObfuscator
                 }
             }
 
+            //Obfuscator.ReservedIDs包含了不应被混淆的标识符集合
+            ReservedIDs = File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + @"Rules/exclusion_rules.txt");
+            ReservedIDs_tokenBeforeLast = File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + @"Rules/exclusion_tokenBeforeLast.txt");
+
             //使用字符集及长度限制创建标识符生成器
             this.identifierGenerator = new IdentifierGenerator("lI1", 16);
             //构建混淆字典（标识符表、字面量表）
@@ -178,25 +191,67 @@ namespace GalaxyObfuscator
             MMCore.WriteLine("█↓扫描开始↓█");
             this.scan();
             MMCore.WriteLine("█Scan End█" + "\r\n" + "");
-            MMCore.WriteLine("█↓标识符表↓█");
+            MMCore.WriteLine("█↓标识符表(支持排除规则)↓█");
             MMCore.WriteLine(string.Join(",\r\n", identifierTable.Select(kvp => $"Key: {kvp.Key}, Value: {kvp.Value}")));
-            MMCore.WriteLine("█identifierTable End█" + "\r\n" + "");
-            MMCore.WriteLine("█↓字面量表↓█");
+            MMCore.WriteLine("█identifierTable End█");
+            MMCore.WriteLine("█注：排除规则文本中InitMap必填！是不可参与混淆的标识符！█" + "\r\n" + "");
+            MMCore.WriteLine("█↓字面量表(触发器定义部分,不受排除规则干扰)↓█");
             MMCore.WriteLine(string.Join(",\r\n", literalTable.Select(kvp => $"Key: {kvp.Key}, Value: {kvp.Value}")));
-            MMCore.WriteLine("█literalTable End█" + "\r\n" + "");
+            MMCore.WriteLine("█literalTable End█");
+            MMCore.WriteLine("█注：其他字面量可接受排除规则,需带上双引号填写█" + "\r\n" + "");
             //遍历标识符保留列表（这些标识符在混淆过程中不应被改变）
-            //Obfuscator.ReservedIdentifiers包含了不应被混淆的标识符集合
-            ReservedIdentifiers = File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + @"Rules/exclusion_rules.txt");
-            foreach (string str in ReservedIdentifiers)
+            foreach (string str in ReservedIDs)
             {
-                //将保留标识符转换为Sequence类型（为了方便比较或存储）
-                Sequence key = new Sequence(str);
-                //参与混淆的identifierTable中包含该保留标识符的映射则将其移除，以便保留标识符在混淆后脚本中保持不变
-                if (this.identifierTable.ContainsKey(key))
+                if (!string.IsNullOrEmpty(str) && !str.StartsWith("/"))
                 {
-                    //移除保留标识符
-                    this.identifierTable.Remove(key);
-                    MMCore.WriteLine("移除标识符：" + key);
+                    //将保留符转换为Sequence类型（为方便比较或存储）
+                    key = new Sequence(str);
+                    if (this.identifierTable.ContainsKey(key))
+                    {
+                        //修改保留标识符的值为与key相同,更安全
+                        MMCore.WriteLine("排除规则改回标识符：" + this.identifierTable[key] + " -> " + key);
+                        this.identifierTable[key] = key.ToString();
+                    }
+
+                    #region
+                    //参与混淆的identifierTable中包含该保留标识符的映射则将其移除，以便保留标识符在混淆后脚本中保持不变
+                    //if (this.identifierTable.ContainsKey(key))
+                    //{
+                    //    //移除保留标识符
+                    //    this.identifierTable.Remove(key);
+                    //    MMCore.WriteLine("排除标识符：" + key);
+                    //}
+
+                    //该字面量表目前仅存储触发器定义相关的字面量及其混淆结果（本项必须混淆,不受排除规则影响）
+                    //if (this.literalTable.ContainsKey(key))
+                    //{
+                    //    //移除保留标识符
+                    //    this.literalTable.Remove(key);
+                    //    MMCore.WriteLine("排除字面量：" + key);
+                    //}
+                    //if (this.literalTable.ContainsKey(key))
+                    //{
+                    //    // 修改保留标识符的值为与key相同
+                    //    this.literalTable[key] = key.ToString();
+                    //    MMCore.WriteLine("修改字面量值：" + key);
+                    //}
+                    #endregion
+
+                    //带引号开头的存入quotedIdentifiers列表(用于额外处理)
+                    if (str.StartsWith("\""))
+                    {
+                        quotedIdentifiers.Add(str);
+                    }
+                }
+            }
+            foreach (string s in ReservedIDs_tokenBeforeLast)
+            {
+                if (!string.IsNullOrEmpty(s))
+                {
+                    if (!s.StartsWith("/"))
+                    {
+                        quotedIdentifiers_tokenBeforeLast.Add(s);
+                    }
                 }
             }
             //构建混淆后的脚本
@@ -215,13 +270,22 @@ namespace GalaxyObfuscator
             return token.Type == TokenType.Identifier || token.Type == TokenType.HexLiteral || token.Type == TokenType.IntegerLiteral || token.Type == TokenType.RealLiteral;
         }
 
+        public static bool ListContainsStr(List<string> ids, string target)
+        {
+            if (ids == null || target == null)
+            {
+                return false;
+            }
+            return ids.Contains(target);
+        }
+
         /// <summary>
         /// 构建混淆后的脚本 
         /// </summary>
         /// <returns></returns>
         private string construct()
         {
-            string tempStr; int tempInt; Match match; Sequence tempSequence;
+            string tempStr; int tempInt; Match match; Sequence tempSequence; Token tokenBeforeLast; Token token; Token tokenCurrent;
             bool checkEvent = form1.GetCheckEventStateFromMainThread();
             //初始化扫描器，用于扫描原始脚本
             this.scanner = new Scanner(this.script, this.errFileName);
@@ -237,13 +301,18 @@ namespace GalaxyObfuscator
 
                 tempStr = scanner.Read().Content();//冒号间内容：Assets\\Textures\\HongMaster1.dds
                 MMCore.WriteLine("字符串字面量：" + scanner.Current.ToString());//结果示范："Assets\\Textures\\HongMaster1.dds"
-                MMCore.WriteLine("解析字符串字面量：" + scanner.Current.ParseStringLiteral());//结果示范：Assets/Textures/HongMaster1.dds
+                MMCore.WriteLine("解析Include内容：" + scanner.Current.ParseStringLiteral());//结果示范：Assets/Textures/HongMaster1.dds
                 tempStr = this.stringObfuscator.Obfuscate(tempStr);
                 MMCore.WriteLine("混淆后：" + tempStr);
                 stringBuilder.AppendLine("include " + tempStr);
             }
+            //初始化一个空的token，用于标记上上个处理的token
+            tokenBeforeLast = new Token
+            {
+                Type = TokenType.None
+            };
             //初始化一个空的token，用于标记上一个处理的token
-            Token token = new Token
+            token = new Token
             {
                 Type = TokenType.None
             };
@@ -251,85 +320,131 @@ namespace GalaxyObfuscator
             for (; ; )
             {
                 //获取当前扫描器指向的token
-                Token token2 = this.scanner.Current;
+                tokenCurrent = this.scanner.Current;
                 //如果当前token不是None（即需要有效的token）
-                if (token2.Type != TokenType.None)
+                if (tokenCurrent.Type != TokenType.None)
                 {
                     //处理独立token之间的换行
                     //如果当前token和上一个token都是独立的标记则在StringBuilder中添加一个换行符保持混淆后脚本的可读性
                     //但显然混淆是不需要可读性的，这里直接将前后串起来
-                    if (Obfuscator.isSeparateToken(token2) && Obfuscator.isSeparateToken(token))
+                    if (Obfuscator.isSeparateToken(tokenCurrent) && Obfuscator.isSeparateToken(token))
                     {
                         stringBuilder.AppendLine();
                     }
                     //根据token类型进行处理
-                    switch (token2.Type)
+                    switch (tokenCurrent.Type)
                     {
                         //如果identifierTable中包含了当前标识符的映射则使用映射后的标识符
                         case TokenType.Identifier:
-                            if (this.identifierTable.ContainsKey(token2.Sequence))
+                            if (this.identifierTable.ContainsKey(tokenCurrent.Sequence))
                             {
                                 //附加混淆后的标识符
-                                stringBuilder.Append(this.identifierTable[token2.Sequence]);
+                                stringBuilder.Append(this.identifierTable[tokenCurrent.Sequence]);
                             }
                             else
                             {
                                 //否则直接附加原始的标识符
-                                if (token2.Sequence == "include")
+                                if (tokenCurrent.Sequence == "include")
                                 {
                                     //如include不集中在代码最前，则在这里打印中间夹杂的include动作
                                     includeIndex = true;
                                     stringBuilder.Append("include ");
                                 }
-                                else { stringBuilder.Append(token2.ToString()); }
+                                else { stringBuilder.Append(tokenCurrent.ToString()); }
                             }
                             break;
                         case TokenType.StringLiteral:
-                            if (this.literalTable.ContainsKey(token2.Sequence))
-                            {//如果literalTable中包含了当前字符串字面量的映射
-                                //使用映射后的字面量
-                                stringBuilder.Append(this.literalTable[token2.Sequence]);
+                            if (this.literalTable.ContainsKey(tokenCurrent.Sequence))
+                            {
+                                //如果literalTable中包含了当前字符串字面量的映射则使用映射后的字面量
+                                //该表目前只有触发器定义相关的字面量及其混淆结果（本项重要,不受排除规则影响）
+                                stringBuilder.Append(this.literalTable[tokenCurrent.Sequence]);
+                                //房间选项对应的GameAttributeGameValue、GameAttributePlayerValue方法中的字面量均不在此表
+                                //使用下面的else分支处理
                             }
                             else
                             {
-                                //否则，对字符串字面量进行混淆处理并附加混淆后的结果
-                                tempStr = token2.Content();//冒号间内容：Assets\\Textures\\HongMaster1.dds
-                                MMCore.WriteLine("字符串字面量：" + token2.ToString());//结果示范："Assets\\Textures\\HongMaster1.dds"
-                                MMCore.WriteLine("解析字符串字面量：" + token2.ParseStringLiteral());//结果示范：Assets/Textures/HongMaster1.dds
-                                //如果标识符表中有变量名=解析后的字符串字面量（如声明了gv_u_Ship=飞船单位后，在事件注册中作为变量参数名字符串填入的情况）
-                                tempSequence = new Sequence(token2.ParseStringLiteral());
-                                if (this.identifierTable.ContainsKey(tempSequence))
+                                //不在触发器定义中的其他字面量均走这里
+                                tempStr = tokenCurrent.Content();//冒号间内容：Assets\\Textures\\HongMaster1.dds
+                                MMCore.WriteLine("字符串字面量：" + tokenCurrent.ToString());//结果示范："Assets\\Textures\\HongMaster1.dds"
+                                MMCore.WriteLine("解析字符串字面量：" + tokenCurrent.ParseStringLiteral());//结果示范：Assets/Textures/HongMaster1.dds
+                                if (tokenBeforeLast.Type != TokenType.None && quotedIdentifiers_tokenBeforeLast.Contains(tokenBeforeLast.Sequence.ToString()))
                                 {
-                                    //如果存在则取出
-                                    tempStr = '\"' + identifierTable[tempSequence] + '\"';
+                                    tempStr = '\"' + tempStr + '\"';
+                                    MMCore.WriteLine("用户排除(指定函数内字符串)：" + tempStr);
                                 }
                                 else
                                 {
-                                    if (checkEvent)
+                                    //若标识符表中有变量名=解析后的字符串字面量（如声明了gv_u_Ship=飞船单位后，在事件注册中作为变量参数名字符串填入的情况）
+                                    tempSequence = new Sequence(tokenCurrent.ParseStringLiteral());
+                                    if (this.identifierTable.ContainsKey(tempSequence))
                                     {
-                                        match = Regex.Match(tempSequence.ToString(), @"(\w+)(\[.*?\])");
-
-                                        if (match.Success)
+                                        //整个内容部分在标识符表中存在直接的Key映射则取出,如事件变量（非数组形式）
+                                        if (!ListContainsStr(quotedIdentifiers, tokenCurrent.ToString()))
                                         {
-                                            tempSequence = new Sequence(match.Groups[1].Value);
-                                            if (this.identifierTable.ContainsKey(tempSequence))
+                                            tempStr = '\"' + identifierTable[tempSequence] + '\"';
+                                            //若该变量误添加到标识符排除规则,由于安全修正为原值,也不会处理错
+                                            //标识符若采用排除即从表中移除,那么不会进入此条件,而是转为下面的else分支
+                                            //下面的正则也能处理非数组形式内容,所以效果上几乎是一样的,区别在于这儿是完整内容与key比对
+                                        }
+                                        else
+                                        {
+                                            tempStr = '\"' + tempStr + '\"';
+                                            MMCore.WriteLine("用户排除(该项应参与混淆,请检查是否误添加)：" + tempStr);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //处理字符串中的更复杂的情况（如事件注册填了变量数组的情况）
+                                        if (!ListContainsStr(quotedIdentifiers, tokenCurrent.ToString()))
+                                        {
+                                            if (checkEvent)
                                             {
-                                                tempStr = '\"' + identifierTable[tempSequence] + match.Groups[2].Value + '\"';
+                                                //若勾选事件变量数组支持，则进一步检查字符串字面量是否含有数组形式（如"gv_u_Ship[0]"）
+                                                match = Regex.Match(tempSequence.ToString(), @"(\w+)(\[.*?\])");
+
+                                                if (match.Success)
+                                                {
+                                                    //若匹配成功则取出变量名部分进行检查
+                                                    tempSequence = new Sequence(match.Groups[1].Value);
+                                                    if (this.identifierTable.ContainsKey(tempSequence))
+                                                    {
+                                                        tempStr = '\"' + identifierTable[tempSequence] + match.Groups[2].Value + '\"';
+                                                    }
+                                                    else
+                                                    {
+                                                        tempStr = this.stringObfuscator.Obfuscate(tempStr);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    tempStr = this.stringObfuscator.Obfuscate(tempStr);
+                                                }
                                             }
                                             else
                                             {
+                                                //否则进行新混淆（会补上两侧冒号）
                                                 tempStr = this.stringObfuscator.Obfuscate(tempStr);
                                             }
                                         }
                                         else
                                         {
-                                            tempStr = this.stringObfuscator.Obfuscate(tempStr);
+                                            //不可误添加到字面量排除规则
+                                            tempStr = '\"' + tempStr + '\"';
+                                            MMCore.WriteLine("用户排除：" + tempStr);
+                                            //if (checkEvent)
+                                            //{
+                                            //    match = Regex.Match(tempSequence.ToString(), @"(\w+)(\[.*?\])");
+                                            //    if (match.Success)
+                                            //    {
+                                            //        tempSequence = new Sequence(match.Groups[1].Value);
+                                            //        if (this.identifierTable.ContainsKey(tempSequence))
+                                            //        {
+                                            //            MMCore.WriteLine("请检查是否误添加到排除规则：" + tempStr);
+                                            //        }
+                                            //    }
+                                            //}
                                         }
-                                    }
-                                    else 
-                                    {
-                                        //否则进行新混淆（会补上两侧冒号）
-                                        tempStr = this.stringObfuscator.Obfuscate(tempStr);
                                     }
                                 }
                                 MMCore.WriteLine("混淆后：" + tempStr);
@@ -350,7 +465,7 @@ namespace GalaxyObfuscator
                         case TokenType.IntegerLiteral:
                         case TokenType.HexLiteral:
                             //对于整数字面量和十六进制字面量进行混淆处理并附加混淆后的结果
-                            tempInt = token2.ParseIntegerLiteral();
+                            tempInt = tokenCurrent.ParseIntegerLiteral();
                             MMCore.WriteLine("整数字面量：" + tempInt.ToString());
                             tempStr = this.integerObfuscator.Obfuscate(tempInt);
                             MMCore.WriteLine("混淆后：" + tempStr);
@@ -362,7 +477,13 @@ namespace GalaxyObfuscator
                     }
                 //IL_1B1标签：更新上一个token为当前token并检查是否有下一个token
                 IL_1B1:
-                    token = token2;
+                    tokenBeforeLast = token;
+                    token = tokenCurrent;
+                    //if (tokenBeforeLast.Type != TokenType.None)
+                    //{
+                    //    MMCore.WriteLine("上上一个Token：" + tokenBeforeLast.Sequence);
+                    //}
+                    //MMCore.WriteLine("上一个Token：" + token.Sequence);
                     if (!this.scanner.MoveNext())
                     {
                         //如果没有下一个token则退出循环
@@ -372,7 +493,7 @@ namespace GalaxyObfuscator
                     continue;
                 //IL_19D标签：对不需要特殊处理的token直接附加其原始文本
                 IL_19D:
-                    stringBuilder.Append(token2.ToString());
+                    stringBuilder.Append(tokenCurrent.ToString());
                     //跳转到IL_1B1标签进行下一次迭代
                     goto IL_1B1;
                 }
@@ -474,7 +595,7 @@ namespace GalaxyObfuscator
         }
 
         /// <summary>
-        /// 扫描触发器定义 
+        /// 扫描触发器定义,并将混淆后的映射存储至字面量表.
         /// </summary>
         private void scanTriggerDefinition()
         {
@@ -519,7 +640,7 @@ namespace GalaxyObfuscator
                 //注意：这里将标识符用双引号括起来，并进行了混淆处理，字符串中有同名函数的应采用标识符混淆表同一Key对应的混淆值
                 temp = this.stringObfuscator.Obfuscate(text2);
                 this.literalTable.Add(new Sequence("\"" + text + "\""), temp);
-                MMCore.WriteLine("存储至字面量表 " + $"Key: {text}, Value: {temp}");
+                MMCore.WriteLine("扫描存至字面量表 " + $"Key: {text}, Value: {temp}");
             }
 
             this.scanner.SkipBlockPro("{", ";");//跳到指定符号之一，表示触发器定义的结束，非函数体才可以使用
@@ -1134,26 +1255,39 @@ namespace GalaxyObfuscator
             "funcref",//不添加导致扫描中断
             "return"
 };
-        private static string[] _reservedIdentifiers;
+        private static string[] _reservedIDs;
         /// <summary>
-        /// 标识符保留数组，这些标识符在脚本中具有特殊用途，不应被混淆。
+        /// 保留数组（同时保留要防止参与混淆的标识符和字面量），这些标识符在脚本中具有特殊用途，不应被混淆。
         /// 从扫描到声明的结构体、变量、函数名表（参与混淆）中排除保留标识符，官方函数因在代码文件中没声明所以不在该表。
         /// </summary>
-        public static string[] ReservedIdentifiers
+        public static string[] ReservedIDs
         {
             get
             {
-                return _reservedIdentifiers;
+                return _reservedIDs;
             }
             set
             {
-                _reservedIdentifiers = value;
+                _reservedIDs = value;
             }
         }
-        //        private static readonly string[] ReservedIdentifiers = new string[]
+        //        private static readonly string[] ReservedIDs = new string[]
         //{
         //            "InitMap"
         //};
+
+        private static string[] _reservedIDs_tokenBeforeLast;
+        public static string[] ReservedIDs_tokenBeforeLast
+        {
+            get
+            {
+                return _reservedIDs_tokenBeforeLast;
+            }
+            set
+            {
+                _reservedIDs_tokenBeforeLast = value;
+            }
+        }
 
         /// <summary>
         /// 标识符生成器，用于生成唯一的标识符或进行某种形式的标识符混淆
@@ -1164,7 +1298,8 @@ namespace GalaxyObfuscator
         /// </summary>
         private IDictionary<Sequence, string> identifierTable;
         /// <summary>
-        /// 字面量表，存储已出现的字面量（如字符串、数字）及其相关信息（混淆前后的值）
+        /// 字面量表，存储已出现的字面量（如字符串、数字）及其相关信息（混淆前后的值）.
+        /// 目前仅存储与触发器相关的字面量及其混淆后的映射值,剩下不在此表的需另行处理。
         /// </summary>
         private IDictionary<Sequence, string> literalTable;
         /// <summary>

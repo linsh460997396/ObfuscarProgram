@@ -1,0 +1,4 @@
+﻿//想要函数(str)中str不被混淆,请将函数名加入此表,一行一个(后面不跟空格).注:触发器定义部分字面量表是必混淆的,不受此表影响.
+
+//GameAttributeGameValue
+//GameAttributePlayerValue
