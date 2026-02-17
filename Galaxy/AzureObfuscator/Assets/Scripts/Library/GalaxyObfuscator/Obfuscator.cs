@@ -377,27 +377,50 @@ namespace GalaxyObfuscator
                                 MMCore.WriteLine("解析字符串字面量：" + tokenCurrent.ParseStringLiteral());//结果示范：Assets/Textures/HongMaster1.dds
                                 if (tokenBeforeLast.Type != TokenType.None && quotedIdentifiers_tokenBeforeLast.Contains(tokenBeforeLast.Sequence.ToString()))
                                 {
+                                    //在排除规则文本（位于混淆器程序根目录的exclusion_tokenBeforeLast.txt）中填写函数名,那么这里直接不对该函数的参数混淆,但识别格式必须是函数(字符串)
                                     tempStr = '\"' + tempStr + '\"';
                                     MMCore.WriteLine("用户排除(指定函数内字符串)：" + tempStr);
                                 }
-                                else if (nameSpace != "-1" && tokenBeforeLast.Type != TokenType.None && (tokenBeforeLast.Sequence == "GameAttributeGameValue" || tokenBeforeLast.Sequence == "GameAttributePlayerValue"))
+                                else if (tokenBeforeLast.Type != TokenType.None && (tokenBeforeLast.Sequence == "GameAttributeGameValue" || tokenBeforeLast.Sequence == "GameAttributePlayerValue"))
                                 {
-                                    //如果tempStr本身就含bnet则忽略
-                                    if (tempStr.Contains("bnet:"))
+                                    //排除规则填写有房间属性函数则对该函数的字符串参数进行特殊处理
+                                    if (nameSpace != "-1")
                                     {
-                                        tempStr = '\"' + tempStr + '\"';
+                                        //用了房间选项的应填写NameSpaceID否则Debug值为-1,当不是-1时说明用户填了正确的NameSpaceID.
+                                        if (tempStr.Contains("bnet:"))
+                                        {
+                                            //遇到指定字样的字符串自动添加引号（输出格式如"[bnet:local/0.0/1]"）,其实这个东西应该可混淆,默认不混淆
+                                            tempStr = '\"' + tempStr + '\"';
+                                        }
+                                        else
+                                        {
+                                            //该字符串不包含bnet,用户自己填了NameSpaceID的情况处理
+                                            tempStr = "[bnet:local/0.0/" + nameSpace + "]" + tempStr;
+                                            tempStr = '\"' + tempStr + '\"';
+                                            MMCore.WriteLine("用户添加(指定NameSpace)后：" + tempStr);
+                                        }
                                     }
-                                    else
+                                    else 
                                     {
-                                        //NameSpace处理
-                                        tempStr = "[bnet:local/0.0/" + nameSpace + "]" + tempStr;
-                                        tempStr = '\"' + tempStr + '\"';
-                                        MMCore.WriteLine("用户添加(指定NameSpace)后：" + tempStr);
+                                        //没有正确填写NameSpaceID的情况处理
+                                        if (tempStr.Contains("bnet:"))
+                                        {
+                                            //遇到指定字样的字符串安全修正为原值,不进行混淆
+                                            tempStr = '\"' + tempStr + '\"';
+                                            MMCore.WriteLine("用户未填NameSpaceID或填错,故安全修正为原值：" + tempStr);
+                                        }
+                                        else
+                                        {
+                                            //字符串不含bnet,输出原值并给个警告
+                                            tempStr = '\"' + tempStr + '\"';
+                                            MMCore.WriteLine("[警告]用户未填NameSpaceID或填错,故安全修正为原值：" + tempStr);
+                                        }
                                     }
                                 }
                                 else
                                 {
-                                    //若标识符表中有变量名=解析后的字符串字面量（如声明了gv_u_Ship=飞船单位后，在事件注册中作为变量参数名字符串填入的情况）
+                                    //前面必须优先识别处理完房间属性,此处处理非房间属性情况（如字符串带事件变量的情况）
+                                    //若标识符表中有变量名=解析后的字符串字面量（如声明了gv_u_Ship=飞船单位后,在事件注册中作为变量参数名字符串填入的情况）
                                     tempSequence = new Sequence(tokenCurrent.ParseStringLiteral());
                                     if (this.identifierTable.ContainsKey(tempSequence))
                                     {

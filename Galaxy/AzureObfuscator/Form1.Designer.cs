@@ -328,7 +328,7 @@ namespace GalaxyObfuscator
             this.Controls.Add(this.panel_Bottom);
             this.Controls.Add(this.panel_Top);
             this.Name = "Form1";
-            this.Text = "代码混淆器V0.7（For Galaxy） By 蔚蓝星海";
+            this.Text = "代码混淆器V0.8（For Galaxy） By 蔚蓝星海";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel_Top.ResumeLayout(false);
             this.panel_Top.PerformLayout();
